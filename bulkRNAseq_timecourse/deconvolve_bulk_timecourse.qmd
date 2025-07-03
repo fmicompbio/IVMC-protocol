@@ -1,0 +1,163 @@
+---
+title: "Deconvolve bulk timecourse with epithelial atlas"
+date: "`r Sys.Date()`"
+format: 
+    html:
+        toc: true
+        theme: united
+embed-resources: true
+---
+
+# Load packages
+
+```{r}
+#| label: load-pkg
+#| warning: false
+
+suppressPackageStartupMessages({
+    library(SingleCellExperiment)
+    library(scater)
+    library(BayesPrism)
+    library(pheatmap)
+})
+
+source("../params.R")
+```
+
+# Define parameters
+
+```{r}
+bulk <- "data/IVMC.raw_counts.20250403.tab"
+sc <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/invivo_epithelial_cell_atlas.rds"
+```
+
+# Session info
+
+```{r}
+sessionInfo()
+```
+
+# Read data
+
+```{r read-data}
+bulk <- read.delim(bulk, header = TRUE)
+sc <- readRDS(sc)
+
+## Add/modify annotations for single-cell data
+table(sc$donorCol, useNA = "ifany")
+
+sc$annotated_celltype <- as.character(sc$leiden_res0.4_annot)
+(tbl <- table(sc$annotated_celltype))
+(celltypes_to_keep <- names(tbl)[tbl > 10])
+sc <- sc[, sc$annotated_celltype %in% celltypes_to_keep]
+```
+
+```{r}
+scater::plotReducedDim(
+    sc, dimred = "UMAP_fastMNNcorr_sketch",
+    colour_by = "annotated_celltype"
+) + scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "")
+```
+
+Look at distribution of cell types across single-cell samples
+
+```{r cell-type-distribution, fig.width = 10, fig.height = 10}
+tbl <- unclass(table(sc$annotated_celltype, sc$donorCol))
+pheatmap::pheatmap(tbl)
+pheatmap::pheatmap(sweep(tbl, MARGIN = 2, STATS = colSums(tbl), FUN = "/"))
+```
+
+# Predict cell type composition
+
+```{r deconv-both, fig.width = 8, fig.height = 6}
+bulkmat <- t(as.matrix(bulk))
+scmat <- t(as.matrix(assay(sc, "counts")))
+
+## Make sure gene names are the same
+ints <- intersect(colnames(bulkmat), colnames(scmat))
+length(ints)
+bulkmat <- bulkmat[, ints]
+scmat <- scmat[, ints]
+stopifnot(all(colnames(bulkmat) == colnames(scmat)))
+dim(bulkmat)
+dim(scmat)
+
+sc.stat <- plot.scRNA.outlier(
+    input = scmat,
+    cell.type.labels = sc$annotated_celltype,
+    species = "hs",
+    return.raw = TRUE
+)
+bulk.stat <- plot.bulk.outlier(
+    bulk.input = bulkmat, 
+    sc.input = scmat,
+    cell.type.labels = sc$annotated_celltype,
+    species = "hs",
+    return.raw = TRUE
+)
+scmat.filt <- cleanup.genes(
+    input = scmat, 
+    input.type = "count.matrix",
+    species = "hs",
+    gene.group = c("Rb", "Mrp", "other_Rb", "chrM",
+                   "MALAT1"),
+    exp.cells = 5
+)
+plot.bulk.vs.sc(
+    sc.input = scmat.filt, 
+    bulk.input = bulkmat
+)
+scmat.filt.pc <- select.gene.type(
+    scmat.filt, 
+    gene.type = "protein_coding"
+)
+
+plot.cor.phi(
+    input = scmat.filt.pc,
+    input.labels = sc$annotated_celltype,
+    title = "cell type correlation",
+    cexRow = 0.8, cexCol = 0.8,
+    margins = c(5, 5)
+)
+
+diff.exp.stat <- get.exp.stat(
+    sc.dat = scmat[, colSums(scmat > 0) > 3],
+    cell.type.labels = sc$annotated_celltype,
+    cell.state.labels = sc$annotated_celltype,
+    pseudo.count = 0.1, 
+    cell.count.cutoff = 50,
+    n.cores = 8L
+)
+scmat.filt.pc.sig <- select.marker(
+    sc.dat = scmat.filt.pc,
+    stat = diff.exp.stat,
+    pval.max = 0.01,
+    lfc.min = 0.1
+)
+
+sc$annotated_celltype_grouped <- as.character(sc$annotated_celltype)
+
+## Marker genes
+stopifnot(all(rownames(scmat.filt.pc.sig) == colnames(sc)))
+myPrism2 <- new.prism(
+    reference = scmat.filt.pc.sig, 
+    mixture = bulkmat, 
+    input.type = "count.matrix",
+    cell.type.labels = sc$annotated_celltype_grouped,
+    cell.state.labels = sc$annotated_celltype_grouped,
+    key = NULL, 
+    outlier.cut = 0.01, 
+    outlier.fraction = 0.1
+)
+bpres_markers <- run.prism(
+    prism = myPrism2, 
+    n.cores = 10
+)
+
+saveRDS(
+    bpres_markers, 
+    file = "bayesprism_predicted_celltypes_marker_genes.rds"
+)
+```
+
+

@@ -1,0 +1,381 @@
+---
+title: "Generating plots for paper (deconvolution)"
+date: "`r Sys.Date()`"
+format: 
+    html:
+        toc: true
+        theme: united
+embed-resources: true
+---
+
+# Load packages
+
+```{r}
+#| label: load-pkg
+#| warning: false
+
+suppressPackageStartupMessages({
+    library(dplyr)
+    library(ggplot2)
+    library(tidyr)
+    library(cowplot)
+    library(BayesPrism)
+    library(tibble)
+    library(ggnewscale)
+    library(ggh4x)
+    library(grid)
+})
+
+source("../params.R")
+source("../helpers.R")
+
+if (!file.exists("paper_figures_deconvolution")) {
+    dir.create("paper_figures_deconvolution", showWarnings = FALSE, recursive = FALSE)
+}
+```
+
+# Load data
+
+```{r}
+#| label: load-data
+
+bayesprism <- readRDS("bayesprism_predicted_celltypes_marker_genes.rds")
+counts <- read.delim("data/IVMC.raw_counts.20250403.tab", header = TRUE)
+
+annot <- data.frame(names = colnames(counts)) |>
+    separate_wider_delim(cols = names, delim = "_", 
+                         names = c("donor", "timepoint", "breakdown", "hormones"),
+                         cols_remove = FALSE) |>
+    as.data.frame()
+rownames(annot) <- annot$names
+
+annot$protocol <- case_when(
+    annot$hormones == "H" & annot$timepoint %in% c("tp1", "tp2", "tp3") ~ "IVMC",
+    annot$hormones == "H" & annot$breakdown == "B" & 
+        annot$timepoint %in% c("tp4", "tp5", "tp6") ~ "IVMC",
+    annot$timepoint == "tp0" ~ "IVMC",
+    annot$hormones == "NH" & annot$timepoint %in% c("tp1", "tp2", "tp3") ~ "B_NH",
+    annot$hormones == "NH" & annot$breakdown == "B" & 
+        annot$timepoint %in% c("tp4", "tp5", "tp6") ~ "B_NH",
+    .default = NA_character_
+)
+
+annot$timepointexp <- bulk_timepoint_map_mll[annot$timepoint]
+annot$timepointexp <- factor(annot$timepointexp, levels = unname(bulk_timepoint_map_mll))
+```
+
+# Reformat data
+
+```{r}
+#| label: reformat-data
+
+mprop <- get.fraction(bp = bayesprism,
+                      which.theta = "final",
+                      state.or.type = "type")
+cdm <- as.data.frame(annot[rownames(mprop), , drop = FALSE])
+
+mprop <- as.data.frame(mprop) |> 
+    rownames_to_column("names") |>
+    pivot_longer(names_to = "celltype", values_to = "proportion", 
+                 -names) |>
+    left_join(cdm) |>
+    group_by(celltype) |>
+    mutate(ndet = sum(proportion > 0.01)) |>
+    filter(!is.na(protocol)) 
+
+# Replicate the pre-diff timepoint also for the B_NH protocol
+prediff <- mprop |>
+    filter(timepointexp == "Pre-diff")
+prediff_bnh <- prediff |>
+    mutate(protocol = "B_NH")
+mprop <- bind_rows(mprop, prediff_bnh)
+```
+
+```{r}
+#| echo: false
+#| label: checks
+
+# check consistency with color definitions
+stopifnot(all(mprop$timepointexp %in% names(bulk_timepoint_colors)))
+stopifnot(all(mprop$celltype %in% names(tissue_leiden_res0.4_annot_colors)))
+```
+
+# Figure 2D, Extended Data 8A (deconvolution)
+
+Keep only cell types for which the proportion in at least two samples is 
+above 1%. Put together t0-t3 (no breakdown) and t4-t6 (breakdown)
+
+```{r}
+#| label: plot-deconv-area-all
+#| fig.width: 12
+#| fig.height: 18
+
+(p_area_all <- ggplot(mprop |> filter(ndet >= 2), 
+                      aes(x = timepointexp, y = proportion,
+                          group = celltype, fill = celltype)) + 
+        geom_area() + 
+        scale_fill_manual(values = tissue_leiden_res0.4_annot_colors, 
+                          name = "") + 
+        guides(fill = guide_legend(nrow = 5)) + 
+        new_scale_fill() + 
+        geom_rect(data = data.frame(
+            donor = "B080", protocol = rep(c("IVMC", "B_NH"), c(7, 7)),
+            timepointexp = c(levels(mprop$timepointexp),
+                             levels(mprop$timepointexp)),
+            xmin = c(1:7, 1:7) - 0.45, xmax = c(1:7, 1:7) + 0.45,
+            ymin = rep(0, 14), ymax = rep(-0.85, 14)),
+            aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+                fill = timepointexp), inherit.aes = FALSE, 
+            show.legend = FALSE) +
+        scale_fill_manual(values = alpha(bulk_timepoint_colors, 0.5)) + 
+        theme_cowplot() + 
+        labs(x = "", y = "Proportion") + 
+        scale_y_continuous(expand = expansion(mult = c(0, 0), add = c(0, 0))) +
+        coord_cartesian(clip = "off", ylim = c(0, 1.05)) + 
+        theme(legend.position = "bottom", 
+              axis.text.x = element_text(size = 16, angle = 90, hjust = 0.5, vjust = 0.5),
+              axis.title = element_text(size = 20),
+              legend.text = element_text(size = 16),
+              strip.text = element_text(size = 16),
+              panel.border = element_rect(fill = NA, colour = "grey20"),
+              strip.background = element_rect(color = "black", fill = "white")) + 
+        facet_grid(donor ~ protocol, scales = "free_x", space = "free_x"))
+
+pdf("paper_figures_deconvolution/areaplot_allclusters.pdf", height = 18, width = 9)
+p_area_all
+dev.off()
+```
+
+```{r}
+#| label: plot-deconv-area-avg
+#| fig.height: 5
+#| fig.width: 10
+
+# now do the same with average values for all lines 
+table(paste(mprop$timepointexp, mprop$breakdown, mprop$hormones, sep = "_"), 
+      mprop$protocol, useNA = "ifany")
+(p_area_avg <- ggplot(mprop |> 
+                          filter(ndet >= 2) |>
+                          group_by(celltype, timepointexp, protocol) |> 
+                          summarize(proportion = mean(proportion), .groups = "drop") |>
+                          filter(protocol == "IVMC"), 
+                      aes(x = timepointexp, y = proportion,
+                          group = celltype, fill = celltype)) + 
+        geom_area() + 
+        scale_fill_manual(values = tissue_leiden_res0.4_annot_colors, name = "") + 
+        new_scale_fill() + 
+        geom_rect(data = data.frame(
+            timepointexp = levels(mprop$timepointexp),
+            xmin = (1:7) - 0.35, xmax = (1:7) + 0.35,
+            ymin = rep(0, 7), ymax = rep(-0.95, 7)),
+            aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+                fill = timepointexp), inherit.aes = FALSE, 
+            show.legend = FALSE) +
+        scale_fill_manual(values = alpha(bulk_timepoint_colors, 0.5)) + 
+        theme_cowplot() + 
+        labs(x = "", y = "Proportion") + 
+        scale_y_continuous(expand = expansion(mult = c(0, 0), add = c(0, 0))) +
+        coord_cartesian(clip = "off", ylim = c(0, 1.05)) + 
+        theme(legend.position = "bottom", 
+              axis.text.y = element_text(size = 16),
+              axis.title.y = element_text(size = 20),
+              axis.text.x = element_text(size = 20, angle = 90, hjust = 0.5, vjust = 0.5)))
+
+pdf("paper_figures_deconvolution/areaplot_allclusters_avg_donors.pdf", height = 5, width = 10)
+p_area_avg + theme(legend.position = "none")
+dev.off()
+png("paper_figures_deconvolution/areaplot_allclusters_avg_donors.png", height = 5, width = 10, 
+    unit = "in", res = 400)
+p_area_avg + theme(legend.position = "none")
+dev.off()
+pdf("paper_figures_deconvolution/areaplot_allclusters_avg_donors_legend.pdf", 
+    height = 1.75, width = 11)
+grid.newpage()
+grid.draw(get_legend2(p_area_avg + theme(legend.position = "bottom",
+                                         legend.text = element_text(size = 12))))
+dev.off()
+```
+
+# Figure 2E, Extended Data 8B (deconvolution box plots)
+
+```{r}
+#| label: plot-deconv-box
+#| fig.width: 12
+#| fig.height: 18
+
+(p_box <- ggplot(
+    mprop |> 
+        filter(ndet >= 2) |>
+        mutate(celltype = replace(celltype, celltype == "hormone responsive late",
+                                  "hormone\nresponsive\nlate")) |>
+        mutate(celltype = replace(celltype, celltype == "hormone responsive early",
+                                  "hormone\nresponsive\nearly")) |>
+        mutate(celltype = replace(celltype, celltype == "secretory late",
+                                  "secretory\nlate")) |>
+        mutate(celltype = replace(celltype, celltype == "secretory mid",
+                                  "secretory\nmid")) |>
+        mutate(celltype = replace(celltype, celltype == "secretory early",
+                                  "secretory\nearly")) |>
+        mutate(celltype = replace(celltype, celltype == "luminal late",
+                                  "luminal\nlate")) |>
+        mutate(celltype = replace(celltype, celltype == "luminal early",
+                                  "luminal\nearly")) |>
+        mutate(celltype = replace(celltype, celltype == "transcriptionally active",
+                                  "trans-\ncriptionally\nactive")), 
+    aes(x = timepointexp, y = proportion)) + 
+        geom_boxplot(position = position_dodge2(0.75, preserve = "single"), 
+                     outlier.size = -1, alpha = 0.5) + 
+        geom_jitter(position = position_dodge2(0.75, preserve = "single"), 
+                    size = 2, aes(color = donor)) + 
+        geom_rect(data = data.frame(
+            celltype = "trans-\ncriptionally\nactive", 
+            protocol = rep(c("IVMC", "B_NH"), c(7, 7)),
+            timepointexp = c(levels(mprop$timepointexp),
+                             levels(mprop$timepointexp)),
+            xmin = c(1:7, 1:7) - 0.45, xmax = c(1:7, 1:7) + 0.45,
+            ymin = rep(-0.05, 14), ymax = rep(-0.9, 14)),
+            aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+                fill = timepointexp), inherit.aes = FALSE, 
+            show.legend = FALSE) +
+        scale_fill_manual(values = alpha(bulk_timepoint_colors, 0.5)) + 
+        guides(color = guide_legend(override.aes = list(size = 4))) + 
+        facet_grid(celltype ~ protocol,
+                   scales = "free") + 
+        labs(x = "", y = "Proportion") + 
+        scale_y_continuous(expand = expansion(mult = c(0, 0), add = c(0.05, 0.05))) +
+        coord_cartesian(clip = "off", ylim = c(0, NA)) + 
+        theme_cowplot() + 
+        theme(axis.text.y = element_text(size = 12),
+              axis.text.x = element_text(size = 16, angle = 90, hjust = 0.5, vjust = 0.5),
+              axis.title = element_text(size = 20),
+              strip.text = element_text(size = 14),
+              panel.border = element_rect(fill = NA, colour = "grey20"),
+              strip.background = element_rect(fill = "white", color = "black")) + 
+        scale_color_manual(values = donor_colors, name = "Donor"))
+
+pdf("paper_figures_deconvolution/boxplot_allclusters_proportions.pdf", height = 18, width = 9)
+p_box + theme(legend.position = "none")
+dev.off()
+pdf("paper_figures_deconvolution/boxplot_allclusters_proportions_legend.pdf", height = 3, width = 2)
+grid.newpage()
+grid.draw(get_legend2(p_box + theme(legend.position = "right",
+                                    legend.text = element_text(size = 14),
+                                    legend.title = element_text(size = 16))))
+dev.off()
+```
+
+```{r}
+#| label: plot-deconv-box-sub
+#| fig.width: 12
+#| fig.height: 5
+
+mpropsub <- mprop |> 
+    filter(celltype %in% c("cycling", "luminal early"),
+           protocol == "IVMC") |>
+    mutate(celltype = factor(celltype, 
+                             levels = c("luminal early", 
+                                        "cycling")))
+sz <- mpropsub |> 
+    group_by(celltype) |>
+    summarize(rng = 0.1 + 1.0 * (max(proportion) - min(proportion)))
+(p_box_sub <- ggplot(mpropsub, 
+                     aes(x = timepointexp, y = proportion)) + 
+        geom_boxplot(position = position_dodge2(0.75, preserve = "single"), 
+                     outlier.size = -1, alpha = 0.5) + 
+        geom_jitter(position = position_dodge2(0.75, preserve = "single"), 
+                    size = 2, aes(color = donor)) + 
+        geom_rect(data = data.frame(
+            timepointexp = rep(levels(mpropsub$timepointexp), nlevels(mpropsub$celltype)),
+            celltype = factor(rep(levels(mpropsub$celltype), each = nlevels(mpropsub$timepointexp)),
+                              c("luminal early", "cycling")),
+            xmin = rep((1:nlevels(mpropsub$timepointexp)) - 0.35, nlevels(mpropsub$celltype)), 
+            xmax = rep((1:nlevels(mpropsub$timepointexp)) + 0.35, nlevels(mpropsub$celltype)),
+            ymin = rep(rep(-0.05, nlevels(mpropsub$timepointexp)), nlevels(mpropsub$celltype)), 
+            ymax = rep(rep(-0.9, nlevels(mpropsub$timepointexp)), nlevels(mpropsub$celltype))) |>
+                left_join(sz) |> mutate(ymax = ymax * rng / rng[celltype == "cycling"]),
+            aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+                fill = timepointexp), inherit.aes = FALSE, 
+            show.legend = FALSE) +
+        scale_fill_manual(values = alpha(bulk_timepoint_colors, 0.5)) + 
+        facet_wrap2(
+            ~ celltype, nrow = 1, 
+            strip = strip_themed(clip = "off", background_x = elem_list_rect(
+                fill = alpha(tissue_leiden_res0.4_annot_colors[levels(mpropsub$celltype)], 1))), 
+            scales = "free_y") + 
+        labs(x = "", y = "Proportion") + 
+        scale_y_continuous(expand = expansion(mult = c(0, 0), add = c(0.05, 0.05))) +
+        coord_cartesian(clip = "off", ylim = c(0, NA)) + 
+        theme_cowplot() + 
+        theme(strip.text = element_text(size = 20, hjust = 0.5, 
+                                        margin = margin(0.15, 0, 0.15, 0, "cm")),
+              strip.background = element_rect(fill = "white", color = "black"),
+              axis.text.x = element_text(size = 20, angle = 90, hjust = 0.5, vjust = 0.5),
+              axis.text.y = element_text(size = 16),
+              legend.title = element_text(size = 20),
+              legend.text = element_text(size = 20),
+              panel.border = element_rect(fill = NA, colour = "grey20"),
+              axis.title = element_text(size = 20)) + 
+        scale_color_manual(values = donor_colors, name = "Donor"))
+
+pdf("paper_figures_deconvolution/boxplot_sub_proportions.pdf", height = 5.5, width = 15)
+p_box_sub
+dev.off()
+```
+
+```{r}
+#| label: plot-deconv-box-sub-single
+#| fig.width: 6.75
+#| fig.height: 5
+
+for (ct in c("cycling", "luminal early")) {
+    tmp <- mpropsub |> filter(celltype == ct) |> droplevels()
+    (p_box_sub <- ggplot(tmp, aes(x = timepointexp, y = proportion)) + 
+            geom_boxplot(position = position_dodge2(0.75, preserve = "single"), 
+                         outlier.size = -1, alpha = 0.5) + 
+            geom_jitter(position = position_dodge2(0.75, preserve = "single"), 
+                        size = 2, aes(color = donor)) + 
+            geom_rect(data = data.frame(
+                timepointexp = rep(levels(tmp$timepointexp), 1),
+                celltype = rep(ct, each = 7),
+                xmin = rep((1:7) - 0.35, 1), xmax = rep((1:7) + 0.35, 1),
+                ymin = rep(rep(-0.05, 7), 1), ymax = rep(rep(-0.9, 7), 1)) |>
+                    left_join(sz) |> mutate(ymax = ymax * rng / sz$rng[sz$celltype == "cycling"]),
+                aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+                    fill = timepointexp), inherit.aes = FALSE, 
+                show.legend = FALSE) +
+            scale_fill_manual(values = alpha(bulk_timepoint_colors, 0.5)) + 
+            facet_wrap2(
+                ~ celltype, nrow = 1, 
+                strip = strip_themed(clip = "off", background_x = elem_list_rect(
+                    fill = alpha(tissue_leiden_res0.4_annot_colors[levels(tmp$celltype)], 1))), 
+                scales = "free_y") + 
+            labs(x = "", y = "Proportion") + 
+            scale_y_continuous(expand = expansion(mult = c(0, 0), add = c(0.05, 0.05))) +
+            coord_cartesian(clip = "off", ylim = c(0, NA)) + 
+            theme_cowplot() + 
+            theme(strip.text = element_text(size = 20, hjust = 0.5, 
+                                            margin = margin(0.15, 0, 0.15, 0, "cm")),
+                  strip.background = element_rect(fill = "white", color = "black"),
+                  axis.text.x = element_text(size = 20, angle = 90, hjust = 0.5, vjust = 0.5),
+                  axis.text.y = element_text(size = 16),
+                  legend.title = element_text(size = 20),
+                  legend.text = element_text(size = 20),
+                  panel.border = element_rect(fill = NA, colour = "grey20"),
+                  axis.title = element_text(size = 20)) + 
+            scale_color_manual(values = donor_colors, name = "Donor"))
+    
+    pdf(paste0("paper_figures_deconvolution/boxplot_sub_proportions_", ct, ".pdf"), 
+        height = 5.75, width = 9)
+    print(p_box_sub)
+    dev.off()
+}
+```
+
+# Session info
+
+```{r}
+#| label: session-info
+
+sessionInfo()
+```
+

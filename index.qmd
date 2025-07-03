@@ -1,0 +1,126 @@
+---
+title: "An organoid model of the menstrual cycle reveals the role of the luminal epithelium in regeneration of the human endometrium"
+subtitle: "Analysis code"
+date: ""
+author:
+  - name: Konstantina Nikolakopoulou
+    orcid: 0000-0003-2306-590X
+    email: konstantina.nikolakopoulou@fmi.ch
+    affiliations:
+      - ref: fmi
+  - name: Weand Ybañez
+    orcid: 0009-0004-9494-819X
+    email: 
+    affiliations:
+      - ref: fmi
+  - name: Lhéanna Klaeylé
+    orcid: 0009-0001-3774-2767
+    email: 
+    affiliations:
+      - ref: fmi
+  - name: Lisa Frugoli
+    orcid: 0009-0009-2997-1197
+    email: 
+    affiliations: 
+      - ref: fmi
+  - name: Hans-Rudolf Hotz
+    orcid: 0000-0002-2799-424X
+    email: hansrudolf.hotz@fmi.ch
+    affiliations:
+      - ref: fmi
+      - ref: sib
+  - name: Charlotte Soneson
+    orcid: 0000-0003-3833-2169
+    email: charlotte.soneson@fmi.ch
+    affiliations:
+      - ref: fmi
+      - ref: sib
+  - name: Margherita Yayoi Turco
+    orcid: 0000-0002-3380-7375
+    email: margherita.turco@fmi.ch
+    affiliations:
+      - ref: fmi
+affiliations:
+  - id: fmi
+    name: Friedrich Miescher Institute for Biomedical Research
+    address: Fabrikstrasse 24
+    postal-code: 4056
+    city: Basel
+    country: Switzerland
+  - id: unibas
+    name: University of Basel
+    address: Petersplatz 10
+    postal-code: 4003
+    city: Basel
+    country: Switzerland
+  - id: sib
+    name: SIB Swiss Institute of Bioinformatics
+    address: Fabrikstrasse 24
+    postal-code: 4056
+    city: Basel
+    country: Switzerland
+license: MIT License
+format: 
+    html:
+        embed-resources: true
+        fig-cap-location: top
+---
+
+<style>
+.author {
+  font-size: 1em;
+}
+
+.affiliation {
+  font-size: 1em;
+}
+</style>
+
+## Links to publication
+
+The accompanying manuscript is:
+Nikolakopoulou et al.: An organoid model of the menstrual cycle reveals the role of the luminal epithelium in regeneration of the human endometrium (2025)
+
+and is available from:
+
+- [bioRxiv]()
+
+## Links to analysis code
+
+All source code is available from GitHub at [https://github.com/fmicompbio/IVMC-protocol](https://github.com/fmicompbio/IVMC-protocol).
+Click on a thumbnail below to jump directly to the corresponding sources.
+
+### Bulk RNA-seq
+
+|          |                                                                                                  |
+|----------|:----------:|
+| [Data processing, analysis and plotting](bulkRNAseq_timecourse/IVMC_analysis_and_plots_for_paper.html) <br> [Supplementary Tables](https://github.com/fmicompbio/IVMC-protocol/tree/main/bulkRNAseq_timecourse/paper_tables_IVMC/) | [![](bulkRNAseq_timecourse/paper_figures_IVMC/EDFigure_1_d.png){width="4cm"}](bulkRNAseq_timecourse/IVMC_analysis_and_plots_for_paper.html) |  
+| [Deconvolution, processing](bulkRNAseq_timecourse/deconvolve_bulk_timecourse.html) |  |  
+| [Deconvolution, paper figures](bulkRNAseq_timecourse/deconvolution_figures_for_paper.html) | [![](bulkRNAseq_timecourse/paper_figures_deconvolution/areaplot_allclusters_avg_donors.png){width="6cm"}](bulkRNAseq_timecourse/deconvolution_figures_for_paper.html) |  
+: {tbl-colwidths="[50,50]"}
+
+### scRNA-seq, epithelial atlas
+
+|          |                                                                                                  |
+|----------|:----------:|
+| [Data processing](scRNAseq_invivo_endometrium_epithelial_cell_atlas/process_epithelial_cell_atlas.html) <br> [Supplementary Tables, marker genes](https://github.com/fmicompbio/IVMC-protocol/tree/main/scRNAseq_invivo_endometrium_epithelial_cell_atlas/marker_genes_all_leiden_res0.4_annot) <br> [Supplementary Tables, GO term enrichments](https://github.com/fmicompbio/IVMC-protocol/tree/main/scRNAseq_invivo_endometrium_epithelial_cell_atlas/gprofiler) |  |  
+| [Paper figures](scRNAseq_invivo_endometrium_epithelial_cell_atlas/epithelial_atlas_figures_for_paper.html) | [![](scRNAseq_invivo_endometrium_epithelial_cell_atlas/paper_figures/UMAP_tissue_clusters.png){width="4cm"}](scRNAseq_invivo_endometrium_epithelial_cell_atlas/epithelial_atlas_figures_for_paper.html) |  
+: {tbl-colwidths="[50,50]"}
+
+### scRNA-seq, timecourse
+
+|          |                                                                                                  |
+|----------|:----------:|
+| [Data processing](scRNAseq_timecourse/process_organoid_scrnaseq_timecourse.html) <br> [Supplementary Tables, marker genes](https://github.com/fmicompbio/IVMC-protocol/tree/main/) <br> [Supplementary Tables, GO term enrichments](https://github.com/fmicompbio/IVMC-protocol/tree/main/scRNAseq_timecourse/gprofiler)  |  |  
+| [Paper figures](scRNAseq_timecourse/scRNAseq_timecourse_figures_for_paper.html) | [![](scRNAseq_timecourse/paper_figures/UMAP_organoids_clusters.png){width="4cm"}](scRNAseq_timecourse/scRNAseq_timecourse_figures_for_paper.html) |  
+: {tbl-colwidths="[50,50]"}
+
+### scRNA-seq, complete atlas (CellChat analysis)
+
+|          |                                                                                                  |
+|----------|:----------:|
+| [Data processing](scRNAseq_invivo_endometrium_cell_atlas/process_cell_atlas.html) |  |  
+| [CellChat analysis](scRNAseq_invivo_endometrium_cell_atlas/run_cellchat.html) | [![](scRNAseq_invivo_endometrium_cell_atlas/paper_figures/cellchat_celltypes_luminal_early_sender.png){width="4cm"}](scRNAseq_invivo_endometrium_cell_atlas/run_cellchat.html) |
+| [Paper figures](scRNAseq_invivo_endometrium_cell_atlas/cell_atlas_figures_for_paper.html) | [![](scRNAseq_invivo_endometrium_cell_atlas/paper_figures/cellchat_pathways_luminal_early_sender_all.png){width="4cm"}](scRNAseq_invivo_endometrium_cell_atlas/cell_atlas_figures_for_paper.html) |
+: {tbl-colwidths="[50,50]"}
+

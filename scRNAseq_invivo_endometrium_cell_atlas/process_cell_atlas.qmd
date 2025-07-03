@@ -1,0 +1,886 @@
+---
+title: "Generating an endometrial atlas"
+date: "`r Sys.Date()`"
+format: 
+    html:
+        toc: true
+        theme: united
+embed-resources: true
+---
+
+# Load packages
+
+```{r load-pkgs}
+suppressPackageStartupMessages({
+    library(fishpond)
+    library(SummarizedExperiment)
+    library(SingleCellExperiment)
+    library(scuttle)
+    library(scater)
+    library(scran)
+    library(dplyr)
+    library(tidyr)
+    library(ggplot2)
+    library(msigdbr)
+    library(batchelor)
+    library(cowplot)
+    library(ComplexHeatmap)
+    library(circlize)
+    library(scDblFinder)
+    library(Seurat)
+    library(sketchR)
+    library(tricycle)
+    library(org.Hs.eg.db)
+    library(parallel)
+    library(bluster)
+    library(BiocParallel)
+    library(igraph)
+    library(DT)
+    library(SingleR)
+})
+```
+
+# Define parameters and reference files
+
+```{r define-params}
+samples <- c("4861STDY7387181", "4861STDY7387182", "4861STDY7387183", 
+             "4861STDY7771115", "4861STDY7771123", "MRC_Endo8625698", 
+             "MRC_Endo8625699", "MRC_Endo8712024", "MRC_Endo8712032", 
+             "MRC_Endo8715415", "MRC_Endo8715416", "GSM4577306", "GSM4577307", 
+             "GSM4577308", "GSM4577309", "GSM4577310", "GSM4577311", 
+             "GSM4577312", "GSM4577313", "GSM4577314", "GSM4577315", 
+             "Shih_MEtissue1", "Shih_MEtissue2", "Shih_MEtissue3", 
+             "Shih_MEtissue4", "Shih_MEtissue5", "Shih_MEtissue6", 
+             "Shih_MEtissue7", "Huang_GSM6605437", "Huang_GSM6605438", 
+             "Huang_GSM6605440", "Huang_GSM6605439", "Huang_GSM7277296", 
+             "Huang_GSM7277297", "Huang_GSM7277298", "Lai_GSM5572238", 
+             "Lai_GSM5572239", "Lai_GSM5572240")
+blockvar <- "sample"           ## used as blocking factor in doublet annotation
+batchvar <- "donorCol"         ## used for batch correction
+datasetvar <- "matchDataset"   ## used as blocking factor in HVG annotation
+
+## Sample annotation
+sampleannot <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/invivo_atlas_samples.txt"
+
+## Gene annotation (derived from GENCODE v38 gtf file)
+t2g <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/reference/gencode.v38.annotation.tx2gene_full.rds"
+
+## Reproductive cell atlas data (downloaded from 
+## https://www.reproductivecellatlas.org/ and converted to SingleCellExperiment 
+## format)
+rca <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/data/reproductivecellatlas/2021/endometrium_all.rds"
+heca <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/data/reproductivecellatlas/2023/endometriumAtlasV2_cells_with_counts.rds"
+hecaimmune <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/data/reproductivecellatlas/2023/endometriumAtlasV2_cells_immune.rds"
+
+## Cell cycle marker genes
+## https://github.com/ventolab/HECA-Human-Endometrial-Cell-Atlas/tree/main/utils
+s_genes <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/data/reproductivecellatlas/2023/S_genes_HECA.tsv"
+g2m_genes <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/data/reproductivecellatlas/2023/G2M_genes_HECA.tsv"
+
+## Shih et al cell annotations (obtained from 
+## https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE203191)
+shih_cellannot <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/data/GSE203191/GSE203191_Shih_endo_meta_frame.tsv"
+
+## Epithelial atlas
+epiatlas <- "../scRNAseq_invivo_endometrium_epithelial_cell_atlas/invivo_epithelial_cell_atlas.rds"
+```
+
+# Assemble gene annotation
+
+```{r gene-annot}
+geneannot <- readRDS(t2g) |>
+    dplyr::select(gene_id, seqnames, gene_type, gene_name) |>
+    dplyr::rename(chromosome = seqnames) |>
+    dplyr::distinct()
+
+## Annotate ribosomal protein genes
+## GO term "structural constituent of ribosome" (GO:0003735)
+golist <- as.list(org.Hs.egGO2ALLEGS)
+ribo_entrez <- unique(golist[["GO:0003735"]])
+length(ribo_entrez)
+tmp <- select(org.Hs.eg.db, keys = ribo_entrez, columns = "ENSEMBL", 
+              keytype = "ENTREZID")
+ribo_ensembl <- unique(na.omit(tmp[, "ENSEMBL"]))
+length(ribo_ensembl)
+summary(ribo_ensembl %in% sub("\\.[0-9]+$", "", geneannot$gene_id))
+geneannot$is_ribosomal_protein <- 
+    sub("\\.[0-9]+$", "", geneannot$gene_id) %in% ribo_ensembl
+geneannot$gene_type_ribo <- ifelse(
+    geneannot$gene_type == "protein_coding",
+    ifelse(geneannot$is_ribosomal_protein, "protein_coding_ribosome",
+           geneannot$gene_type),
+    geneannot$gene_type)
+```
+
+# Read data
+
+```{r read-data}
+#| message: false
+
+## Get sample IDs
+tbl <- read.delim(sampleannot) |>
+     dplyr::filter(SampleName %in% samples)
+DT::datatable(tbl, options = list(scrollX = TRUE, pageLength = 50))
+sns <- unique(tbl$SampleName)
+names(sns) <- sns
+
+## Read alevin-fry data and combine
+dat <- do.call(cbind, lapply(sns, function(s) {
+    x <- fishpond::loadFry(
+        fryDir = file.path("../scRNAseq_invivo_endometrium_epithelial_cell_atlas", 
+                           "data", "alevin_fry_splici", s), 
+        outputFormat = list(counts = c("S", "A"), spliced = c("S", "A"),
+                            unspliced = c("U"), total = c("U", "S", "A")))
+    rowData(x)$gene_name <- 
+        geneannot$gene_name[match(rowData(x)$gene_ids, geneannot$gene_id)]
+    rowData(x)$chromosome <- 
+        geneannot$chromosome[match(rowData(x)$gene_ids, geneannot$gene_id)]
+    rowData(x)$gene_type <- 
+        geneannot$gene_type[match(rowData(x)$gene_ids, geneannot$gene_id)]
+    rowData(x)$gene_type_ribo <- 
+        geneannot$gene_type_ribo[match(rowData(x)$gene_ids, geneannot$gene_id)]
+    
+    ## Keep only cells with at least 1,000 detected genes
+    x <- x[, colSums(assay(x, "total") > 0) > 1000]
+    
+    ## Add sample ID to colnames
+    x$sample <- s
+    colnames(x) <- paste0(s, "_", colnames(x))
+    x
+}))
+dat
+
+## Set rownames to gene names where possible
+rownames(dat) <- scater::uniquifyFeatureNames(
+    ID = rownames(dat), 
+    names = rowData(dat)$gene_name
+)
+```
+
+# Add sample annotations
+
+```{r add-sample-annots}
+## Extract barcodes corresponding to control samples in Shih data and remove 
+## all other barcodes from the Shih samples
+cb <- read.delim(shih_cellannot) |>
+    dplyr::filter(pheno == "Control") |>
+    dplyr::mutate(barcode = gsub("-[0-9]$", "", barcode)) |>
+    dplyr::mutate(sample_cb = paste("Shih", run, barcode, sep = "_")) |>
+    dplyr::pull(sample_cb)
+to_remove <- which(grepl("Shih", dat$sample) & 
+                       !paste0(dat$sample, "_", dat$barcodes) %in% cb)
+dat <- dat[, -to_remove]
+dim(dat)
+
+## Add 'cell' column
+dat$cell <- colnames(dat)
+
+## Any other provided annotations
+tbl2 <- tbl |>
+    dplyr::filter(RunID != "Shih")
+if (nrow(tbl2) > 0 && (length(tbl2$SampleName) == length(unique(tbl2$SampleName)))) {
+    for (cn in colnames(tbl2)) {
+        if (!all(is.na(tbl2[[cn]])) && !(cn %in% colnames(colData(dat)))) {
+            if (cn == "Day") {
+                colData(dat)[[cn]] <- paste0(
+                    "D", tbl2[[cn]][match(dat$sample, tbl2$SampleName)])
+            } else if (cn == "RunID") {
+                colData(dat)[[cn]] <- sub("_[0-9]+$", "", 
+                                          tbl2[[cn]][match(dat$sample, 
+                                                           tbl2$SampleName)])
+            } else {
+                colData(dat)[[cn]] <- tbl2[[cn]][match(dat$sample, tbl2$SampleName)]
+            }
+        }
+    }
+}
+
+## Harmonize annotation values
+dat$Stage <- gsub(" stage", "", dat$Stage)
+
+## Add information for the Shih data set
+shih_annot <- read.delim(shih_cellannot) |>
+    dplyr::mutate(cell = paste0("Shih_", run, "_", gsub("-[0-9]$", "", barcode)))
+if (any(dat$cell %in% shih_annot$cell)) {
+    for (cn in c("clusterID", "pheno", "Phase", "subjectID", "NKsubclusterID",
+                 "StromalSubclusterID")) {
+        colData(dat)[[paste0("Shih_", cn)]] <- 
+            shih_annot[[cn]][match(dat$cell, shih_annot$cell)]
+    }
+}
+dat$RunID[grep("Shih", dat$sample)] <- "Shih"
+dat$Stage[grep("Shih", dat$sample)] <- "menstrual"
+
+dat$StageFactor <- factor(dat$Stage, 
+                          levels = c("menstrual", "proliferative",
+                                     "early-secretory", "early-mid-secretory",
+                                     "mid-secretory", "late-secretory"))
+dat$StageCoarse <- sub("early-|early-mid-|mid-|late-", "", dat$Stage)
+
+## Create a 'donorCol' column
+dat$donorCol <- NA_character_
+if ("DonorID" %in% colnames(colData(dat))) {
+    idx <- which(!is.na(dat[["DonorID"]]))
+    dat$donorCol[idx] <- dat[["DonorID"]][idx]
+}
+if ("Shih_subjectID" %in% colnames(colData(dat))) {
+    idx <- which(!is.na(dat[["Shih_subjectID"]]))
+    dat$donorCol[idx] <- dat[["Shih_subjectID"]][idx]
+}
+
+## Create a 'sampleCol' column (either sample or Shih_subjectID)
+dat$sampleCol <- NA_character_
+if ("sample" %in% colnames(colData(dat))) {
+    idx <- which(!is.na(dat[["sample"]]))
+    dat$sampleCol[idx] <- dat[["sample"]][idx]
+}
+if ("Shih_subjectID" %in% colnames(colData(dat))) {
+    idx <- which(!is.na(dat[["Shih_subjectID"]]))
+    dat$sampleCol[idx] <- dat[["Shih_subjectID"]][idx]
+}
+
+## Generate columns to match to HECA
+dat$matchDataset <- ifelse(dat$RunID %in% c("Wang", "Shih", "Lai", "Huang"), 
+                           dat$RunID, "GarciaAlonso")
+dat$matchCell <- sub("^Huang_|^Lai_|^Shih_", "", dat$cell)
+dat$matchId <- paste0(dat$matchCell, "-", dat$matchDataset)
+
+## Add annotations from the reproductive cell atlas (2021)
+rca <- readRDS(rca)
+table(dat$matchDataset, colnames(dat) %in% colnames(rca), useNA = "ifany")
+dat$RCA_CellCyclePhase <- rca$`CellCycle Phase`[match(colnames(dat), colnames(rca))]
+dat$RCA_Celltype <- rca$`Cell type`[match(colnames(dat), colnames(rca))]
+dat$RCA_percentmito <- rca$percent_mito[match(colnames(dat), colnames(rca))]
+dat$RCA_ngenes <- rca$n_genes[match(colnames(dat), colnames(rca))]
+dat$RCA_BiopsyType <- rca$BiopsyType[match(colnames(dat), colnames(rca))]
+dat$RCA_Location <- rca$Location[match(colnames(dat), colnames(rca))]
+dat$RCA_BroadCelltype <- rca$`Broad cell type`[match(colnames(dat), colnames(rca))]
+
+## Add annotations from HECA (2023)
+heca <- readRDS(heca)
+hecaimmune <- readRDS(hecaimmune)
+table(dat$matchDataset, dat$matchId %in% colnames(heca), useNA = "ifany")
+dat$HECA_CellCyclePhase <- as.character(heca$phase[match(dat$matchId, colnames(heca))])
+dat$HECA_Celltype <- as.character(heca$celltype[match(dat$matchId, colnames(heca))])
+dat$HECA_CelltypeImmune <- as.character(hecaimmune$celltype[match(dat$matchId, colnames(hecaimmune))])
+dat$HECA_ngenes <- heca$n_genes[match(dat$matchId, colnames(heca))]
+dat$HECA_percentmito <- heca$percent_mito[match(dat$matchId, colnames(heca))]
+dat$HECA_ScrubletScore <- heca$scrublet_score[match(dat$matchId, colnames(heca))]
+dat$HECA_Stage <- as.character(heca$Stage[match(dat$matchId, colnames(heca))])
+dat$HECA_Lineage <- as.character(heca$lineage[match(dat$matchId, colnames(heca))])
+dat$HECA_Label <- as.character(heca$label_long[match(dat$matchId, colnames(heca))])
+
+## Filter to only keep cells that have a value for the batch variable
+(dat <- dat[, !is.na(dat[[batchvar]])])
+
+## Sample annotation summary
+DT::datatable(as.data.frame(colData(dat)) |>
+                  dplyr::select(sample, SampleType, DonorID, SampleName, RunID,
+                                ReadLength1, ReadLength2, Tissue, Stage,
+                                Digestion, Protocol, Source, Sex, 
+                                TimeInMenstrualCycle, DiseaseState, 
+                                Fecundity, Phenotype, DevStage,
+                                Shih_pheno, Shih_subjectID, 
+                                StageFactor, StageCoarse, donorCol, sampleCol,
+                                matchDataset) |>
+                  dplyr::distinct(), 
+              rownames = FALSE,
+              options = list(scrollX = TRUE, pageLength = 50))
+```
+
+
+# Check total count for each gene type and removed unwanted gene types
+
+```{r filter-genes}
+#| fig.width: 10
+#| fig.height: 10
+
+keepGeneTypes <- c("protein_coding", "IG_V_gene", "IG_C_gene", "IG_J_gene",
+                   "TR_C_gene", "TR_J_gene", "TR_V_gene", "TR_D_gene",
+                   "IG_D_gene", "Mt_tRNA", "Mt_rRNA")
+
+pd <- data.frame(gene = rownames(dat), 
+                 gene_type_ribo = rowData(dat)$gene_type_ribo, 
+                 total_count = rowSums(counts(dat))) |>
+    group_by(gene_type_ribo) |>
+    summarize(nbr_genes = length(gene), 
+              total_count = sum(total_count)) |>
+    mutate(keep = gene_type_ribo %in% keepGeneTypes) |>
+    arrange(desc(nbr_genes))
+pd$gene_type_ribo <- factor(pd$gene_type_ribo, levels = unique(pd$gene_type_ribo))
+
+p1 <- ggplot(pd, aes(x = gene_type_ribo, y = nbr_genes, fill = keep)) +
+    geom_col() +
+    labs(x = "", y = "Number of genes", fill = "keep") +
+    theme_cowplot() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p2 <- ggplot(pd, aes(x = gene_type_ribo, y = total_count, fill = keep)) +
+    geom_col() +
+    labs(x = "", y = "Total UMI count", fill = "keep") +
+    theme_cowplot() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+plot_grid(p1, p2, ncol = 1)
+
+dat <- dat[rowData(dat)$gene_type_ribo %in% keepGeneTypes, ]
+dim(dat)
+```
+
+# Add QC metrics
+
+```{r qc-scuttle}
+(MT <- grep("^MT-", rownames(dat), value = TRUE))
+dat <- scuttle::addPerCellQC(dat, assay.type = "counts", subsets = list(MT = MT))
+dat <- scuttle::addPerFeatureQC(dat, assay.type = "counts")
+dat$intronic_fraction <- 
+    colSums(assay(dat, "unspliced")) / colSums(assay(dat, "total"))
+rowData(dat)$intronic_fraction <- 
+    rowSums(assay(dat, "unspliced")) / rowSums(assay(dat, "total"))
+```
+
+# QC plots
+
+```{r qc-plots}
+#| fig.width: 8
+#| fig.height: 6
+
+total_count_threshold <- 1000
+detected_threshold <- 500
+mt_percent_threshold <- 25
+
+dat$keep <- (dat$total > total_count_threshold) & 
+    (dat$detected > detected_threshold) & 
+    (dat$subsets_MT_percent < mt_percent_threshold)
+table(dat$keep)
+
+cdplot <- as.data.frame(colData(dat))
+
+sid <- "sample"
+stid <- "StageFactor"
+
+ggplot(cdplot, aes(x = .data[[sid]], y = sum, fill = .data[[stid]])) +
+    geom_hline(yintercept = total_count_threshold) + 
+    geom_violin(scale = "width") + theme_minimal() +
+    labs(y = "Total UMI count per cell") + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+ggplot(cdplot, aes(x = .data[[sid]], y = sum, fill = .data[[stid]])) +
+    geom_hline(yintercept = total_count_threshold) + 
+    geom_violin(scale = "width") + theme_minimal() +
+    scale_y_log10() + 
+    labs(y = "Total UMI count per cell") + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+ggplot(cdplot, aes(x = .data[[sid]], y = detected, fill = .data[[stid]])) +
+    geom_hline(yintercept = detected_threshold) + 
+    geom_violin(scale = "width") + theme_minimal() +
+    labs(y = "Number of detected genes per cell") + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+ggplot(cdplot, aes(x = .data[[sid]], y = subsets_MT_percent, fill = .data[[stid]])) +
+    geom_hline(yintercept = mt_percent_threshold) + 
+    geom_violin(scale = "width") + theme_minimal() +
+    labs(y = "Percentage of MT count per cell") + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+
+ggplot(cdplot, aes(x = detected, y = subsets_MT_percent, color = keep)) + 
+    geom_point(size = 0.5, alpha = 0.5) + theme_minimal() + 
+    labs(x = "Number of detected genes per cell", 
+         y = "Percentage of MT count per cell")
+ggplot(cdplot, aes(x = detected, y = intronic_fraction, color = keep)) + 
+    geom_point(size = 0.5, alpha = 0.5) + theme_minimal() + 
+    labs(x = "Number of detected genes per cell",
+         y = "Intronic fraction per cell")
+```
+
+# Filter and remove samples with too few cells
+
+```{r filter}
+#| fig.width: 8
+#| fig.height: 6
+
+(tbl <- table(sample = dat$sample, keep = dat$keep))
+ggplot(as.data.frame(tbl), aes(x = sample, y = Freq, fill = keep)) + 
+    geom_col(position = "stack") + theme_bw() + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+    labs(x = "", y = "Number of cells")
+ggplot(as.data.frame(tbl), aes(x = sample, y = Freq, fill = keep)) + 
+    geom_col(position = "fill") + theme_bw() + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+    labs(x = "", y = "Fraction of cells")
+
+dat <- dat[, which(dat$keep)]
+dim(dat)
+```
+
+```{r cells-per-sample}
+(tbl <- sort(table(dat$sampleCol)))
+keepsamples <- names(tbl)[tbl > 30]
+dat <- dat[, dat$sampleCol %in% keepsamples]
+dim(dat)
+```
+
+```{r draw-heatmap}
+#| fig.width: 8
+#| fig.height: 7
+
+tbl <- table(dat[[sid]], dat[[stid]])
+draw(Heatmap(tbl, col = circlize::colorRamp2(c(0, max(tbl)), c("white", "steelblue")),
+             cluster_columns = FALSE, cluster_rows = FALSE, 
+             row_names_gp = gpar(fontsize = 8),
+             name = "Number of\ncells per\nsample",
+             rect_gp = gpar(col = "grey", lwd = 1),
+             cell_fun = function(j, i, x, y, width, height, fill) {
+                 grid.text(sprintf("%d", tbl[i, j]), x, y, gp = gpar(fontsize = 8))
+             }))
+```
+
+# Recalculate QC metrics for genes based on remaining cells
+
+```{r qc-scuttle2}
+dat <- scuttle::addPerFeatureQC(dat, assay.type = "counts")
+rowData(dat)$intronic_fraction <- 
+    rowSums(assay(dat, "unspliced")) / rowSums(assay(dat, "total"))
+```
+
+# Most highly expressed genes
+
+```{r highly-expressed}
+scater::plotHighestExprs(dat, n = 25, colour_cells_by = stid, 
+                         exprs_values = "counts")
+```
+
+# Calculate size factors and logcounts
+
+```{r size-factors}
+size_factor_threshold <- 0.1
+set.seed(123)
+clusters <- scran::quickCluster(
+    dat, method = "igraph", min.mean = 0.1,
+    use.ranks = FALSE, BSPARAM = BiocSingular::ExactParam(),
+    block = dat[[datasetvar]], 
+    min.size = min(table(dat[[datasetvar]]))
+)
+dat <- scran::computeSumFactors(dat, min.mean = 0.1, cluster = clusters)
+summary(sizeFactors(dat))
+ggplot(data.frame(libSize = dat$sum,
+                  sizeFactor = sizeFactors(dat),
+                  group = dat[[blockvar]],
+                  stringsAsFactors = FALSE),
+       aes(x = libSize, y = sizeFactor, color = group)) + 
+    geom_point(alpha = 0.5) + theme_bw() + 
+    geom_hline(yintercept = size_factor_threshold, linetype = "dashed") + 
+    xlab("Total UMI count") + ylab("Size factor")
+dat <- dat[, sizeFactors(dat) > size_factor_threshold]
+
+dat <- batchelor::multiBatchNorm(dat, batch = dat[[batchvar]], min.mean = 0.1)
+ggplot(data.frame(libSize = dat$sum,
+                  sizeFactor = sizeFactors(dat),
+                  group = dat[[blockvar]],
+                  stringsAsFactors = FALSE),
+       aes(x = libSize, y = sizeFactor, color = group)) + 
+    geom_point(alpha = 0.5) + theme_bw() + 
+    geom_hline(yintercept = size_factor_threshold, linetype = "dashed") + 
+    xlab("Total UMI count") + ylab("Size factor")
+```
+
+# Cell cycle assignment
+
+```{r cell-cycle}
+#| message: false
+#| warning: false
+
+## tricycle
+set.seed(123)
+dat <- project_cycle_space(dat, species = "human", gname.type = "SYMBOL")
+dat <- estimate_cycle_position(dat)
+dat <- estimate_Schwabe_stage(dat, gname.type = "SYMBOL", species = "human", 
+                              batch.v = batchvar, tolerance = 0)
+plotReducedDim(dat, "tricycleEmbedding", point_size = 0.5, 
+               colour_by = "CCStage")
+tbl <- table(dat$StageFactor, dat$CCStage)
+draw(Heatmap(tbl, col = circlize::colorRamp2(c(0, max(tbl)), c("white", "steelblue")),
+             cluster_columns = FALSE, cluster_rows = FALSE, 
+             row_names_gp = gpar(fontsize = 8),
+             name = "Number of\ncells",
+             rect_gp = gpar(col = "grey", lwd = 1),
+             cell_fun = function(j, i, x, y, width, height, fill) {
+                 grid.text(sprintf("%d", tbl[i, j]), x, y, gp = gpar(fontsize = 8))
+             }))
+
+## Seurat (using genes from HECA)
+s_genes <- read.delim(s_genes)[, 1]
+g2m_genes <- read.delim(g2m_genes)[, 1]
+seurat <- CreateSeuratObject(counts = assay(dat, "counts"))
+seurat <- NormalizeData(seurat, verbose = FALSE)
+seurat <- FindVariableFeatures(seurat, selection.method = "vst", verbose = FALSE)
+seurat <- ScaleData(seurat, features = rownames(seurat), verbose = FALSE)
+seurat <- CellCycleScoring(seurat, s.features = s_genes, g2m.features = g2m_genes, 
+                           set.ident = TRUE)
+stopifnot(all(rownames(seurat@meta.data) == colnames(dat)))
+dat$SeuratCC <- seurat@meta.data$Phase
+tbl <- table(dat$StageFactor, dat$SeuratCC)
+draw(Heatmap(tbl, col = circlize::colorRamp2(c(0, max(tbl)), c("white", "steelblue")),
+             cluster_columns = FALSE, cluster_rows = FALSE, 
+             row_names_gp = gpar(fontsize = 8),
+             name = "Number of\ncells",
+             rect_gp = gpar(col = "grey", lwd = 1),
+             cell_fun = function(j, i, x, y, width, height, fill) {
+                 grid.text(sprintf("%d", tbl[i, j]), x, y, gp = gpar(fontsize = 8))
+             }))
+```
+
+# Find and mark doublets
+
+```{r doublets}
+#| warning: false
+
+set.seed(123)
+dat <- scDblFinder(dat, samples = blockvar, verbose = FALSE, 
+                   BPPARAM = MulticoreParam(workers = 8L))
+table(dat$scDblFinder.class, dat[[blockvar]])
+```
+
+# Sketching
+
+```{r sketching}
+set.seed(123)
+sketchcells.bybatch <- unlist(lapply(unique(colData(dat)[[batchvar]]), function(b) {
+    subd <- dat[, which(colData(dat)[[batchvar]] == b)]
+    geneVar <- scran::modelGeneVar(subd)
+    subhvgs <- scran::getTopHVGs(geneVar, n = 2000)
+    subd <- scater::runPCA(subd, exprs_values = "logcounts", ncomponents = 30, 
+                           name = "PCAsub", 
+                           subset_row = subhvgs, scale = FALSE)
+    idxsub <- geosketch(reducedDim(subd, "PCAsub"), 
+                        N = min(ncol(subd), max(0.1 * ncol(subd), 150)), 
+                        seed = 123)
+    colnames(subd)[idxsub]
+}))
+dat$sketched.bybatch <- ifelse(colnames(dat) %in% sketchcells.bybatch, TRUE, FALSE)
+table(batch = colData(dat)[[batchvar]], sketched.bybatch = dat$sketched.bybatch)
+```
+
+# Find an alternative reduced dimension representation, after sketching
+
+```{r dimred-sketch}
+set.seed(123)
+## First find a new set of HVGs
+dattmp <- dat[, sketchcells.bybatch]
+stopifnot(all(rownames(dattmp) == rownames(dat)))
+rowData(dat)$scran_geneVar_geosketch <- 
+    scran::modelGeneVar(dattmp, block = dattmp[[datasetvar]])
+hvgs <- scran::getTopHVGs(rowData(dat)$scran_geneVar_geosketch, n = 3000)
+metadata(dat)$hvg.scran.genevar.geosketch <- hvgs
+
+head(
+    as.data.frame(
+        rowData(dat)$scran_geneVar_geosketch[
+            order(rowData(dat)$scran_geneVar_geosketch$bio, 
+                  decreasing = TRUE), 
+            c("mean", "total", "tech", "bio", "p.value", "FDR")]
+    ), 
+    25
+)
+
+## Next run multibatch PCA on the sketched cells
+set.seed(123)
+dattmp <- dat[, sketchcells.bybatch]
+mbpca <- multiBatchPCA(dattmp, batch = dattmp[[batchvar]], d = 30, 
+                       subset.row = metadata(dat)$hvg.scran.genevar.geosketch, 
+                       weights = FALSE, preserve.single = TRUE)
+projection <- mbpca[[1]]
+rotation <- metadata(mbpca)$rotation
+centers <- metadata(mbpca)$centers
+## Sanity check
+tmp <- t(sweep(assay(dattmp[names(centers), ], "logcounts"), MARGIN = 1, 
+               STATS = centers, FUN = "-")) %*% rotation
+max(abs(tmp - projection))
+## Project all cells
+pca <- t(sweep(assay(dat[names(centers), ], "logcounts"), MARGIN = 1, 
+               STATS = centers, FUN = "-")) %*% rotation
+
+## Perform batch correction in the PCA space
+stopifnot(all(rownames(pca) == colnames(dat)))
+reducedDim(dat, "multibatchPCA") <- as.matrix(pca)
+mnn <- reducedMNN(as.matrix(pca), batch = dat[[batchvar]], k = 20, 
+                  BPPARAM = MulticoreParam(workers = 8L))
+stopifnot(all(rownames(mnn) == colnames(dat)))
+reducedDim(dat, "fastMNNcorr_sketch") <- mnn$corrected
+```
+
+# Dimension reduction
+
+Apply tSNE and UMAP to sketched cells and project the others.
+
+```{r dimred}
+## TSNE
+set.seed(123)
+tsne <- snifter::fitsne(
+    reducedDim(dat[, sketchcells.bybatch], "fastMNNcorr_sketch"), 
+    n_jobs = 8L, random_state = 123L,
+    perplexity = 30, n_components = 2L, 
+    pca = FALSE)
+proj <- snifter::project(
+    x = tsne, 
+    new = reducedDim(dat, "fastMNNcorr_sketch"), 
+    old = reducedDim(dat[, sketchcells.bybatch], "fastMNNcorr_sketch"))
+rownames(proj) <- colnames(dat)
+reducedDim(dat, "TSNE_fastMNNcorr_sketch") <- proj
+
+## UMAP
+set.seed(123)
+umap <- uwot::umap(
+    X = reducedDim(dat[, sketchcells.bybatch], "fastMNNcorr_sketch"), 
+    n_components = 2, n_neighbors = 50,
+    pca = NULL, scale = FALSE, 
+    ret_model = TRUE, n_threads = 8L)
+proj <- uwot::umap_transform(
+    X = reducedDim(dat, "fastMNNcorr_sketch"), 
+    model = umap, 
+    n_threads = 8L)
+rownames(proj) <- colnames(dat)
+reducedDim(dat, "UMAP_fastMNNcorr_sketch") <- proj
+```
+
+# Shuffle cells (to avoid plotting in layers by sample later)
+
+```{r shuffle-cells}
+set.seed(123)
+dat <- dat[, sample(seq_len(ncol(dat)), ncol(dat), replace = FALSE)]
+```
+
+# Annotate cells
+
+```{r annotate-clusters}
+dat$celltype_annot <- rep(NA, ncol(dat))
+
+# Cells from the epithelial lineage are assigned a cell type label based on the 
+# annotation from there. 
+epiatlas <- readRDS(epiatlas)
+epicells <- intersect(colnames(epiatlas), colnames(dat))
+dat$celltype_annot[match(epicells, colnames(dat))] <- 
+    as.character(epiatlas$leiden_res0.4_annot)[match(epicells, colnames(epiatlas))]
+
+# For the other lineages, cells that appear in HECA
+# are assigned the label from there. 
+hecaidx <- which(!is.na(dat$HECA_Celltype) & dat$HECA_Lineage != "Epithelial")
+dat$celltype_annot[hecaidx] <- dat$HECA_Celltype[hecaidx]
+
+# Immune cells are assigned the refined immune cell type
+dat$celltype_annot[which(dat$celltype_annot %in% 
+                             c("Immune_Myeloid", "Immune_Lymphoid"))] <- NA
+hecaimmuneidx <- which(!is.na(dat$HECA_CelltypeImmune))
+dat$celltype_annot[hecaimmuneidx] <- dat$HECA_CelltypeImmune[hecaimmuneidx]
+
+# Group together some subtypes
+dat$celltype_annot[dat$celltype_annot %in% 
+                       c("dStromal_early", "dStromal_late", "dStromal_mid")] <- "dStromal"
+dat$celltype_annot[dat$celltype_annot %in% c("ePV_1a", "ePV_1b", "ePV_2")] <- "ePV"
+dat$celltype_annot[dat$celltype_annot %in% 
+                       c("eStromal", "eStromal_cycling", "eStromal_MMPs")] <- "eStromal"
+
+table(dat$celltype_annot, useNA = "ifany")
+
+# All remaining cells are assigned a label by running SingleR with the 
+# previously annotated cells as the reference.
+datleft <- dat[, is.na(dat$celltype_annot)]
+datref <- dat[, !is.na(dat$celltype_annot)]
+
+set.seed(123)
+ref_summed <- aggregateAcrossCells(datref, id = datref$celltype_annot,
+                                   use.assay.type = "logcounts",
+                                   statistics = "mean")
+pred <- SingleR(test = datleft, ref = ref_summed, 
+                labels = ref_summed$celltype_annot)
+plotScoreHeatmap(pred)
+dat$celltype_annot[match(rownames(pred), colnames(dat))] <- pred$labels
+table(dat$celltype_annot, useNA = "ifany")
+
+# Exclude cells that are not assigned a cluster label
+table(is.na(dat$celltype_annot))
+dat <- dat[, !is.na(dat$celltype_annot)]
+
+leiden_res0.4_annot_cols <- c(
+    "pre-ciliated" = "#AEC7E8",
+    "ciliated" = "#1F77B4",
+    "secretory early" = "#FF9896",
+    "secretory mid" = "#D62728",
+    "secretory late" = "#C49C94",
+    "luminal early" = "#C5B0D5",
+    "luminal late" = "#9467BD",
+    "transcriptionally active" = "#FF7F0E",
+    "MUC5B+" = "#2CA02C",
+    "KRT5+" = "#8C564B",
+    "remodeling" = "grey20",
+    "cycling" = "#FFBB78",
+    "hormone responsive early" = "#F7B6D2",
+    "hormone responsive late" = "#E377C2"
+)
+```
+
+# Dot plots of clusters and marker genes of interest
+
+Marker genes from HECA paper (https://www.nature.com/articles/s41588-024-01873-w, Fig 2a).
+
+```{r markers2}
+#| fig.width: 8
+#| fig.height: 12
+#| warning: false
+
+col = circlize::colorRamp2(
+    breaks = seq(0, 7.5, length.out = 64),
+    colors = colorRampPalette(c("grey90", "purple"))(64))
+
+markers <- intersect(
+    c("PAX8", "EPCAM", "FOXA2", "MMP7", "SOX9", "AXIN2", "TRH", "ALDH1A1",
+      "CDH2", "KLK11", "SLC7A11", "DKK1", "PHLDA1", "KMO", "IHH", "EMID1", 
+      "HPRT1", "SUFU", "OPRK1", "CBR3", "S100P", "SCGB2A2", "ABCG1", "PAEP", 
+      "DPP4", "GPX3", "PTPRR", "FGF7", "FXYD2", "IL32", "WNT7A", "LGR5", 
+      "MMP7", "TNF", "VTCN1", "CLDN22", "SULT1E1", "LEFTY1", "PTGS1", "IL6",
+      "CCNO", "CDC20B", "MUC12", "PIFO", "FOXJ1", "TP73", "BPIFB1", "TFF3", 
+      "MUC5B", "SAA1", "TP63", "SNCG", "KRT5", "PGR", "AR", "ESR1"), 
+    rownames(dat))
+plotDots(dat, features = markers,
+         group = "celltype_annot", 
+         swap_rownames = "gene_name", zlim = c(0, 7.5),
+         colour = col(seq(0, 7.5, length.out = 64))) + 
+    scale_size(limits=c(0.2, 1)) + 
+    labs(x = "") + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+
+# Plot dimension reductions
+
+```{r plot-umap}
+#| fig.width: 8
+#| fig.height: 6
+
+plotReducedDim(dat, dimred = "UMAP_fastMNNcorr_sketch", 
+               other_fields = "HECA_Celltype", point_size = 0.5) + 
+    geom_point(aes(color = HECA_Celltype), size = 0.5) + 
+    guides(color = guide_legend(override.aes = list(size = 2, alpha = 1)))
+
+for (vrb in c("RCA_Celltype", "RCA_Location", "RCA_BiopsyType", 
+              "matchDataset", "StageCoarse", "Stage", "donorCol", 
+              "scDblFinder.class", "SeuratCC", "celltype_annot")) {
+    print(plotReducedDim(dat, dimred = "UMAP_fastMNNcorr_sketch", 
+                         colour_by = vrb, point_size = 0.5) + 
+              guides(color = guide_legend(override.aes = list(size = 2, alpha = 1))))
+}
+
+print(plotReducedDim(dat, dimred = "UMAP_fastMNNcorr_sketch", 
+                     colour_by = "celltype_annot", point_size = 0.5) + 
+          scale_color_manual(values = leiden_res0.4_annot_cols, name = "") + 
+          guides(color = guide_legend(override.aes = list(size = 2, alpha = 1))))
+
+for (vrb in c("subsets_MT_percent", "detected", "intronic_fraction")) {
+    print(plotReducedDim(dat, dimred = "UMAP_fastMNNcorr_sketch", 
+                         colour_by = vrb, point_size = 0.5))
+}
+
+```
+
+# Plot cluster abundance over the cycle
+
+```{r plot-over-time}
+#| warning: false
+#| message: false
+#| fig.height: 8
+#| fig.width: 9.5
+
+col <- "celltype_annot"
+
+df <- data.frame(colData(dat)[, c("StageFactor", col)]) |>
+    group_by(StageFactor, .data[[col]]) |>
+    tally() |>
+    group_by(StageFactor) |>
+    mutate(perc = n / sum(n) * 100) |>
+    group_by(.data[[col]]) |>
+    mutate(scaledperc = perc / sum(perc)) |>
+    ungroup() |>
+    dplyr::filter(!is.na(StageFactor))
+ggplot(df, aes(x = StageFactor, y = perc, color = .data[[col]])) + 
+    geom_point() + 
+    geom_line(aes(x = as.numeric(StageFactor)), linewidth = 1) + 
+    theme_cowplot() + 
+    labs(x = "", y = "Relative abundance (%)",
+         title = col) + 
+    theme(legend.position = "bottom") + 
+    scale_color_manual(values = leiden_res0.4_annot_cols, name = "")
+
+## One panel per cluster
+ggplot(df, aes(x = StageFactor, y = perc, color = .data[[col]])) + 
+    geom_point() + 
+    geom_line(aes(x = as.numeric(StageFactor)), linewidth = 1) + 
+    theme_cowplot() + 
+    labs(x = "", y = "Relative abundance (%)",
+         title = col) + 
+    facet_wrap(~ .data[[col]], scales = "free_y") + 
+    scale_color_manual(values = leiden_res0.4_annot_cols, name = "") + 
+    theme(legend.position = "none",
+          axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+          strip.text = element_text(size = 10))
+```
+
+# Find marker genes
+
+First, we compare all clusters in a pairwise manner. The comparison is only 
+performed for genes with a non-zero count in at least 
+0.05% of the cells (corresponding to `r ceiling(0.05/100*ncol(dat))` of the 
+`r ncol(dat)` cells in the data set). These gene IDs are also written to a 
+file, for potential use as the 'universe' in over-representation analyses. 
+
+```{r}
+#| warning: false
+
+frac_detected <- rowMeans(assay(dat, "counts") > 0)
+genes_to_test <- rownames(dat)[frac_detected >= (0.05 / 100)]
+write.table(genes_to_test, file = "epithelial_stromal_cell_atlas_gene_universe.txt", 
+            row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
+
+clc <- "celltype_annot"
+ptts <- pairwiseTTests(dat, groups = dat[[clc]], 
+                       block = dat[[blockvar]], direction = "up", 
+                       subset.row = genes_to_test)
+markers <- combineMarkers(ptts$statistics, ptts$pairs, pval.type = "all")
+
+## Write results to files
+ttestdir <- paste0("pairwise_ttests_", clc)
+if (!file.exists(ttestdir)) {
+    dir.create(ttestdir, recursive = TRUE)
+}
+for (i in seq_len(nrow(ptts$pairs))) {
+    df <- cbind(gene = rownames(ptts$statistics[[i]]), 
+                ptts$statistics[[i]])
+    df <- df[order(df$p.value, -df$logFC), ]
+    filename <- paste0(clc, "_cluster_", ptts$pairs$first[i],
+                       "_vs_", ptts$pairs$second[i], ".txt")
+    write.table(df, file = file.path(ttestdir, filename), quote = FALSE,
+                sep = "\t", row.names = FALSE, col.names = TRUE)
+}
+
+markerdir <- paste0("marker_genes_all_", clc)
+if (!file.exists(markerdir)) {
+    dir.create(markerdir, recursive = TRUE)
+}
+for (i in seq_along(markers)) {
+    df <- cbind(gene = rownames(markers[[i]]), markers[[i]])
+    filename <- paste0(clc, "_cluster_", names(markers)[i], "_markers.txt")
+    write.table(df, file = file.path(markerdir, filename), quote = FALSE,
+                sep = "\t", row.names = FALSE, col.names = TRUE)
+}
+```
+
+# Save object
+
+```{r save-object}
+saveRDS(dat, file = "invivo_cell_atlas.rds")
+```
+
+# Session info
+
+```{r session-info}
+sessionInfo()
+```
+
+

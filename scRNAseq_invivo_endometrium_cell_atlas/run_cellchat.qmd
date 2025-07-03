@@ -1,0 +1,115 @@
+---
+title: "Run CellChat, endometrial atlas"
+date: "`r Sys.Date()`"
+format: 
+    html:
+        toc: true
+        theme: united
+embed-resources: true
+---
+
+# Load packages
+
+```{r load-pkgs}
+suppressPackageStartupMessages({
+    library(CellChat)
+    library(SingleCellExperiment)
+    library(future)
+    library(patchwork)
+    library(NMF)
+    library(ggalluvial)
+    library(ComplexHeatmap)
+    library(dplyr)
+})
+
+options(future.globals.maxSize = 10000 * 1024 ^ 2, 
+        future.seed = TRUE,
+        future.rng.onMisuse = "ignore")
+
+## Decide whether to force re-execution of CellChat even if files exist
+force_cellchat <- TRUE
+```
+
+# Read data
+
+```{r}
+sce <- readRDS("invivo_cell_atlas.rds")
+clustercolumn <- "celltype_annot"
+
+table(sce$Stage, useNA = "ifany")
+
+# Define stages to include
+stages <- list(menstrual_proliferative = c("menstrual", "proliferative"))
+```
+
+# Run CellChat (for each stage)
+
+```{r}
+minClusterSize <- 100
+
+for (stgn in names(stages)) {
+    if (!file.exists(paste0("cellchat_", stgn, ".rds")) || force_cellchat) {
+        sub <- sce[, sce$Stage %in% stages[[stgn]]]
+        
+        ## Remove rare cell types
+        tbl <- table(sub[[clustercolumn]])
+        kp <- names(tbl)[tbl >= minClusterSize]
+        sub <- sub[, sub[[clustercolumn]] %in% kp]
+        
+        ## Create CellChat object
+        cellchat <- createCellChat(object = sub, group.by = clustercolumn)
+        
+        ## Define which CellChatDB to use
+        CellChatDB <- CellChatDB.human
+        
+        ## Potentially subset the CellChatDB
+        CellChatDB.use <- subsetDB(CellChatDB, search = "Secreted Signaling")
+        # CellChatDB.use <- CellChatDB
+        cellchat@DB <- CellChatDB.use
+        
+        ## Subset to only signalling genes
+        cellchat <- subsetData(cellchat)
+        future::plan("multisession", workers = 8)
+        
+        ## Process the expression data
+        cellchat <- identifyOverExpressedGenes(cellchat)
+        cellchat <- identifyOverExpressedInteractions(cellchat)
+        
+        ## Infer cell-cell communication network
+        cellchat <- computeCommunProb(cellchat, raw.use = TRUE, type = "triMean", 
+                                      population.size = FALSE)
+        ## To apply less stringent filtering
+        # cellchat <- computeCommunProb(cellchat, raw.use = TRUE, type = "truncatedMean", 
+        #                               trim = 0.1)
+        
+        ## Filter out the cell-cell communication if there are only few cells
+        cellchat <- filterCommunication(cellchat, min.cells = minClusterSize)
+        
+        ## Calculate communication probability on pathway level
+        cellchat <- computeCommunProbPathway(cellchat)
+        
+        ## Aggregated cell-cell communication network by counting the number of
+        ## links or summarizing the communication probability
+        cellchat <- aggregateNet(cellchat)
+        
+        ## Compute network centrality scores
+        ## Unless 'future.rng.onMisuse' is set to "ignore", this 
+        ## generates warnings about random numbers being generated without
+        ## this being set
+        cellchat <- netAnalysis_computeCentrality(cellchat, slot.name = "netP")
+        
+        ## Save object
+        saveRDS(cellchat, file = paste0("cellchat_", stgn, ".rds"))
+        
+        ## Close background workers
+        future::plan("sequential")
+    }
+}
+```
+
+# Session info
+
+```{r session-info}
+sessionInfo()
+```
+

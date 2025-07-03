@@ -1,0 +1,236 @@
+---
+title: "Generating plots for paper (cell-cell communication)"
+date: "`r Sys.Date()`"
+format: 
+    html:
+        toc: true
+        theme: united
+embed-resources: true
+---
+
+# Load packages
+
+```{r}
+#| label: load-pkg
+
+suppressPackageStartupMessages({
+    library(SingleCellExperiment)
+    library(scuttle)
+    library(scater)
+    library(dplyr)
+    library(tidyr)
+    library(ggplot2)
+    library(cowplot)
+    library(ComplexHeatmap)
+    library(circlize)
+    library(ggtext)
+    library(scales)
+    library(ggh4x)
+    library(swissknife)
+    library(BiocParallel)
+    library(CellChat)
+    library(tibble)
+    library(patchwork)
+    library(ggforce)
+})
+
+source("../params.R")
+source("../helpers.R")
+
+if (!file.exists("paper_figures")) {
+    dir.create("paper_figures", showWarnings = FALSE, recursive = FALSE)
+}
+```
+
+# Load data
+
+```{r}
+#| label: load-data
+
+atlas <- readRDS("invivo_cell_atlas.rds")
+cellchat <- readRDS("cellchat_menstrual_proliferative.rds")
+
+# pathways of interest
+poi <- c("CXCL", "ANNEXIN", "CSF", "EDN", "SEMA3", "IL6", "WNT")
+
+sender <- "luminal early"
+receivers <- setdiff(as.character(cellchat@idents), sender)
+```
+
+# Heatmaps of interaction strength by pathway
+
+```{r}
+#| label: plot-heatmap-main
+#| fig.width: 7
+#| fig.height: 5
+
+# cellchat@netP$prob give interaction probabilities
+# dim 1 - sender, dim 2 - receiver, dim 3 - pathway
+# luminal early as sender
+plotdf <- as.data.frame(cellchat@netP$prob["luminal early", , poi]) |>
+    rownames_to_column("receiver") |>
+    pivot_longer(names_to = "pathway", values_to = "prob", -receiver) |>
+    group_by(pathway) |>
+    mutate(prob_scaled = prob / max(prob)) |>
+    ungroup() |>
+    mutate(receiver = factor(receiver, 
+                             levels = names(tissue_all_lineages_celltype_cols)[
+                                 names(tissue_all_lineages_celltype_cols) %in% receiver]
+    )) |>
+    mutate(pathway = factor(pathway, levels = poi))
+(ggs <- ggplot(plotdf,
+               aes(x = receiver, y = pathway, fill = prob_scaled)) + 
+     geom_tile() + 
+     scale_fill_gradient(low = "grey98", high = "firebrick", 
+                         limits = c(0, 1), oob = scales::squish,
+                         name = "relative\ninteraction\nprobability") +
+     labs(x = "Receiving population", y = "Pathway", 
+          title = "luminal early as sender") + 
+     theme_minimal() + 
+     theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)))
+pdf("paper_figures/cellchat_pathways_luminal_early_sender.pdf", 
+    width = 7, height = 5)
+ggs
+dev.off()
+```
+
+```{r}
+#| label: plot-heatmap-all
+#| fig.width: 7
+#| fig.height: 6
+
+# cellchat@netP$prob give interaction probabilities
+# dim 1 - sender, dim 2 - receiver, dim 3 - pathway
+# luminal early as sender
+# cluster pathways
+tmp <- cellchat@netP$prob["luminal early", , ]
+tmp <- tmp[, colSums(tmp) > 0, drop = FALSE]
+tmp <- sweep(tmp, MARGIN = 2, STATS = colSums(tmp), FUN = "/")
+hcl <- colnames(tmp)[hclust(d = dist(t(tmp)), method = "complete")$order]
+plotdf <- as.data.frame(cellchat@netP$prob["luminal early", , ]) |>
+    rownames_to_column("receiver") |>
+    pivot_longer(names_to = "pathway", values_to = "prob", -receiver) |>
+    group_by(pathway) |>
+    mutate(prob_scaled = prob / max(prob)) |>
+    ungroup() |>
+    filter(!is.na(prob_scaled)) |>
+    mutate(receiver = factor(receiver, 
+                             levels = names(tissue_all_lineages_celltype_cols)[
+                                 names(tissue_all_lineages_celltype_cols) %in% receiver]),
+           pathway = factor(pathway,
+                            levels = hcl[hcl %in% pathway])
+    )
+(ggs <- ggplot(plotdf,
+               aes(x = pathway, y = receiver, fill = prob_scaled)) + 
+     geom_tile() + 
+     scale_fill_gradient(low = "grey98", high = "firebrick", 
+                         limits = c(0, 1), oob = scales::squish,
+                         name = "relative\ninteraction\nprobability") +
+     labs(y = "Receiving population", x = "Pathway", 
+          title = "luminal early as sender") + 
+     theme_minimal() + 
+     theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)))
+pdf("paper_figures/cellchat_pathways_luminal_early_sender_all.pdf", 
+    width = 7, height = 6)
+ggs
+dev.off()
+png("paper_figures/cellchat_pathways_luminal_early_sender_all.png", 
+    width = 7, height = 6, units = "in", res = 400)
+ggs
+dev.off()
+```
+
+# Bar plot of total interaction strength from luminal early to cell types
+
+```{r}
+# cellchat@net$weight give interaction probabilities
+# dim 1 - sender, dim 2 - receiver
+# luminal early as sender
+plotdf <- as.data.frame(cellchat@net$weight["luminal early", , drop = FALSE]) |>
+    rownames_to_column("sender") |>
+    pivot_longer(names_to = "receiver", values_to = "prob", -sender) |>
+    mutate(lineage = tissue_all_lineages_celltype_lineage[receiver]) |>
+    mutate(receiver = factor(receiver, levels = names(tissue_all_lineages_celltype_cols)))
+ggc1 <- ggplot(plotdf |> dplyr::filter(lineage %in% c("Endothelial", "Immune")), 
+               aes(x = receiver, y = prob, fill = receiver)) + 
+    geom_col() + 
+    theme_bw() + 
+    scale_fill_manual(values = tissue_all_lineages_celltype_cols) + 
+    facet_col(~ lineage, scales = "free_y", space = "free") + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+          legend.position = "none") + 
+    coord_flip(ylim = c(0, max(plotdf$prob))) + 
+    labs(x = "Receiver", y = "Summed interaction probabilities")
+ggc2 <- ggplot(plotdf |> dplyr::filter(lineage %in% c("Epithelial", "Mesenchymal")), 
+               aes(x = receiver, y = prob, fill = receiver)) + 
+    geom_col() + 
+    theme_bw() + 
+    scale_fill_manual(values = tissue_all_lineages_celltype_cols) + 
+    facet_col(~ lineage, scales = "free_y", space = "free") + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+          legend.position = "none") + 
+    coord_flip(ylim = c(0, max(plotdf$prob))) + 
+    labs(x = "Receiver", y = "Summed interaction probabilities")
+ggc1 + ggc2 + plot_layout(axis_titles = "collect")
+
+pdf("paper_figures/cellchat_celltypes_luminal_early_sender.pdf", 
+    width = 7, height = 6)
+ggc1 + ggc2 + plot_layout(axis_titles = "collect")
+dev.off()
+png("paper_figures/cellchat_celltypes_luminal_early_sender.png", 
+    width = 7, height = 6, units = "in", res = 400)
+ggc1 + ggc2 + plot_layout(axis_titles = "collect")
+dev.off()
+```
+
+
+# Plot expression of ligands and receptors for pathways of interest
+
+```{r}
+#| fig.width: 9
+#| fig.height: 9
+#| label: fig-ligands-receptors
+#| warning: false
+
+lr <- subsetCommunication(
+    cellchat, slot.name = "net", 
+    sources.use = "luminal early", targets.use = receivers, 
+    signaling = NULL, pairLR.use = NULL, thresh = 0.05
+)
+
+for (pw in unique(lr$pathway_name)) {
+    lrsub <- lr |> 
+        filter(pathway_name == pw)
+    markers <- unique(c(lrsub$ligand, unlist(strsplit(lrsub$receptor, "_"))))
+    if (pw == "WNT") {
+        wntligands <- cellchat@DB$interaction |> 
+            filter(pathway_name == "WNT") |>
+            pull(ligand) |> 
+            unique()
+        markers <- unique(c(wntligands, markers, paste0("FZD", 1:10)))
+        markers <- markers[rowSums(assay(atlas, "logcounts")[markers, ]) > 0]
+    } else if (pw == "CXCL") {
+        markers <- unique(c(markers, c("CXCR1", "CXCR2")))
+    }
+    dp <- .makeDotPlot(
+        atlas, markers = markers, cluster_column = "celltype_annot",
+        cluster_order = names(tissue_all_lineages_celltype_cols), 
+        cluster_colors = tissue_all_lineages_celltype_cols, 
+        transpose = TRUE, split_by_ciliated = FALSE, normalize = TRUE,
+        min_fraction = 0.2) + 
+        ggtitle(pw)
+    print(dp)
+    pdf(paste0("paper_figures/cellchat_pathways_ligands_receptors_", pw, ".pdf"), 
+        height = 9, width = min(5.5, 1.25 * (0.2 * length(markers) + 3)))
+    print(dp)
+    dev.off()
+}
+```
+
+# Session info
+
+```{r}
+#| label: session-info
+
+sessionInfo()
+```

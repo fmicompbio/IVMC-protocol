@@ -1,0 +1,37 @@
+term_name	p_value	term_size	query_size	intersection_size
+cell adhesion	4.6796616642475e-05	1058	100	24
+cell-cell adhesion	0.000152968567554961	669	100	18
+response to stimulus	0.0051129276294442	5974	100	59
+skin development	0.00554246006482192	126	100	7
+epidermis development	0.00554246006482192	178	100	8
+tissue development	0.00554246006482192	1094	100	20
+cell migration	0.0120303669354174	1105	100	19
+regulation of protein localization	0.0120303669354174	643	100	14
+locomotion	0.0329485980166816	909	100	16
+regulation of cellular localization	0.0329485980166816	730	100	14
+cell communication	0.0329485980166816	4458	100	45
+cell motility	0.0381724842785614	1244	100	19
+regulation of cell adhesion	0.0381724842785614	573	100	12
+animal organ development	0.0414928121303728	1491	100	21
+cellular response to stimulus	0.0414928121303728	5142	100	49
+epithelium development	0.044821611676848	597	100	12
+regulation of response to stimulus	0.044821611676848	3051	100	33
+cell-cell junction organization	0.044821611676848	163	100	6
+retina vasculature morphogenesis in camera-type eye	0.044821611676848	5	100	2
+regulation of systemic arterial blood pressure by endothelin	0.044821611676848	5	100	2
+regulation of localization	0.044821611676848	1458	100	20
+epithelial cell differentiation	0.044821611676848	380	100	9
+regulation of cell migration	0.044821611676848	726	100	13
+positive regulation of cell growth	0.044821611676848	110	100	5
+regulation of signaling	0.044821611676848	2549	100	29
+response to wounding	0.044821611676848	372	100	9
+response to external stimulus	0.044821611676848	1428	100	20
+signal transduction	0.044821611676848	4107	100	41
+substrate-dependent cell migration, cell extension	0.044821611676848	6	100	2
+exploration behavior	0.044821611676848	6	100	2
+positive regulation of protein localization to cell periphery	0.044821611676848	62	100	4
+signaling	0.0458314281327741	4447	100	43
+protein kinase A signaling	0.0458314281327741	28	100	3
+cell junction assembly	0.0459425529612971	311	100	8
+wound healing	0.0459425529612971	312	100	8
+apical junction assembly	0.0464332092416063	66	100	4

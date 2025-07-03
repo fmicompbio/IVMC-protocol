@@ -1,0 +1,69 @@
+term_name	p_value	term_size	query_size	intersection_size
+response to corticotropin-releasing hormone	0.000248876865886082	3	99	3
+cellular response to corticotropin-releasing hormone stimulus	0.000248876865886082	3	99	3
+negative regulation of macromolecule metabolic process	0.00178499250890027	2021	99	30
+regulation of programmed cell death	0.00505645532171318	1005	99	19
+negative regulation of metabolic process	0.00505645532171318	2181	99	30
+cell death	0.0071314462857408	1283	99	21
+programmed cell death	0.0071314462857408	1278	99	21
+regulation of apoptotic process	0.0071314462857408	973	99	18
+negative regulation of signal transduction	0.0071314462857408	988	99	18
+response to growth factor	0.00715740601748541	477	99	12
+negative regulation of cellular process	0.00715740601748541	3843	99	42
+negative regulation of signaling	0.00791664747994748	1030	99	18
+apoptotic process	0.00791664747994748	1228	99	20
+negative regulation of cell communication	0.00791664747994748	1024	99	18
+negative regulation of programmed cell death	0.00875296809031901	585	99	13
+positive regulation of intracellular mRNA localization	0.0129850795821345	3	99	2
+negative regulation of biological process	0.0129850795821345	4014	99	42
+regulation of signal transduction	0.0129850795821345	2330	99	29
+regulation of intracellular mRNA localization	0.0129850795821345	3	99	2
+p38MAPK cascade	0.0138905975964865	42	99	4
+fat cell differentiation	0.0177381666836702	133	99	6
+negative regulation of response to stimulus	0.0177381666836702	1246	99	19
+negative regulation of apoptotic process	0.0177381666836702	565	99	12
+stem cell proliferation	0.0195627054191066	48	99	4
+positive regulation of nucleobase-containing compound metabolic process	0.0219560576488864	1494	99	21
+regulation of epithelial cell proliferation	0.0280204173050642	218	99	7
+keratinocyte apoptotic process	0.0280204173050642	5	99	2
+regulation of keratinocyte apoptotic process	0.0280204173050642	5	99	2
+regulation of somatic stem cell population maintenance	0.0280204173050642	5	99	2
+signal transduction	0.0280204173050642	4107	99	41
+regulation of metabolic process	0.0280204173050642	5091	99	48
+gastrulation	0.0291013684405499	103	99	5
+intracellular signaling cassette	0.0291013684405499	1444	99	20
+endothelial cell chemotaxis	0.0296440516314654	25	99	3
+regulation of response to stimulus	0.0296440516314654	3051	99	33
+cellular response to growth factor stimulus	0.0297264187750388	460	99	10
+negative regulation of erythrocyte differentiation	0.0297264187750388	6	99	2
+regulation of type B pancreatic cell proliferation	0.0297264187750388	6	99	2
+regulation of signaling	0.0297264187750388	2549	99	29
+intracellular signal transduction	0.0297264187750388	2290	99	27
+regulation of cell communication	0.0297264187750388	2554	99	29
+negative regulation of protein metabolic process	0.0311276715996604	554	99	11
+regulation of macromolecule metabolic process	0.0359823414530071	4658	99	44
+cellular response to epidermal growth factor stimulus	0.0359823414530071	29	99	3
+metabolic process	0.0359823414530071	8611	99	69
+nuclear-transcribed mRNA catabolic process, deadenylation-independent decay	0.0361585475920676	7	99	2
+mesodermal cell fate specification	0.0361585475920676	7	99	2
+epithelial cell proliferation	0.0390071857256732	249	99	7
+positive regulation of metabolic process	0.0390071857256732	2758	99	30
+positive regulation of kidney development	0.0402668340632865	8	99	2
+mesodermal cell fate commitment	0.0402668340632865	8	99	2
+response to fibroblast growth factor	0.0402668340632865	73	99	4
+response to epidermal growth factor	0.0402668340632865	32	99	3
+formation of primary germ layer	0.0402668340632865	72	99	4
+positive regulation of transcription by RNA polymerase II	0.0402668340632865	887	99	14
+negative regulation of macromolecule biosynthetic process	0.0402668340632865	1654	99	21
+negative regulation of MAPK cascade	0.0402668340632865	122	99	5
+signaling	0.0402668340632865	4447	99	42
+positive regulation of RNA metabolic process	0.040810271549604	1324	99	18
+cell communication	0.0410405920855389	4458	99	42
+positive regulation of epithelial cell proliferation	0.043347550225121	129	99	5
+response to endogenous stimulus	0.04338467390783	904	99	14
+response to stimulus	0.04338467390783	5974	99	52
+TRAIL-activated apoptotic signaling pathway	0.0437884151989397	9	99	2
+intracellular mRNA localization	0.0437884151989397	9	99	2
+regulation of primary metabolic process	0.0437884151989397	4341	99	41
+negative regulation of biosynthetic process	0.0449223342615025	1700	99	21
+embryonic morphogenesis	0.0499078703493357	275	99	7

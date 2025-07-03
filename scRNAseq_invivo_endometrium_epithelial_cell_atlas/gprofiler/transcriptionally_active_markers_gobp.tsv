@@ -1,0 +1,27 @@
+term_name	p_value	term_size	query_size	intersection_size
+nucleic acid metabolic process	0.0162933005749934	4062	97	44
+RNA splicing	0.0162933005749934	378	97	10
+gene expression	0.0162933005749934	4713	97	47
+cell-cell adhesion mediated by cadherin	0.0162933005749934	38	97	4
+RNA metabolic process	0.0162933005749934	3605	97	39
+peptidyl-serine phosphorylation	0.0162933005749934	164	97	7
+peptidyl-serine modification	0.0162933005749934	176	97	7
+macromolecule metabolic process	0.0162933005749934	6917	97	62
+RNA biosynthetic process	0.0162933005749934	3427	97	38
+nucleic acid biosynthetic process	0.0162933005749934	3517	97	38
+negative regulation of hippo signaling	0.0162933005749934	14	97	3
+hippo signaling	0.0204711387674568	43	97	4
+regulation of primary metabolic process	0.0250844035217257	4341	97	43
+nucleobase-containing compound metabolic process	0.0257098440367801	4504	97	44
+positive regulation of cellular process	0.0372124497938873	4453	97	43
+intracellular signal transduction	0.0372124497938873	2290	97	27
+nucleobase-containing compound biosynthetic process	0.0372124497938873	3756	97	38
+regulation of nucleobase-containing compound metabolic process	0.0372124497938873	3177	97	34
+regulation of gene expression	0.0386363519716034	3791	97	38
+regulation of macromolecule metabolic process	0.0386363519716034	4658	97	44
+macromolecule biosynthetic process	0.0386363519716034	5092	97	47
+regulation of hippo signaling	0.0387389439363843	25	97	3
+positive regulation of biological process	0.0491177407793399	4724	97	44
+regulation of biosynthetic process	0.0491294757122924	4013	97	39
+RNA processing	0.0491294757122924	765	97	13
+positive regulation of intracellular signal transduction	0.0491294757122924	865	97	14

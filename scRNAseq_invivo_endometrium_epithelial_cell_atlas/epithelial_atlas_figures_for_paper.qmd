@@ -1,0 +1,436 @@
+---
+title: "Generating plots for paper (epithelial atlas)"
+date: "`r Sys.Date()`"
+format: 
+    html:
+        toc: true
+        theme: united
+embed-resources: true
+---
+
+# Load packages
+
+```{r}
+#| label: load-pkg
+#| warning: false
+
+suppressPackageStartupMessages({
+    library(SingleCellExperiment)
+    library(scuttle)
+    library(scater)
+    library(dplyr)
+    library(tidyr)
+    library(ggplot2)
+    library(cowplot)
+    library(ComplexHeatmap)
+    library(circlize)
+    library(ggtext)
+    library(gprofiler2)
+    library(DT)
+    library(forcats)
+})
+
+source("../params.R")
+source("../helpers.R")
+
+if (!file.exists("paper_figures")) {
+    dir.create("paper_figures", showWarnings = FALSE, recursive = FALSE)
+}
+if (!file.exists("gprofiler")) {
+    dir.create("gprofiler", showWarnings = FALSE, recursive = FALSE)
+}
+```
+
+# Load data
+
+```{r}
+#| label: load-data
+
+dat <- readRDS("invivo_epithelial_cell_atlas.rds")
+```
+
+# Numeric summaries
+
+```{r}
+# number of genes and cells
+dim(dat)
+
+# donors and samples
+tmp <- colData(dat)[, c("donorCol", "sampleCol", "matchDataset")] |>
+    as.data.frame() |> distinct() |>
+    arrange(matchDataset, donorCol, sampleCol)
+rownames(tmp) <- NULL
+tmp
+
+# number of unique values in each column
+vapply(tmp, function(x) length(unique(x)), NA_real_)
+```
+
+# Define colors
+
+```{r}
+#| label: define-colors
+
+dat$leiden_res0.4_annot <- factor(dat$leiden_res0.4_annot,
+                                  levels = tissue_leiden_res0.4_annot_order)
+```
+
+# Figure 2A (UMAP with clusters)
+
+```{r}
+#| label: plot-umap-tissue-clusters
+#| fig.width: 8
+#| fig.height: 11
+
+(umap_clusters <- plotReducedDim(dat, dimred = "UMAP_fastMNNcorr_sketch", 
+                             colour_by = "leiden_res0.4_annot", 
+                             point_size = 0.5) + 
+     scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "") + 
+     guides(color = guide_legend(nrow = 4, byrow = FALSE, title = "",
+                                 override.aes = list(size = 5, alpha = 1, 
+                                                     shape = 15))) + 
+     theme_void() + 
+     theme(legend.text = element_text(size = 20),
+           legend.position = "bottom",
+           axis.title = element_blank()))
+
+png("paper_figures/UMAP_tissue_clusters.png", 
+    height = 4, width = 4, units = "in", res = 300)
+umap_clusters + theme(legend.position = "none")
+dev.off()
+pdf("paper_figures/UMAP_tissue_clusters_legend.pdf", 
+    height = 1.75, width = 9)
+grid.newpage()
+grid.draw(get_legend2(umap_clusters + theme(legend.position = "bottom",
+                                            legend.text = element_text(size = 12))))
+dev.off()
+pdf("paper_figures/UMAP_tissue_clusters.pdf", height = 4, width = 4)
+umap_clusters + theme(legend.position = "none")
+dev.off()
+```
+
+# Figure 2B (cluster abundance over cycle)
+
+```{r}
+#| label: plot-rel-abund-allclusters-tissue
+#| fig.width: 9
+#| fig.height: 6
+
+df <- data.frame(colData(dat)[, c("StageFactor", "leiden_res0.4_annot")]) |>
+    group_by(StageFactor, leiden_res0.4_annot) |>
+    tally() |>
+    group_by(StageFactor) |>
+    mutate(perc = n / sum(n) * 100) |>
+    dplyr::filter(!is.na(StageFactor)) |>
+    ungroup() |> 
+    complete(StageFactor, leiden_res0.4_annot, fill = list(n = 0, perc = 0))
+
+(clust_abund_plot <- ggplot(df, aes(x = StageFactor, y = perc,
+                                    color = leiden_res0.4_annot)) + 
+        geom_point() + 
+        geom_line(aes(x = as.numeric(StageFactor)), linewidth = 1) + 
+        theme_cowplot() + 
+        labs(x = "", y = "Relative abundance (%)") + 
+        facet_wrap(~ leiden_res0.4_annot, scales = "free_y", nrow = 3) + 
+        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "") + 
+        theme(legend.position = "none",
+              axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+              strip.text = element_text(size = 10),
+              strip.background = element_rect(fill = "white", color = "white")))
+
+pdf("paper_figures/rel_abund_allclusters_tissue.pdf", height = 5, width = 11)
+clust_abund_plot
+dev.off()
+```
+
+# Figure 2C (dot plot)
+
+```{r}
+#| label: plot-dotplot-tissue-markers
+#| fig.width: 18
+#| fig.height: 6
+
+markers <- intersect(tissue_markers, rownames(dat))
+
+(dotplot_norm <- .makeDotPlot(
+    dat = dat, markers = markers, 
+    cluster_column = "leiden_res0.4_annot", 
+    cluster_order = tissue_leiden_res0.4_annot_order, 
+    cluster_colors = tissue_leiden_res0.4_annot_colors, 
+    transpose = TRUE
+))
+
+pdf("paper_figures/dotplot_tissue_clusters_normalized.pdf", height = 6, width = 18)
+dotplot_norm
+dev.off()
+png("paper_figures/dotplot_tissue_clusters_normalized.png", height = 6, width = 18,
+    unit = "in", res = 300)
+dotplot_norm
+dev.off()
+```
+
+# Extended Data 5 (UMAPs)
+
+```{r}
+#| label: plot-qc-umaps-tissue
+#| fig.width: 7
+#| fig.height: 4
+
+(umap_matchdataset <- plotReducedDim(
+    dat, "UMAP_fastMNNcorr_sketch", colour_by = "matchDataset",
+    point_size = 1) +  
+        scale_color_manual(values = dataset_colors) + 
+        guides(color = guide_legend(override.aes = list(size = 4),
+                                    title = "Dataset")) +
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_tissue_matchDataset.png", 
+    height = 4, width = 7, units = "in", res = 300)
+plot_grid(
+    umap_matchdataset + theme(legend.position = "none"),
+    get_legend2(umap_matchdataset),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+
+(umap_stage <- plotReducedDim(
+    dat, "UMAP_fastMNNcorr_sketch", colour_by = "StageFactor",
+    point_size = 1) +
+        scale_color_manual(values = stage_colors) + 
+        guides(color = guide_legend(override.aes = list(size = 4),
+                                    title = "Stage")) +
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_tissue_stage.png", 
+    height = 4, width = 7, units = "in", res = 300)
+plot_grid(
+    umap_stage + theme(legend.position = "none"),
+    get_legend2(umap_stage),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+
+(umap_cc <- plotReducedDim(
+    dat, "UMAP_fastMNNcorr_sketch", colour_by = "SeuratCC",
+    point_size = 1) +
+        scale_color_manual(values = cc_colors) + 
+        guides(color = guide_legend(override.aes = list(size = 4),
+                                    title = "Cell cycle")) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_tissue_seuratCC.png", 
+    height = 4, width = 7, units = "in", res = 300)
+plot_grid(
+    umap_cc + theme(legend.position = "none"),
+    get_legend2(umap_cc),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+
+(umap_mt <- plotReducedDim(
+    dat, "UMAP_fastMNNcorr_sketch", colour_by = "subsets_MT_percent",
+    point_size = 1) +   
+        guides(color = guide_colorbar(title = "% MT")) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_tissue_subsets_MT_percent.png", 
+    height = 4, width = 7, units = "in", res = 300)
+plot_grid(
+    umap_mt + theme(legend.position = "none"),
+    get_legend2(umap_mt),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+
+(umap_tricycle <- plotReducedDim(
+    dat, "UMAP_fastMNNcorr_sketch", colour_by = "tricyclePosition",
+    point_size = 1) +   
+        guides(color = guide_colorbar(title = "tricycle\nposition")) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_tissue_tricyclePosition.png", 
+    height = 4, width = 7, units = "in", res = 300)
+plot_grid(
+    umap_tricycle + theme(legend.position = "none"),
+    get_legend2(umap_tricycle),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+
+(umap_intronic <- plotReducedDim(
+    dat, "UMAP_fastMNNcorr_sketch", colour_by = "intronic_fraction",
+    point_size = 1) +   
+        guides(color = guide_colorbar(title = "intronic\nfraction")) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_tissue_intronic_fraction.png", 
+    height = 4, width = 7, units = "in", res = 300)
+plot_grid(
+    umap_intronic + theme(legend.position = "none"),
+    get_legend2(umap_intronic),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+```
+
+# Dot plot, early vs late luminal markers
+
+```{r}
+#| label: dotplot-early-late
+#| fig.width: 4
+#| fig.height: 10
+
+(dotplot_early_late <- .makeDotPlot(
+    dat = dat, 
+    markers = c(luminal_early_genes, luminal_late_genes), 
+    cluster_column = "leiden_res0.4_annot",
+    cluster_order = tissue_leiden_res0.4_annot_order, 
+    cluster_colors = tissue_leiden_res0.4_annot_colors, 
+    transpose = FALSE,
+    split_by_ciliated = FALSE,
+    normalize = FALSE, 
+    subset_to_clusters = c("luminal late", "luminal early")))
+
+pdf("paper_figures/dotplot_tissue_luminal_early_late.pdf", height = 10, width = 4)
+dotplot_early_late
+dev.off()
+png("paper_figures/dotplot_tissue_luminal_early_late.png", height = 10, width = 4,
+    unit = "in", res = 300)
+dotplot_early_late
+dev.off()
+```
+
+# Figure 3A, Extended Data 6B (UMAPs)
+
+```{r}
+#| label: plot-umap-tissue-genes
+#| fig.width: 6
+#| fig.height: 4
+
+for (gn in c("CD74", "IL32", "PLAU", "LGR5", "ENPP3", "IL6", "WNT7A",
+             "VIM", "EPCAM", "CDH1", "MUC5B", "PDGFRB")) {
+    umap_gn <- plotReducedDim(
+        dat, "UMAP_fastMNNcorr_sketch", colour_by = gn,
+        point_size = 1) + 
+        scale_color_gradientn(colors = c("#d9d9d9", "#f4a582", "#d6604d","#8b0000", '#5c0000')) +
+        labs(color = gn) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines"))
+    print(umap_gn)
+    
+    png(paste0("paper_figures/UMAP_tissue_", gn, ".png"), 
+        height = 4, width = 6, units = "in", res = 300)
+    print(plot_grid(
+        umap_gn + theme(legend.position = "none"),
+        get_legend2(umap_gn),
+        nrow = 1, rel_widths = c(4, 2)
+    ))
+    dev.off()
+}
+```
+
+# Overrepresentation analysis
+
+```{r}
+# tested genes
+invivo_gene_bg <- read.delim("epithelial_cell_atlas_gene_universe.txt", 
+                             header = FALSE)[, 1]
+
+clusters_to_consider <- c("luminal early", 
+                          "luminal late",
+                          "transcriptionally active")
+
+gprofiler2::set_base_url("https://biit.cs.ut.ee/gprofiler_archive3/e112_eg59_p19")
+for (cl in clusters_to_consider) {
+    mgenes <- read.delim(paste0("marker_genes_all_leiden_res0.4_annot/leiden_res0.4_annot_cluster_", 
+                                cl, "_markers.txt")) |>
+        arrange(p.value) |>
+        slice_head(n = 100) |>
+        pull(gene)
+    
+    gostres <- gost(
+        query = mgenes, 
+        organism = "hsapiens",
+        ordered_query = FALSE, 
+        multi_query = FALSE, 
+        significant = TRUE, 
+        exclude_iea = TRUE, 
+        measure_underrepresentation = FALSE, 
+        evcodes = FALSE, 
+        user_threshold = 0.05, 
+        correction_method = "fdr",
+        domain_scope = "custom",
+        custom_bg = invivo_gene_bg, 
+        numeric_ns = "", 
+        sources = c("GO:BP"),
+        as_short_link = FALSE, 
+        highlight = TRUE
+    )
+    print(head(gostres$result |>
+                   dplyr::select(term_name, p_value, term_size, query_size, intersection_size),
+               n = 15) |>
+              mutate(p_value = signif(p_value, digits = 3)))
+    write.table(gostres$result |>
+                    dplyr::select(term_name, p_value, term_size, query_size, intersection_size),
+                file = paste0("gprofiler/", sub(" ", "_", cl), "_markers_gobp.tsv"),
+                row.names = FALSE, quote = FALSE, col.names = TRUE, sep = "\t")
+    
+    if (length(tissue_goterms[[cl]]) > 0) {
+        stopifnot(all(tissue_goterms[[cl]] %in% gostres$result$term_name))
+        gg <- ggplot(gostres$result |> 
+                         filter(term_name %in% tissue_goterms[[cl]]),
+                     aes(x = -log10(p_value), y = forcats::fct_reorder(term_name, -p_value))) + 
+            geom_point(size = 4, color = tissue_leiden_res0.4_annot_colors[cl]) + 
+            theme_cowplot() + 
+            labs(x = "-log10 FDR", y = "", title = cl) + 
+            coord_cartesian(xlim = c(0, NA))
+        print(gg)
+        pdf(paste0("paper_figures/gprofiler_tissue_", sub(" ", "_", cl), ".pdf"), 
+            height = 4, width = 7)
+        print(gg)
+        dev.off()
+    }
+}
+```
+
+
+# Session info
+
+```{r}
+#| label: session-info
+
+# gProfiler/GO version
+get_version_info(organism = "hsapiens")$gprofiler_version
+get_version_info(organism = "hsapiens")$sources$`GO:MF`
+
+sessionInfo()
+```
+

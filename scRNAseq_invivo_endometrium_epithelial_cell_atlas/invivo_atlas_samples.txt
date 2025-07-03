@@ -1,0 +1,47 @@
+SampleType	DonorID	DonorID_2	Day	Hormone	Inhibitor	Sample	SampleName	RunID	ReadLength1	ReadLength2	Tissue	Stage	Digestion	Protocol	Source	Sex	TimeInMenstrualCycle	DiseaseState	Fecundity	Phenotype	Specimen	experiment_accession	DevStage
+scRNAseq	A13	NA	NA	NA	NA	NA	4861STDY7387181	STDY	26	98	endometrium	proliferative stage	collagenase	10xV2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	A13	NA	NA	NA	NA	NA	4861STDY7387182	STDY	26	98	endometrium	proliferative stage	collagenase	10xV2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	A13	NA	NA	NA	NA	NA	4861STDY7387183	STDY	26	98	myometrium	proliferative stage	collagenase	10xV2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	A30	NA	NA	NA	NA	NA	4861STDY7771115	STDY	26	98	endometrium	early-secretory stage	collagenase	10xV2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	A30	NA	NA	NA	NA	NA	4861STDY7771123	STDY	26	98	endometrium	early-secretory stage	trypsin	10xV2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	E1	NA	NA	NA	NA	NA	MRC_Endo8625698	MRC	28	91	endometrium	late-secretory stage	collagenase	10xV3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	E1	NA	NA	NA	NA	NA	MRC_Endo8625699	MRC	28	91	endometrium	late-secretory stage	trypsin	10xV3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	E2	NA	NA	NA	NA	NA	MRC_Endo8712024	MRC	28	91	endometrium	mid-secretory stage	collagenase	10xV3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	E2	NA	NA	NA	NA	NA	MRC_Endo8712032	MRC	28	91	endometrium	mid-secretory stage	trypsin	10xV3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	E3	NA	NA	NA	NA	NA	MRC_Endo8715415	MRC	28	91	endometrium	proliferative stage	collagenase	10xV3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	E3	NA	NA	NA	NA	NA	MRC_Endo8715416	MRC	28	91	endometrium	proliferative stage	trypsin	10xV3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+scRNAseq	GSM4577306	NA	NA	NA	NA	NA	GSM4577306	Wang	28	91	endometrium biopsy	early-secretory	NA	NA	endometrium_biopsy	female	day17	healthy	fertile	NA	NA	NA	NA
+scRNAseq	GSM4577307	NA	NA	NA	NA	NA	GSM4577307	Wang	28	91	endometrium biopsy	proliferative	NA	NA	endometrium_biopsy	female	day22	healthy	fertile	NA	NA	NA	NA
+scRNAseq	GSM4577308	NA	NA	NA	NA	NA	GSM4577308	Wang	28	91	endometrium biopsy	mid-secretory	NA	NA	endometrium_biopsy	female	day22	healthy	fertile	NA	NA	NA	NA
+scRNAseq	GSM4577309	NA	NA	NA	NA	NA	GSM4577309	Wang	28	91	endometrium biopsy	early-mid-secretory	NA	NA	endometrium_biopsy	female	day20	healthy	fertile	NA	NA	NA	NA
+scRNAseq	GSM4577310	NA	NA	NA	NA	NA	GSM4577310	Wang	28	91	endometrium biopsy	early-mid-secretory	NA	NA	endometrium_biopsy	female	day23	healthy	fertile	NA	NA	NA	NA
+scRNAseq	GSM4577311	NA	NA	NA	NA	NA	GSM4577311	Wang	28	91	endometrium biopsy	early-mid-secretory	NA	NA	endometrium_biopsy	female	day19	healthy	fertile	NA	NA	NA	NA
+scRNAseq	GSM4577312	NA	NA	NA	NA	NA	GSM4577312	Wang	28	91	endometrium biopsy	late-secretory	NA	NA	endometrium_biopsy	female	day26	healthy	fertile	NA	NA	NA	NA
+scRNAseq	GSM4577313	NA	NA	NA	NA	NA	GSM4577313	Wang	28	91	endometrium biopsy	early-secretory	NA	NA	endometrium_biopsy	female	day20	healthy	fertile	NA	NA	NA	NA
+scRNAseq	GSM4577314	NA	NA	NA	NA	NA	GSM4577314	Wang	28	91	endometrium biopsy	early-secretory	NA	NA	endometrium_biopsy	female	day26	healthy	fertile	NA	NA	NA	NA
+scRNAseq	GSM4577315	NA	NA	NA	NA	NA	GSM4577315	Wang	28	91	endometrium biopsy	proliferative	NA	NA	endometrium_biopsy	female	day16	healthy	fertile	NA	NA	NA	NA
+scRNAseq	TB13021372	NA	NA	NA	NA	NA	Shih_MEtissue1	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Control	TB13021372_MEtissue	NA	NA
+scRNAseq	TB13021252	NA	NA	NA	NA	NA	Shih_MEtissue1	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Symptomatic	TB13021252_MEtissue	NA	NA
+scRNAseq	TB13020912	NA	NA	NA	NA	NA	Shih_MEtissue1	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Symptomatic	TB13020912_MEtissue	NA	NA
+scRNAseq	TB13021550	NA	NA	NA	NA	NA	Shih_MEtissue2	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Diagnosed	TB13021550_MEtissue	NA	NA
+scRNAseq	TB13021576	NA	NA	NA	NA	NA	Shih_MEtissue2	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Control	TB13021576_MEtissue	NA	NA
+scRNAseq	TB13021099	NA	NA	NA	NA	NA	Shih_MEtissue2	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Symptomatic	TB13021099_MEtissue	NA	NA
+scRNAseq	TB13021061	NA	NA	NA	NA	NA	Shih_MEtissue2	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Control	TB13021061_MEtissue	NA	NA
+scRNAseq	TB13021654	NA	NA	NA	NA	NA	Shih_MEtissue3	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Symptomatic	TB13021654_MEtissue	NA	NA
+scRNAseq	TB13020851	NA	NA	NA	NA	NA	Shih_MEtissue3	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Control	TB13020851_MEtissue	NA	NA
+scRNAseq	TB13020985	NA	NA	NA	NA	NA	Shih_MEtissue3	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Diagnosed	TB13020985_MEtissue	NA	NA
+scRNAseq	TB13021037	NA	NA	NA	NA	NA	Shih_MEtissue4	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Diagnosed	TB13021037_MEtissue	NA	NA
+scRNAseq	TB13021039	NA	NA	NA	NA	NA	Shih_MEtissue5	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Symptomatic	TB13021039_MEtissue	NA	NA
+scRNAseq	TB13021179	NA	NA	NA	NA	NA	Shih_MEtissue5	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Diagnosed	TB13021179_MEtissue	NA	NA
+scRNAseq	TB13021191	NA	NA	NA	NA	NA	Shih_MEtissue6	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Diagnosed	TB13021191_MEtissue	NA	NA
+scRNAseq	TB13021008	NA	NA	NA	NA	NA	Shih_MEtissue7	Shih	28	91	MEtissue	NA	NA	NA	NA	NA	NA	NA	NA	Diagnosed	TB13021008_MEtissue	NA	NA
+scRNAseq	GSM5572238	NA	NA	NA	NA	NA	Lai_GSM5572238	Lai	28	150	endometrium	early-mid-secretory	NA	10xV3	NA	NA	NA	NA	NA	Ctrl1	NA	SRX12124996	5 days after ovulation
+scRNAseq	GSM5572239	NA	NA	NA	NA	NA	Lai_GSM5572239	Lai	28	150	endometrium	early-mid-secretory	NA	10xV3	NA	NA	NA	NA	NA	Ctrl2	NA	SRX12124997	5 days after ovulation
+scRNAseq	GSM5572240	NA	NA	NA	NA	NA	Lai_GSM5572240	Lai	28	150	endometrium	early-mid-secretory	NA	10xV3	NA	NA	NA	NA	NA	Ctrl3	NA	SRX12124998	5 days after ovulation
+scRNAseq	GSM6605437	NA	NA	NA	NA	NA	Huang_GSM6605437	Huang	28	150	endometrium	mid-secretory	NA	10xV3	NA	NA	NA	NA	NA	N1	NA	SRX17742664	NA
+scRNAseq	GSM6605438	NA	NA	NA	NA	NA	Huang_GSM6605438	Huang	28	150	endometrium	late-secretory	NA	10xV3	NA	NA	NA	NA	NA	N2	NA	SRX17742665	NA
+scRNAseq	GSM6605440	NA	NA	NA	NA	NA	Huang_GSM6605440	Huang	28	150	endometrium	proliferative	NA	10xV3	NA	NA	NA	NA	NA	N4	NA	SRX17742666	NA
+scRNAseq	GSM6605439	NA	NA	NA	NA	NA	Huang_GSM6605439	Huang	28	150	endometrium	proliferative	NA	10xV3	NA	NA	NA	NA	NA	N3	NA	SRX17742667	NA
+scRNAseq	GSM7277296	NA	NA	NA	NA	NA	Huang_GSM7277296	Huang	28	150	endometrium	mid-secretory	NA	10xV3	NA	NA	NA	NA	NA	N5	NA	SRX20174638	NA
+scRNAseq	GSM7277297	NA	NA	NA	NA	NA	Huang_GSM7277297	Huang	28	150	endometrium	proliferative	NA	10xV3	NA	NA	NA	NA	NA	N6	NA	SRX20174639	NA
+scRNAseq	GSM7277298	NA	NA	NA	NA	NA	Huang_GSM7277298	Huang	28	150	endometrium	mid-secretory	NA	10xV3	NA	NA	NA	NA	NA	N7	NA	SRX20174640	NA

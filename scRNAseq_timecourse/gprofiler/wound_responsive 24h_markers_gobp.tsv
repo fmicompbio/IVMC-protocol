@@ -1,0 +1,57 @@
+term_name	p_value	term_size	query_size	intersection_size
+actin cytoskeleton organization	0.000115712238481511	572	100	17
+cytoskeleton organization	0.000115712238481511	1206	100	25
+actin filament-based process	0.00031632811132178	632	100	17
+cell migration	0.00345527682928656	1033	100	20
+cell adhesion	0.0071472276637998	1008	100	19
+locomotion	0.00838414273996957	850	100	17
+cell motility	0.010323568004121	1168	100	20
+post-Golgi vesicle-mediated transport	0.010323568004121	98	100	6
+cell-matrix adhesion	0.0173375349507891	168	100	7
+vesicle-mediated transport	0.0173375349507891	1128	100	19
+regulation of cell migration	0.0173375349507891	675	100	14
+actin filament depolymerization	0.0173375349507891	38	100	4
+positive regulation of biological process	0.0185362806991346	4486	100	46
+regulation of actin cytoskeleton organization	0.0185362806991346	248	100	8
+regulation of cell motility	0.0185362806991346	718	100	14
+positive regulation of cellular process	0.0185362806991346	4241	100	44
+low-density lipoprotein particle clearance	0.0185362806991346	16	100	3
+actin filament bundle assembly	0.0185362806991346	127	100	6
+actin filament bundle organization	0.0185362806991346	130	100	6
+regulation of supramolecular fiber organization	0.0185362806991346	297	100	9
+regulation of signaling	0.0185362806991346	2412	100	30
+positive regulation of signaling	0.0191392897712001	1215	100	19
+cell-substrate adhesion	0.0191392897712001	252	100	8
+regulation of locomotion	0.0203108462756478	737	100	14
+protein depolymerization	0.0207192566731144	88	100	5
+regulation of actin filament organization	0.0213076664355541	198	100	7
+regulation of cell-matrix adhesion	0.0213076664355541	90	100	5
+regulation of cytoskeleton organization	0.0214350403808933	411	100	10
+supramolecular fiber organization	0.0214350403808933	664	100	13
+regulation of plasma lipoprotein particle levels	0.0217707165784788	51	100	4
+regulation of actin filament-based process	0.0258504914669678	276	100	8
+regulation of cell-substrate adhesion	0.0259334981578698	150	100	6
+positive regulation of exocytosis	0.0303852457329005	57	100	4
+plasma lipoprotein particle clearance	0.0323423468251866	26	100	3
+anatomical structure morphogenesis	0.0323423468251866	1529	100	21
+positive regulation of cell communication	0.0323423468251866	1209	100	18
+regulation of protein depolymerization	0.0323423468251866	60	100	4
+receptor-mediated endocytosis involved in cholesterol transport	0.0323423468251866	6	100	2
+negative regulation of actin filament depolymerization	0.0323423468251866	26	100	3
+localization within membrane	0.0343844450614943	546	100	11
+developmental process	0.0343844450614943	3804	100	39
+actin filament organization	0.0343844450614943	376	100	9
+positive regulation of transport	0.0343844450614943	546	100	11
+protein localization to membrane	0.0344088987962588	462	100	10
+establishment of organelle localization	0.0365050512645906	385	100	9
+focal adhesion assembly	0.0374163668258445	66	100	4
+regulation of low-density lipoprotein particle clearance	0.0374163668258445	7	100	2
+regulation of cell communication	0.0378877992714465	2414	100	28
+positive regulation of cell migration	0.0401798453403211	395	100	9
+negative regulation of supramolecular fiber organization	0.0445751502835056	121	100	5
+regulation of signal transduction	0.0451087948112062	2204	100	26
+regulation of actin filament depolymerization	0.0458333762623649	33	100	3
+cellular component organization	0.0458333762623649	4880	100	46
+cell-substrate junction assembly	0.0458333762623649	73	100	4
+transport	0.0458333762623649	2976	100	32
+positive regulation of cell motility	0.0458333762623649	410	100	9

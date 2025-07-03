@@ -1,0 +1,28 @@
+term_name	p_value	term_size	query_size	intersection_size
+macromolecule glycosylation	0.000161664884682782	173	100	10
+protein glycosylation	0.000161664884682782	173	100	10
+glycosylation	0.000213093744765196	192	100	10
+glycoprotein metabolic process	0.000213093744765196	289	100	12
+glycoprotein biosynthetic process	0.00155813683576865	245	100	10
+commissural neuron axon guidance	0.00638484203476846	9	100	3
+protein O-linked glycosylation	0.00638484203476846	88	100	6
+carbohydrate derivative biosynthetic process	0.0149355301618754	482	100	12
+branching involved in blood vessel morphogenesis	0.0210270712835127	14	100	3
+positive regulation of smooth muscle cell migration	0.0235463231203264	15	100	3
+endoderm development	0.0312258915848707	47	100	4
+carbohydrate derivative metabolic process	0.0312258915848707	747	100	14
+L-arginine import across plasma membrane	0.0312258915848707	4	100	2
+central nervous system development	0.0312258915848707	484	100	11
+positive regulation of cell adhesion	0.0312258915848707	324	100	9
+branching morphogenesis of an epithelial tube	0.0312258915848707	49	100	4
+negative regulation of multicellular organismal process	0.0312258915848707	659	100	13
+lipid biosynthetic process	0.0312258915848707	566	100	12
+basement membrane organization	0.0312258915848707	20	100	3
+morphogenesis of a branching epithelium	0.0335275150678399	51	100	4
+retina vasculature morphogenesis in camera-type eye	0.0394062530775444	5	100	2
+positive regulation of hepatocyte proliferation	0.0394062530775444	5	100	2
+multicellular organismal process	0.0416291829417597	4129	100	42
+morphogenesis of a branching structure	0.0489451318549316	59	100	4
+negative regulation of amyloid-beta clearance	0.0497658501642767	6	100	2
+regulation of cell adhesion	0.0497658501642767	538	100	11
+cell adhesion	0.0497658501642767	1008	100	16

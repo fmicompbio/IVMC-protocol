@@ -1,0 +1,29 @@
+term_name	p_value	term_size	query_size	intersection_size
+ribosome biogenesis	9.67930877710094e-13	208	98	18
+ribonucleoprotein complex biogenesis	2.32150731620252e-10	342	98	19
+rRNA metabolic process	3.29617644156613e-09	181	98	14
+rRNA processing	4.00341157814691e-08	145	98	12
+ribosomal small subunit biogenesis	3.39363638026368e-06	69	98	8
+endothelial cell development	5.13970086864219e-05	41	98	6
+ribosomal large subunit biogenesis	0.000131618373871626	49	98	6
+RNA processing	0.00021589273606497	768	98	18
+cellular component biogenesis	0.000314020084107627	2533	98	35
+establishment of endothelial barrier	0.000447211443127641	36	98	5
+maturation of SSU-rRNA	0.000695760830314514	40	98	5
+endothelial cell differentiation	0.00104834641075212	76	98	6
+maturation of SSU-rRNA from tricistronic rRNA transcript (SSU-rRNA, 5.8S rRNA, LSU-rRNA)	0.00171740089923686	24	98	4
+endothelium development	0.0023720682303335	91	98	6
+epithelial cell development	0.0023720682303335	91	98	6
+transcription by RNA polymerase I	0.00359804462072267	60	98	5
+tRNA metabolic process	0.0135476619394449	182	98	7
+positive regulation of blood-brain barrier permeability	0.0344036151927545	5	98	2
+epithelial cell differentiation	0.0367867441814035	365	98	9
+negative regulation of stress fiber assembly	0.0367867441814035	24	98	3
+bicellular tight junction assembly	0.0367867441814035	59	98	4
+negative regulation of actin filament bundle assembly	0.0367867441814035	25	98	3
+regulation of blood-brain barrier permeability	0.0477744340752416	7	98	2
+establishment of centrosome localization	0.0477744340752416	7	98	2
+tight junction assembly	0.0477744340752416	64	98	4
+tight junction organization	0.0477744340752416	66	98	4
+apical junction assembly	0.0477744340752416	66	98	4
+rRNA transcription	0.049108794159946	30	98	3

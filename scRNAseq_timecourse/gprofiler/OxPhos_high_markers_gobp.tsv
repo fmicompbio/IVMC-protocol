@@ -1,0 +1,150 @@
+term_name	p_value	term_size	query_size	intersection_size
+oxidative phosphorylation	5.41020148984051e-20	125	96	20
+aerobic respiration	1.50927753975453e-19	160	96	21
+cellular respiration	2.0427756132767e-18	184	96	21
+energy derivation by oxidation of organic compounds	3.82327177035677e-16	239	96	21
+generation of precursor metabolites and energy	3.4729086249521e-15	349	96	23
+ATP biosynthetic process	5.47422851776804e-14	88	96	14
+purine ribonucleoside triphosphate biosynthetic process	5.71332651750957e-14	90	96	14
+purine nucleoside triphosphate biosynthetic process	5.71332651750957e-14	90	96	14
+proton motive force-driven ATP synthesis	8.1811230941252e-14	72	96	13
+ribonucleoside triphosphate biosynthetic process	1.00860672341314e-13	95	96	14
+purine ribonucleotide biosynthetic process	1.63462278970007e-13	124	96	15
+nucleoside triphosphate biosynthetic process	2.04831022751075e-13	101	96	14
+purine nucleotide biosynthetic process	2.27194112716592e-13	157	96	16
+ribonucleotide biosynthetic process	3.74147257359812e-13	133	96	15
+ribose phosphate biosynthetic process	6.11373503154682e-13	138	96	15
+nucleotide biosynthetic process	1.4954902469031e-12	179	96	16
+nucleotide metabolic process	5.01897079478223e-12	361	96	20
+purine nucleotide metabolic process	7.14994507603336e-12	322	96	19
+ATP metabolic process	1.04391014331159e-11	170	96	15
+purine ribonucleotide metabolic process	1.04391014331159e-11	244	96	17
+purine-containing compound biosynthetic process	1.36912130175864e-11	211	96	16
+ATP synthesis coupled electron transport	1.36912130175864e-11	87	96	12
+mitochondrial ATP synthesis coupled electron transport	1.36912130175864e-11	87	96	12
+proton motive force-driven mitochondrial ATP synthesis	1.36912130175864e-11	65	96	11
+ribonucleotide metabolic process	1.60238523548193e-11	254	96	17
+ribose phosphate metabolic process	2.25515397554856e-11	260	96	17
+purine ribonucleoside triphosphate metabolic process	2.29615614301952e-11	183	96	15
+purine nucleoside triphosphate metabolic process	2.81204900707833e-11	186	96	15
+ribonucleoside triphosphate metabolic process	3.43371790335942e-11	189	96	15
+respiratory electron transport chain	4.5935299321999e-11	98	96	12
+nucleoside triphosphate metabolic process	7.34484059042087e-11	200	96	15
+electron transport chain	1.12133837472659e-10	106	96	12
+aerobic electron transport chain	1.24551718175548e-10	81	96	11
+nucleoside phosphate biosynthetic process	1.35817893620256e-10	251	96	16
+nucleoside phosphate metabolic process	5.52123125390331e-10	484	96	20
+purine-containing compound metabolic process	5.74866932629464e-10	429	96	19
+nucleobase-containing small molecule metabolic process	1.8375864141812e-09	519	96	20
+actin filament organization	4.23136638565734e-07	376	96	15
+carbohydrate derivative metabolic process	9.60947235533939e-07	747	96	20
+carbohydrate derivative biosynthetic process	1.62200886446872e-06	482	96	16
+organophosphate biosynthetic process	1.6761218381699e-06	484	96	16
+organophosphate metabolic process	3.33145861669941e-06	809	96	20
+supramolecular fiber organization	4.15875428567806e-06	664	96	18
+actin filament-based process	1.08767965588598e-05	632	96	17
+actin cytoskeleton organization	1.49317956973508e-05	572	96	16
+platelet aggregation	2.74240318320587e-05	51	96	6
+small molecule metabolic process	4.50707927843151e-05	1336	96	24
+wound healing	7.41785097413536e-05	295	96	11
+regulation of actin filament organization	0.000134899940541568	198	96	9
+mitochondrial electron transport, cytochrome c to oxygen	0.000147871218236529	18	96	4
+homotypic cell-cell adhesion	0.000193583933603672	72	96	6
+regulation of stress fiber assembly	0.00022291993342026	74	96	6
+mitochondrial electron transport, NADH to ubiquinone	0.000314417809501281	46	96	5
+regulation of actomyosin structure organization	0.000314417809501281	79	96	6
+regulation of actin filament bundle assembly	0.000331973035858103	80	96	6
+response to wounding	0.000335181333804902	351	96	11
+positive regulation of actin filament bundle assembly	0.000408427035611933	49	96	5
+regulation of supramolecular fiber organization	0.000455450630428542	297	96	10
+stress fiber assembly	0.000494140316070809	87	96	6
+contractile actin filament bundle assembly	0.000494140316070809	87	96	6
+response to oxidative stress	0.00065426267380369	248	96	9
+regulation of actin cytoskeleton organization	0.00065426267380369	248	96	9
+platelet activation	0.000752906142657331	95	96	6
+phosphorus metabolic process	0.000752906142657331	1826	96	26
+positive regulation of molecular function	0.000752906142657331	800	96	16
+phosphate-containing compound metabolic process	0.000752906142657331	1826	96	26
+proton transmembrane transport	0.000869372924572389	59	96	5
+mitochondrial respirasome assembly	0.00127231187810804	105	96	6
+regulation of actin filament-based process	0.00135897203326459	276	96	9
+mitochondrial electron transport, ubiquinol to cytochrome c	0.00170488658942769	13	96	3
+cell motility	0.00193908050055779	1168	96	19
+protein peptidyl-prolyl isomerization	0.0021002472049954	14	96	3
+cellular response to oxidative stress	0.00253998929481182	174	96	7
+detoxification of hydrogen peroxide	0.00286912814228404	3	96	2
+positive regulation of plasma membrane repair	0.00286912814228404	3	96	2
+actin filament fragmentation	0.00286912814228404	3	96	2
+actin filament bundle assembly	0.0032410054859536	127	96	6
+positive regulation of stress fiber assembly	0.00340125506577813	43	96	4
+actin filament bundle organization	0.00359115067254053	130	96	6
+positive regulation of cell migration	0.00363820706714298	395	96	10
+actin polymerization or depolymerization	0.00474378080509613	138	96	6
+activation of protein kinase B activity	0.00474378080509613	19	96	3
+positive regulation of cell motility	0.00474378080509613	410	96	10
+regulation of transepithelial transport	0.00517107506343663	4	96	2
+positive regulation of locomotion	0.00540927980852544	418	96	10
+maintenance of protein location in cell	0.00648919813594983	52	96	4
+blood coagulation	0.00676252175933279	149	96	6
+regulation of binding	0.00676252175933279	210	96	7
+coagulation	0.00693123980525921	150	96	6
+cytoskeleton organization	0.00713993354551545	1206	96	18
+cellular response to chemical stress	0.00749292535105968	215	96	7
+hemostasis	0.00763792577380955	154	96	6
+peptidyl-proline modification	0.00763792577380955	23	96	3
+actomyosin structure organization	0.00866507719570899	158	96	6
+regulation of molecular function	0.00884334290300358	1343	96	19
+intrinsic apoptotic signaling pathway	0.00933542160508819	225	96	7
+cell migration	0.00994313493743513	1033	96	16
+positive regulation of binding	0.0100234606794288	107	96	5
+mitochondrial respiratory chain complex I assembly	0.0103160692653776	61	96	4
+NADH dehydrogenase complex assembly	0.0103160692653776	61	96	4
+actin polymerization-dependent cell motility	0.0105617410960537	6	96	2
+regulation of plasma membrane repair	0.0105617410960537	6	96	2
+locomotion	0.012014344725247	850	96	14
+regulation of protein binding	0.0131235027196708	115	96	5
+negative regulation of stress-activated MAPK cascade	0.0140394115853499	7	96	2
+muscle filament sliding	0.0140394115853499	7	96	2
+actin-myosin filament sliding	0.0140394115853499	7	96	2
+response to reactive oxygen species	0.0142014228338492	118	96	5
+regulation of cell migration	0.0147975378431471	675	96	12
+positive regulation of catalytic activity	0.0161760856784817	497	96	10
+regulation of cytoskeleton organization	0.0161977112224249	411	96	9
+regulation of intrinsic apoptotic signaling pathway	0.0171238097955624	124	96	5
+positive regulation of plasminogen activation	0.0173477569625342	8	96	2
+sequestering of actin monomers	0.0173477569625342	8	96	2
+negative regulation of stress-activated protein kinase signaling cascade	0.0173477569625342	8	96	2
+maintenance of protein location	0.0175422423861591	73	96	4
+hydrogen peroxide metabolic process	0.0194486861749464	34	96	3
+negative regulation of intrinsic apoptotic signaling pathway	0.0208697947788623	77	96	4
+positive regulation of DNA binding	0.0208697947788623	35	96	3
+membrane raft assembly	0.0212899642755737	9	96	2
+regulation of body fluid levels	0.0224518804765614	199	96	6
+regulation of cell motility	0.0224927261372592	718	96	12
+mitochondrion organization	0.0232388693556317	354	96	8
+regulation of catalytic activity	0.0246761365856353	829	96	13
+positive regulation of supramolecular fiber organization	0.0247050461075707	138	96	5
+regulation of locomotion	0.0271523029180004	737	96	12
+protein-containing complex organization	0.027199367996993	1393	96	18
+Arp2/3 complex-mediated actin nucleation	0.0285854470739731	40	96	3
+cell activation	0.0293221936443709	648	96	11
+organelle organization	0.0293221936443709	2926	96	30
+regulation of cellular response to hypoxia	0.0293221936443709	11	96	2
+positive regulation of cytoskeleton organization	0.0293221936443709	145	96	5
+regulation of actin filament polymerization	0.0293221936443709	87	96	4
+negative regulation of actin filament polymerization	0.0293317349018404	41	96	3
+cellular detoxification	0.0312162908187264	42	96	3
+maintenance of location in cell	0.031788835103906	149	96	5
+reactive oxygen species metabolic process	0.0324896971762568	150	96	5
+regulation of proton transport	0.0335378254265868	12	96	2
+mitochondrial respiratory chain complex assembly	0.0372119409070943	94	96	4
+negative regulation of apoptotic signaling pathway	0.0376896747749428	156	96	5
+cellular response to toxic substance	0.0388313253024765	46	96	3
+actin nucleation	0.0435479894608215	48	96	3
+positive regulation of cytoplasmic translation	0.0442714374934395	14	96	2
+regulation of actin polymerization or depolymerization	0.0462395119527403	101	96	4
+cellular response to reactive oxygen species	0.0462395119527403	101	96	4
+negative regulation of protein-containing complex assembly	0.0475768287969621	102	96	4
+negative regulation of endoplasmic reticulum stress-induced intrinsic apoptotic signaling pathway	0.0488311106432885	15	96	2
+regulation of plasma membrane organization	0.0488311106432885	15	96	2
+regulation of actin filament length	0.0488311106432885	103	96	4

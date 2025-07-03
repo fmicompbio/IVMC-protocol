@@ -1,0 +1,855 @@
+---
+title: "Generating plots for paper (scRNA-seq time course)"
+date: "`r Sys.Date()`"
+format: 
+    html:
+        toc: true
+        theme: united
+embed-resources: true
+---
+
+# Load packages
+
+```{r}
+#| label: load-pkg
+
+suppressPackageStartupMessages({
+    library(SingleCellExperiment)
+    library(scuttle)
+    library(scater)
+    library(dplyr)
+    library(tidyr)
+    library(ggplot2)
+    library(cowplot)
+    library(ComplexHeatmap)
+    library(circlize)
+    library(ggtext)
+    library(scales)
+    library(ggh4x)
+    library(swissknife)
+    library(BiocParallel)
+    library(Matrix)
+    library(gprofiler2)
+    library(forcats)
+})
+
+source("../params.R")
+source("../helpers.R")
+
+if (!file.exists("paper_figures")) {
+    dir.create("paper_figures", showWarnings = FALSE, recursive = FALSE)
+}
+if (!file.exists("gprofiler")) {
+    dir.create("gprofiler", showWarnings = FALSE, recursive = FALSE)
+}
+```
+
+# Load data
+
+```{r}
+#| label: load-data
+
+organ <- readRDS("organoid_scrnaseq_timecourse.rds")
+
+# check for consistency
+stopifnot(all(organ$leiden_res0.125_annot %in% sc_leiden_res0.125_annot_order))
+stopifnot(all(organ$pred_from_invivo %in% tissue_leiden_res0.4_annot_order))
+
+organ$leiden_res0.125_annot <- factor(organ$leiden_res0.125_annot,
+                                      levels = sc_leiden_res0.125_annot_order)
+organ$pred_from_invivo <- factor(organ$pred_from_invivo, 
+                                 levels = tissue_leiden_res0.4_annot_order)
+
+stopifnot(all(organ$timepoint %in% sc_timepoint_order))
+organ$timepoint <- factor(organ$timepoint, 
+                          levels = sc_timepoint_order)
+```
+
+# Numeric summaries
+
+```{r}
+# number of genes and cells
+dim(organ)
+```
+
+# Figure 4B (UMAPs for time points)
+
+```{r}
+#| label: plot-umap-by-timepoint
+#| fig.width: 22
+#| fig.height: 4
+
+x <- makePerCellDF(organ, use.coldata = TRUE, use.dimred = TRUE)
+
+(umap_facet <- ggplot(x, aes(x = UMAP_sketch.1, y = UMAP_sketch.2)) + 
+        geom_point(data = transform(x, timepoint = NULL), 
+                   color = "grey95", alpha = 1, size = 0.5) + 
+        geom_point(aes(color = timepoint), alpha = 0.5, size = 0.5) + 
+        facet_wrap2(~ timepoint, nrow = 1, 
+                    strip = strip_themed(clip = "off", background_x = elem_list_rect(
+                        fill = alpha(sc_timepoint_colors[levels(x$timepoint)], 0.5)))) + 
+        scale_color_manual(values = sc_timepoint_colors) + 
+        theme_void() + 
+        theme(axis.text = element_blank(),
+              axis.title = element_blank(),
+              strip.text = element_text(size = 20, hjust = 0.5, 
+                                        margin = margin(0.15, 0, 0.15, 0, "cm")),
+              legend.position = "none",
+              panel.background = element_rect(fill = "white", color = NA),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              axis.line = element_line(color = "black"),
+              strip.background = element_rect(fill = "white", color = "white")
+        ))
+
+png("paper_figures/UMAP_timepoints_separate.png", 
+    height = 4, width = 22, units = "in", res = 500)
+umap_facet
+dev.off()
+```
+
+# Figure 4C (UMAP with clusters)
+
+```{r}
+#| label: plot-umap-clusters
+#| fig.width: 7
+#| fig.height: 4
+
+(umap_clusters <- plotReducedDim(
+    organ, dimred = "UMAP_sketch", 
+    colour_by = "leiden_res0.125_annot", point_size = 0.5) + 
+        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = "") + 
+        guides(color = guide_legend(override.aes = list(size = 5, alpha = 1, 
+                                                        shape = 15), 
+                                    ncol = 2)) + 
+        theme_void() + 
+        theme(legend.text = element_text(size = 12)))
+png("paper_figures/UMAP_organoids_clusters.png", 
+    height = 4, width = 4, units = "in", res = 500)
+umap_clusters + theme(legend.position = "none")
+dev.off()
+pdf("paper_figures/UMAP_organoids_clusters_legend.pdf", 
+    height = 3, width = 5)
+grid.newpage()
+grid.draw(get_legend2(umap_clusters + 
+                          theme(legend.position = "bottom",
+                                legend.text = element_text(size = 12))))
+dev.off()
+pdf("paper_figures/UMAP_organoids_clusters.pdf", height = 4, width = 4)
+umap_clusters + theme(legend.position = "none")
+dev.off()
+```
+
+# Figure 4H (predictions from atlas)
+
+```{r}
+#| label: plot-umap-preds-invivo
+#| fig.width: 7
+#| fig.height: 4
+
+(umap_preds <- plotReducedDim(
+    organ, "UMAP_sketch", colour_by = "pred_from_invivo", point_size = 0.5) + 
+        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "") +  
+        theme_void() + 
+        theme(legend.text = element_text(size = 12),       
+              legend.title = element_text(size = 12),      
+              legend.key.size = unit(1.5, "lines")) + 
+        guides(color = guide_legend(override.aes = list(size = 4), title = NULL))
+)
+png("paper_figures/UMAP_organoids_pred_from_invivo.png", 
+    height = 4, width = 4, units = "in", res = 500)
+umap_preds + theme(legend.position = "none")
+dev.off()
+pdf("paper_figures/UMAP_organoids_pred_from_invivo_legend.pdf", 
+    height = 1.75, width = 9)
+grid.newpage()
+grid.draw(get_legend2(umap_preds + theme(legend.position = "bottom",
+                                         legend.text = element_text(size = 12))))
+dev.off()
+```
+
+# Figure 4E (dot plot)
+
+```{r}
+#| label: plot-dotplot-timecourse-markers
+#| fig.width: 20
+#| fig.height: 6
+
+markers <- intersect(sc_timecourse_markers, rownames(organ))
+
+(dotplot_norm <- .makeDotPlot(
+    dat = organ, markers = markers, 
+    cluster_column = "leiden_res0.125_annot", 
+    cluster_order = sc_leiden_res0.125_annot_order, 
+    cluster_colors = sc_leiden_res0.125_annot_colors, 
+    transpose = TRUE, 
+    split_by_ciliated = TRUE))
+
+pdf("paper_figures/dotplot_organoids_normalized.pdf", height = 6, width = 20)
+dotplot_norm
+dev.off()
+png("paper_figures/dotplot_organoids_normalized.png", height = 6, width = 20, 
+    unit = "in", res = 500)
+dotplot_norm
+dev.off()
+```
+
+# Dot plot of WNT ligands and FZD receptors
+
+```{r}
+#| label: plot-dotplot-timecourse-wnt-fzd
+#| fig.width: 7
+#| fig.height: 6
+
+fzd <- paste0("FZD", 1:10)
+
+(dotplot_norm_fzd <- .makeDotPlot(
+    dat = organ, markers = fzd, 
+    cluster_column = "leiden_res0.125_annot", 
+    cluster_order = sc_leiden_res0.125_annot_order, 
+    cluster_colors = sc_leiden_res0.125_annot_colors, 
+    transpose = TRUE, 
+    split_by_ciliated = FALSE))
+
+pdf("paper_figures/dotplot_organoids_fzd_normalized.pdf", height = 6, width = 7)
+dotplot_norm_fzd
+dev.off()
+png("paper_figures/dotplot_organoids_fzd_normalized.png", height = 6, width = 7, 
+    unit = "in", res = 500)
+dotplot_norm_fzd
+dev.off()
+```
+
+
+# Figures 4D + 4G + 4I, Extended Data 9G (relative abundance over time)
+
+## Time course clusters
+
+```{r}
+#| label: plot-rel-abundance-clusters
+#| fig.width: 9
+#| fig.height: 6
+
+df <- data.frame(colData(organ)[, c("timepoint", "leiden_res0.125_annot")]) |>
+    group_by(timepoint, leiden_res0.125_annot) |>
+    tally() |>
+    group_by(timepoint) |>
+    mutate(perc = n / sum(n) * 100) |>
+    ungroup() |>
+    complete(timepoint, leiden_res0.125_annot, fill = list(n = 0, perc = 0)) |>
+    mutate(cluster_group = ifelse(grepl("ciliated", leiden_res0.125_annot), 
+                                  "ciliated", "non-ciliated"))
+
+dfdonor <- data.frame(colData(organ)[, c("timepoint", "donor", "leiden_res0.125_annot")]) |>
+    group_by(timepoint, donor, leiden_res0.125_annot) |>
+    tally() |>
+    group_by(timepoint, donor) |>
+    mutate(perc = n / sum(n) * 100) |>
+    ungroup() |>
+    complete(timepoint, donor, leiden_res0.125_annot, fill = list(n = 0, perc = 0))
+
+# timepoint vs. relative abundance
+# ... ciliated
+(plot_relab_cil <- ggplot(df |> dplyr::filter(cluster_group == "ciliated") |>
+                              droplevels(), 
+                          aes(x = timepoint, y = perc, color = leiden_res0.125_annot)) + 
+        geom_point() + 
+        geom_line(aes(x = as.numeric(timepoint)), linewidth = 1) + 
+        theme_cowplot() + 
+        labs(x = "", y = "Relative\nabundance (%)",
+             title = "") + 
+        theme(legend.position = "bottom",
+              axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
+              axis.text.y = element_text(size = 16),
+              axis.title = element_text(size = 16),
+              strip.text = element_text(size = 16, margin = margin(0.2, 0, 0.2, 0, "cm")),
+              strip.background = element_rect(fill = "white", color = "white")) + 
+        facet_wrap(~ cluster_group, ncol = 1) + 
+        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = ""))
+
+pdf(paste0("paper_figures/relative_abundance_leiden_res0.125_annot_ciliated.pdf"), 
+    height = 4.5, width = 6)
+print(plot_relab_cil + theme(legend.position = "none"))
+dev.off()
+pdf("paper_figures/relative_abundance_leiden_res0.125_annot_ciliated_legend.pdf", 
+    height = 3, width = 4)
+grid.newpage()
+grid.draw(get_legend2(plot_relab_cil + 
+                          theme(legend.position = "bottom",
+                                legend.text = element_text(size = 12)) + 
+                          guides(color = guide_legend(ncol = 1))))
+dev.off()
+
+# ... non-ciliated
+(plot_relab_noncil <- ggplot(df |> dplyr::filter(cluster_group == "non-ciliated") |>
+                                 droplevels(), 
+                             aes(x = timepoint, y = perc, color = leiden_res0.125_annot)) + 
+        geom_point() + 
+        geom_line(aes(x = as.numeric(timepoint)), linewidth = 1) + 
+        theme_cowplot() + 
+        labs(x = "", y = "Relative\nabundance (%)",
+             title = "") + 
+        theme(legend.position = "bottom",
+              axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
+              axis.text.y = element_text(size = 16),
+              axis.title = element_text(size = 16),
+              strip.text = element_text(size = 16, margin = margin(0.2, 0, 0.2, 0, "cm")),
+              strip.background = element_rect(fill = "white", color = "white")) + 
+        facet_wrap(~ cluster_group, ncol = 1) + 
+        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = ""))
+
+pdf(paste0("paper_figures/relative_abundance_leiden_res0.125_annot_nonciliated.pdf"), 
+    height = 4.5, width = 6)
+print(plot_relab_noncil + theme(legend.position = "none"))
+dev.off()
+pdf("paper_figures/relative_abundance_leiden_res0.125_annot_nonciliated_legend.pdf", 
+    height = 2, width = 4.5)
+grid.newpage()
+grid.draw(get_legend2(plot_relab_noncil + 
+                          theme(legend.position = "bottom",
+                                legend.text = element_text(size = 12)) + 
+                          guides(color = guide_legend(ncol = 2))))
+dev.off()
+```
+
+```{r}
+#| label: plot-rel-abundance-clusters-facet
+#| fig.width: 14
+#| fig.height: 10
+
+# one panel per cluster
+(plot_relab_facet <- ggplot(
+    bind_rows(df |> mutate(donor = "overall"), dfdonor), 
+    aes(x = timepoint, y = perc, group = donor, 
+        alpha = donor == "overall", 
+        linewidth = donor == "overall", color = leiden_res0.125_annot)) + 
+        geom_point() + 
+        geom_line(aes(x = as.numeric(timepoint))) + 
+        scale_alpha_manual(values = c(`TRUE` = 1, `FALSE` = 0.25)) + 
+        scale_linewidth_manual(values = c(`TRUE` = 2, `FALSE` = 1)) + 
+        theme_cowplot() + 
+        labs(x = "", y = "Relative abundance (%)",
+             title = "") + 
+        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = "") + 
+        facet_wrap(~ leiden_res0.125_annot, scales = "free_y") + 
+        guides(alpha = "none", linewidth = "none") + 
+        theme(legend.position = "none",
+              axis.text.x = element_text(angle = 45, hjust = 1),
+              strip.text = element_text(size = 16),
+              strip.background = element_rect(fill = "white", color = "white")))
+
+pdf(paste0("paper_figures/relative_abundance_cluster_leiden_res0.125_annot.pdf"), 
+    height = 9, width = 14)
+print(plot_relab_facet)
+dev.off()
+```
+
+```{r}
+#| label: plot-rel-abundance-clusters-barplot
+#| fig.width: 8
+#| fig.height: 6
+
+# bar plot
+(plotbar <- ggplot(df, aes(x = fct_rev(timepoint), y = perc, fill = leiden_res0.125_annot)) + 
+        geom_col() + 
+        theme_cowplot() + 
+        labs(x = "", y = "Relative abundance (%)", title = "") +
+        coord_flip() + 
+        theme(legend.position = "bottom",
+              axis.text = element_text(size = 20),
+              axis.title = element_text(size = 20)) + 
+        scale_fill_manual(values = sc_leiden_res0.125_annot_colors, name = ""))
+pdf("paper_figures/relative_abundance_barplot_leiden_res0.125_annot.pdf", 
+    height = 5, width = 8)
+plotbar + theme(legend.position = "none")
+dev.off()
+png("paper_figures/relative_abundance_barplot_leiden_res0.125_annot.png", 
+    height = 5, width = 8, unit = "in", res = 400)
+plotbar + theme(legend.position = "none")
+dev.off()
+pdf("paper_figures/relative_abundance_barplot_leiden_res0.125_annot_legend.pdf", 
+    height = 1.75, width = 9)
+grid.newpage()
+grid.draw(get_legend2(plotbar + theme(legend.position = "bottom",
+                                      legend.text = element_text(size = 12))))
+dev.off()
+```
+
+## Predicted labels from atlas
+
+```{r}
+#| label: plot-rel-abundance-pred
+#| fig.width: 9
+#| fig.height: 6
+
+df <- data.frame(colData(organ)[, c("timepoint", "pred_from_invivo")]) |>
+    group_by(timepoint, pred_from_invivo) |>
+    tally() |>
+    group_by(timepoint) |>
+    mutate(perc = n / sum(n) * 100) |>
+    ungroup() |>
+    complete(timepoint, pred_from_invivo, fill = list(n = 0, perc = 0))
+
+dfdonor <- data.frame(colData(organ)[, c("timepoint", "donor", "pred_from_invivo")]) |>
+    group_by(timepoint, donor, pred_from_invivo) |>
+    tally() |>
+    group_by(timepoint, donor) |>
+    mutate(perc = n / sum(n) * 100) |>
+    ungroup() |>
+    complete(timepoint, donor, pred_from_invivo, fill = list(n = 0, perc = 0))
+
+# timepoint vs. relative abundance
+(plot_relab <- ggplot(df, aes(x = timepoint, y = perc, color = pred_from_invivo)) + 
+        geom_point() + 
+        geom_line(aes(x = as.numeric(timepoint)), linewidth = 1) + 
+        theme_cowplot() + 
+        labs(x = "", y = "Relative\nabundance (%)",
+             title = "") + 
+        theme(legend.position = "bottom",
+              axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
+              axis.text.y = element_text(size = 16),
+              axis.title = element_text(size = 16),
+              strip.background = element_rect(fill = "white", color = "black")) + 
+        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = ""))
+
+pdf(paste0("paper_figures/relative_abundance_pred_from_invivo.pdf"), 
+    height = 4, width = 6)
+print(plot_relab + theme(legend.position = "none"))
+dev.off()
+pdf("paper_figures/relative_abundance_pred_from_invivo_legend.pdf", 
+    height = 1.75, width = 11)
+grid.newpage()
+grid.draw(get_legend2(plot_relab + theme(legend.position = "bottom",
+                                         legend.text = element_text(size = 12))))
+dev.off()
+```
+
+```{r}
+#| label: plot-rel-abundance-pred-facet
+#| fig.width: 14
+#| fig.height: 9
+
+# one panel per cluster
+(plot_relab_facet <- ggplot(
+    bind_rows(df |> mutate(donor = "overall"), dfdonor), 
+    aes(x = timepoint, y = perc, group = donor, 
+        alpha = donor == "overall", 
+        linewidth = donor == "overall", color = pred_from_invivo)) + 
+        geom_point() + 
+        geom_line(aes(x = as.numeric(timepoint))) + 
+        scale_alpha_manual(values = c(`TRUE` = 1, `FALSE` = 0.25)) + 
+        scale_linewidth_manual(values = c(`TRUE` = 2, `FALSE` = 1)) + 
+        theme_cowplot() + 
+        labs(x = "", y = "Relative abundance (%)",
+             title = "") + 
+        theme(legend.position = "none",
+              axis.text.x = element_text(angle = 45, hjust = 1)) + 
+        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "") + 
+        facet_wrap(~ pred_from_invivo, scales = "free_y") + 
+        guides(alpha = "none", linewidth = "none") + 
+        theme(strip.text = element_text(size = 16),
+              strip.background = element_rect(fill = "white", color = "white")))
+
+pdf(paste0("paper_figures/relative_abundance_cluster_pred_from_invivo.pdf"), 
+    height = 9, width = 14)
+print(plot_relab_facet)
+dev.off()
+```
+
+```{r}
+#| label: plot-rel-abundance-pred-barplot
+#| fig.width: 8
+#| fig.height: 6
+
+# bar plot
+(plotbar <- ggplot(df, aes(x = timepoint, y = perc, fill = pred_from_invivo)) + 
+        geom_col() + 
+        theme_cowplot() + 
+        labs(x = "", y = "Relative abundance (%)", title = "") +
+        coord_flip() + 
+        theme(legend.position = "bottom",
+              axis.text = element_text(size = 20),
+              axis.title = element_text(size = 20)) + 
+        scale_fill_manual(values = tissue_leiden_res0.4_annot_colors, name = ""))
+pdf("paper_figures/relative_abundance_barplot_pred_from_invivo.pdf", 
+    height = 5, width = 8)
+plotbar + theme(legend.position = "none")
+dev.off()
+pdf("paper_figures/relative_abundance_barplot_pred_from_invivo_legend.pdf", 
+    height = 1.75, width = 11)
+grid.newpage()
+grid.draw(get_legend2(plotbar + theme(legend.position = "bottom",
+                                      legend.text = element_text(size = 12))))
+dev.off()
+```
+
+
+# Extended Data 9 (UMAPs)
+
+```{r}
+#| label: plot-umap-qc
+#| fig.width: 6
+#| fig.height: 4
+
+(umap_donor <- plotReducedDim(
+    organ, "UMAP_sketch", colour_by = "donorCol",
+    point_size = 0.5) +
+        scale_color_manual(values = donor_colors) + 
+        guides(color = guide_legend(override.aes = list(size = 4),
+                                    title = "Donor")) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_organoids_donorCol.png", 
+    height = 4, width = 7, units = "in", res = 500)
+plot_grid(
+    umap_donor + theme(legend.position = "none"),
+    get_legend2(umap_donor),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+
+(umap_cc <- plotReducedDim(
+    organ, "UMAP_sketch", colour_by = "SeuratCC",
+    point_size = 0.5) +
+        scale_color_manual(values = cc_colors) + 
+        guides(color = guide_legend(override.aes = list(size = 4),
+                                    title = "Cell cycle")) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_organoids_seuratCC.png", 
+    height = 4, width = 7, units = "in", res = 500)
+plot_grid(
+    umap_cc + theme(legend.position = "none"),
+    get_legend2(umap_cc),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+
+(umap_tricycle <- plotReducedDim(
+    organ, "UMAP_sketch", colour_by = "tricyclePosition",
+    point_size = 0.5) +   
+        guides(color = guide_colorbar(title = "tricycle\nposition")) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_organoids_tricyclePosition.png", 
+    height = 4, width = 7, units = "in", res = 500)
+plot_grid(
+    umap_tricycle + theme(legend.position = "none"),
+    get_legend2(umap_tricycle),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+
+(umap_intronic <- plotReducedDim(
+    organ, "UMAP_sketch", colour_by = "intronic_fraction",
+    point_size = 0.5) +   
+        guides(color = guide_colorbar(title = "intronic\nfraction")) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_organoids_intronic_fraction.png", 
+    height = 4, width = 7, units = "in", res = 500)
+plot_grid(
+    umap_intronic + theme(legend.position = "none"),
+    get_legend2(umap_intronic),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+
+(umap_mt <- plotReducedDim(
+    organ, "UMAP_sketch", colour_by = "subsets_MT_percent",
+    point_size = 0.5) +   
+        guides(color = guide_colorbar(title = "% MT")) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines")))
+png("paper_figures/UMAP_organoids_subsets_MT_percent.png", 
+    height = 4, width = 7, units = "in", res = 500)
+plot_grid(
+    umap_mt + theme(legend.position = "none"),
+    get_legend2(umap_mt),
+    nrow = 1, rel_widths = c(4, 3)
+)
+dev.off()
+```
+
+# Figure 4F (UMAPs)
+
+```{r}
+#| label: plot-umap-timecourse-genes
+#| fig.width: 6
+#| fig.height: 4
+
+for (gn in c("WNT7A", "E2F7")) {
+    umap_gn <- plotReducedDim(
+        organ, "UMAP_sketch", colour_by = gn,
+        point_size = 1) + 
+        scale_color_gradientn(colors = c("#d9d9d9", "#f4a582", "#d6604d","#8b0000", '#5c0000')) +
+        labs(color = gn) + 
+        theme_void() + 
+        theme(axis.title = element_blank(),
+              axis.text = element_blank(),
+              legend.text = element_text(size = 20),      
+              legend.title = element_text(size = 20),      
+              legend.key.size = unit(1.5, "lines"))
+    print(umap_gn)
+    
+    png(paste0("paper_figures/UMAP_organoids_", gn, ".png"), 
+        height = 4, width = 6, units = "in", res = 500)
+    print(plot_grid(
+        umap_gn + theme(legend.position = "none"),
+        get_legend2(umap_gn),
+        nrow = 1, rel_widths = c(4, 2)
+    ))
+    dev.off()
+}
+```
+
+# Luminal early signature over time
+
+Use the top 100 marker genes for the luminal early cluster to calculate a 
+gene set score for each cell. 
+
+```{r}
+#| label: fig-lum-early-signature
+#| fig.width: 7
+#| fig.height: 5
+
+luminal_early_markers <- read.delim("../scRNAseq_invivo_endometrium_epithelial_cell_atlas/marker_genes_all_leiden_res0.4_annot/leiden_res0.4_annot_cluster_luminal early_markers.txt") |>
+    arrange(p.value) |>
+    slice_head(n = 100) |>
+    pull(gene)
+
+organ$lum_early_score <- swissknife::normGenesetExpression(
+    organ, genes = luminal_early_markers, 
+    BPPARAM = MulticoreParam(workers = 8L))
+(ggrep <- ggplot(as.data.frame(colData(organ)), 
+                 aes(x = timepoint, y = lum_early_score,
+                     fill = timepoint)) + 
+        geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + 
+        labs(x = "", y = "Luminal early gene set score") + 
+        scale_fill_manual(values = sc_timepoint_colors) + 
+        theme_bw(base_size = 14) + 
+        theme(legend.position = "none",
+              axis.text.x = element_text(size = 16, angle = 45, hjust = 1, vjust = 1),
+              axis.text.y = element_text(size = 16),
+              axis.title = element_text(size = 16)))
+
+pdf("paper_figures/luminal_early_signature.pdf", width = 7, height = 5)
+ggrep
+dev.off()
+```
+
+Instead of the top 100 marker genes for the luminal early cluster, we here use 
+the top 100 upregulated genes in the luminal early cluster when compared to the 
+luminal late cluster. 
+
+```{r}
+#| label: fig-lum-early-vs-late-signature
+#| fig.width: 7
+#| fig.height: 5
+
+luminal_early_vs_late_markers <- read.delim("../scRNAseq_invivo_endometrium_epithelial_cell_atlas/pairwise_ttests_leiden_res0.4_annot/leiden_res0.4_annot_cluster_luminal early_vs_luminal late.txt") |>
+    arrange(p.value) |>
+    slice_head(n = 100) |>
+    pull(gene)
+
+organ$lum_early_vs_late_score <- swissknife::normGenesetExpression(
+    organ, genes = luminal_early_vs_late_markers, 
+    BPPARAM = MulticoreParam(workers = 8L))
+(ggrep3 <- ggplot(as.data.frame(colData(organ)), 
+                 aes(x = timepoint, y = lum_early_vs_late_score,
+                     fill = timepoint)) + 
+        geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + 
+        labs(x = "", y = "Luminal early vs late gene set score") + 
+        scale_fill_manual(values = sc_timepoint_colors) + 
+        theme_bw(base_size = 14) + 
+        theme(legend.position = "none",
+              axis.text.x = element_text(size = 16, angle = 45, hjust = 1, vjust = 1),
+              axis.text.y = element_text(size = 16),
+              axis.title = element_text(size = 16)))
+
+pdf("paper_figures/luminal_early_vs_late_signature.pdf", width = 7, height = 5)
+ggrep3
+dev.off()
+```
+
+# Luminal late signature over time
+
+```{r}
+#| label: fig-lum-late-signature
+#| fig.width: 7
+#| fig.height: 5
+
+luminal_late_markers <- read.delim("../scRNAseq_invivo_endometrium_epithelial_cell_atlas/marker_genes_all_leiden_res0.4_annot/leiden_res0.4_annot_cluster_luminal late_markers.txt") |>
+    arrange(p.value) |>
+    slice_head(n = 100) |>
+    pull(gene)
+
+organ$lum_late_score <- swissknife::normGenesetExpression(
+    organ, genes = luminal_late_markers, 
+    BPPARAM = MulticoreParam(workers = 8L))
+(ggrep2 <- ggplot(as.data.frame(colData(organ)), 
+                  aes(x = timepoint, y = lum_late_score,
+                      fill = timepoint)) + 
+        geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + 
+        labs(x = "", y = "Luminal late gene set score") + 
+        scale_fill_manual(values = sc_timepoint_colors) + 
+        theme_bw(base_size = 14) + 
+        theme(legend.position = "none",
+              axis.text.x = element_text(size = 16, angle = 45, hjust = 1, vjust = 1),
+              axis.text.y = element_text(size = 16),
+              axis.title = element_text(size = 16)))
+
+pdf("paper_figures/luminal_late_signature.pdf", width = 7, height = 5)
+ggrep2
+dev.off()
+```
+
+# Overrepresentation analysis
+
+```{r}
+#| label: gprofiler
+#| fig.height: 8
+#| fig.width: 7
+
+# tested genes
+timecourse_gene_bg <- read.delim("organoid_timecourse_gene_universe.txt", 
+                                 header = FALSE)[, 1]
+
+clusters_to_consider <- c("stress responsive",
+                          "wound responsive 12h",
+                          "wound responsive 24h",
+                          "immunomodulatory",
+                          "OxPhos high", 
+                          "cycling",
+                          "hormone responsive")
+
+
+gprofiler2::set_base_url("https://biit.cs.ut.ee/gprofiler_archive3/e112_eg59_p19")
+for (cl in clusters_to_consider) {
+    mgenes <- read.delim(paste0(
+        "marker_genes_within_lineage_all_leiden_res0.125_annot/leiden_res0.125_annot_cluster_", 
+        cl, "_markers_within_lineage.txt")) |>
+        arrange(p.value) |>
+        slice_head(n = 100) |>
+        pull(gene)
+    
+    gostres <- gost(
+        query = mgenes, 
+        organism = "hsapiens",
+        ordered_query = FALSE, 
+        multi_query = FALSE, 
+        significant = TRUE, 
+        exclude_iea = TRUE, 
+        measure_underrepresentation = FALSE, 
+        evcodes = FALSE, 
+        user_threshold = 0.05, 
+        correction_method = "fdr",
+        domain_scope = "custom",
+        custom_bg = timecourse_gene_bg, 
+        numeric_ns = "", 
+        sources = c("GO:BP"),
+        as_short_link = FALSE, 
+        highlight = TRUE
+    )
+    print(head(gostres$result |>
+                   dplyr::select(term_name, p_value, term_size, query_size, intersection_size),
+               n = 15) |>
+              mutate(p_value = signif(p_value, digits = 3)))
+    write.table(gostres$result |>
+                    dplyr::select(term_name, p_value, term_size, query_size, intersection_size),
+                file = paste0("gprofiler/", sub(" ", "_", cl), "_markers_gobp.tsv"),
+                row.names = FALSE, quote = FALSE, col.names = TRUE, sep = "\t")
+}
+
+plotdf <- do.call(bind_rows, lapply(clusters_to_consider, function(cl) {
+    read.delim(paste0("gprofiler/", sub(" ", "_", cl), "_markers_gobp.tsv")) |>
+        slice_head(n = 5) |>
+        mutate(cluster = cl) |>
+        mutate(term_size = as.numeric(term_size),
+               p_value = as.numeric(p_value))
+})) |>
+    mutate(cluster2 = sub("immunomodulatory", "immuno-\nmodulatory", 
+                          gsub(" ", "\n", cluster))) |>
+    mutate(cluster = factor(cluster, levels = rev(clusters_to_consider))) |>
+    mutate(cluster2 = factor(cluster2, levels = sub("immunomodulatory", "immuno-\nmodulatory",
+                                                    gsub(" ", "\n", levels(cluster)))))
+(ggprof <- ggplot(plotdf, aes(x = -log10(p_value), y = fct_reorder(term_name, -p_value))) + 
+    geom_point(size = 4, aes(color = cluster)) + 
+    scale_color_manual(values = sc_leiden_res0.125_annot_colors) + 
+    facet_grid2(cluster2 ~ .,
+                strip = strip_themed(clip = "off", background_y = elem_list_rect(
+                    fill = alpha(sc_leiden_res0.125_annot_colors[levels(plotdf$cluster)], 0.5))), 
+                scales = "free_y") + 
+    labs(x = "-log10 FDR", y = "") + 
+    theme_cowplot() + 
+    theme(legend.position = "none"))
+pdf("paper_figures/gprofiler_selclusters.pdf", width = 7, height = 8)
+ggprof
+dev.off()
+```
+
+# Save count matrix and cell type annotations
+
+```{r}
+#| eval: true
+
+if (!file.exists("upload_data")) {
+    dir.create("upload_data", showWarnings = FALSE, recursive = FALSE)
+}
+writeMM(assay(organ, "counts"), 
+        file = "upload_data/ivmc_scrnaseq_counts.mtx")
+R.utils::gzip(filename = "upload_data/ivmc_scrnaseq_counts.mtx", 
+              compression = 9, overwrite = TRUE, remove = TRUE)
+write.table(rownames(organ), 
+            file = "upload_data/ivmc_scrnaseq_genes.tsv", 
+            row.names = FALSE, col.names = FALSE, sep = "\t", quote = FALSE)
+R.utils::gzip(filename = "upload_data/ivmc_scrnaseq_genes.tsv", 
+              compression = 9, overwrite = TRUE, remove = TRUE)
+write.table(colnames(organ), 
+            file = "upload_data/ivmc_scrnaseq_cells.tsv", 
+            row.names = FALSE, col.names = FALSE, sep = "\t", quote = FALSE)
+R.utils::gzip(filename = "upload_data/ivmc_scrnaseq_cells.tsv", 
+              compression = 9, overwrite = TRUE, remove = TRUE)
+
+write.table(
+    cbind(colData(organ)[, c("cell", "leiden_res0.125_annot", 
+                             "pred_from_invivo", "timepoint")], 
+          reducedDim(organ, "UMAP_sketch")[, 1:2]),
+    file = "upload_data/ivmc_scrnaseq_annot.tsv", 
+    row.names = FALSE, col.names = TRUE, sep = "\t")
+R.utils::gzip(filename = "upload_data/ivmc_scrnaseq_annot.tsv", 
+              compression = 9, overwrite = TRUE, remove = TRUE)
+```
+
+# Session info
+
+```{r}
+#| label: session-info
+
+# gProfiler/GO version
+get_version_info(organism = "hsapiens")$gprofiler_version
+get_version_info(organism = "hsapiens")$sources$`GO:MF`
+
+sessionInfo()
+```
+

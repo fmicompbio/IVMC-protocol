@@ -1,0 +1,355 @@
+term_name	p_value	term_size	query_size	intersection_size
+mitotic cell cycle	7.79713033335177e-38	754	99	51
+cell cycle process	2.31730664408066e-37	1042	99	56
+mitotic cell cycle process	1.17926233856003e-36	630	99	47
+chromosome organization	8.02881029856672e-35	525	99	43
+cell cycle	1.29748463844524e-34	1319	99	58
+chromosome segregation	8.04264280127585e-31	346	99	35
+mitotic nuclear division	1.77775054962845e-28	246	99	30
+nuclear division	5.37224766317003e-28	349	99	33
+regulation of cell cycle process	5.82951030826632e-28	586	99	39
+nuclear chromosome segregation	9.7175022625089e-28	263	99	30
+sister chromatid segregation	1.80879732288743e-27	214	99	28
+mitotic sister chromatid segregation	9.73638549172791e-27	177	99	26
+organelle fission	1.65757178822006e-26	393	99	33
+regulation of chromosome segregation	3.16083511743278e-26	121	99	23
+positive regulation of cell cycle process	3.46346097644121e-26	187	99	26
+regulation of chromosome separation	7.19841500506509e-25	69	99	19
+positive regulation of cell cycle	7.19841500506509e-25	238	99	27
+regulation of cell cycle	2.40212968740781e-24	854	99	41
+chromosome separation	3.87947367177524e-24	75	99	19
+mitotic cell cycle phase transition	7.16544302420315e-23	353	99	29
+regulation of chromosome organization	7.62154398962419e-23	223	99	25
+cell cycle phase transition	1.34921990433918e-22	441	99	31
+regulation of nuclear division	9.09940646532087e-21	110	99	19
+regulation of mitotic nuclear division	6.76813104010477e-20	101	99	18
+regulation of sister chromatid segregation	1.2747404698556e-18	97	99	17
+regulation of mitotic cell cycle phase transition	4.02868237817724e-18	273	99	23
+regulation of cell cycle phase transition	7.03274952945459e-18	357	99	25
+metaphase/anaphase transition of mitotic cell cycle	1.03864795892847e-17	89	99	16
+metaphase/anaphase transition of cell cycle	1.21357800547794e-17	90	99	16
+regulation of mitotic sister chromatid separation	1.28291768245153e-17	56	99	14
+mitotic sister chromatid separation	2.14751727519968e-17	58	99	14
+regulation of mitotic cell cycle	1.09722672011404e-16	403	99	25
+regulation of mitotic metaphase/anaphase transition	1.70025574285603e-16	85	99	15
+regulation of mitotic sister chromatid segregation	1.72963879165494e-16	51	99	13
+mitotic cell cycle checkpoint signaling	1.87835425395128e-16	131	99	17
+regulation of metaphase/anaphase transition of cell cycle	1.87835425395128e-16	86	99	15
+negative regulation of mitotic nuclear division	2.10841406059951e-16	52	99	13
+negative regulation of nuclear division	5.98646284531496e-16	56	99	13
+cell cycle checkpoint signaling	9.43020576884754e-16	173	99	18
+mitotic spindle checkpoint signaling	1.15378999524146e-15	44	99	12
+mitotic spindle assembly checkpoint signaling	1.15378999524146e-15	44	99	12
+spindle assembly checkpoint signaling	1.15378999524146e-15	44	99	12
+spindle checkpoint signaling	1.39878098412001e-15	45	99	12
+negative regulation of mitotic sister chromatid separation	1.39878098412001e-15	45	99	12
+negative regulation of mitotic metaphase/anaphase transition	1.39878098412001e-15	45	99	12
+negative regulation of sister chromatid segregation	1.39878098412001e-15	45	99	12
+negative regulation of mitotic sister chromatid segregation	1.39878098412001e-15	45	99	12
+negative regulation of chromosome segregation	1.73511873304849e-15	46	99	12
+negative regulation of chromosome separation	1.73511873304849e-15	46	99	12
+negative regulation of metaphase/anaphase transition of cell cycle	1.73511873304849e-15	46	99	12
+negative regulation of mitotic cell cycle phase transition	1.73511873304849e-15	152	99	17
+DNA metabolic process	1.45049845137213e-14	794	99	30
+regulation of organelle organization	1.67872864285339e-14	930	99	32
+positive regulation of chromosome segregation	1.89081331895404e-14	28	99	10
+microtubule cytoskeleton organization involved in mitosis	2.71550103791756e-14	149	99	16
+positive regulation of chromosome separation	2.76857769369861e-14	29	99	10
+negative regulation of cell cycle process	2.84407142441519e-14	250	99	19
+negative regulation of cell cycle phase transition	2.85284403438666e-14	214	99	18
+negative regulation of mitotic cell cycle	6.6360735525208e-14	190	99	17
+chromosome localization	6.88760894798042e-14	104	99	14
+negative regulation of chromosome organization	2.34428655892021e-13	89	99	13
+attachment of spindle microtubules to kinetochore	3.81398357657784e-13	52	99	11
+metaphase chromosome alignment	4.74027578391768e-13	94	99	13
+establishment of chromosome localization	9.34136151033957e-13	99	99	13
+negative regulation of cell cycle	1.69608103913608e-12	315	99	19
+organelle organization	1.39472706863689e-11	2926	99	50
+mitotic spindle organization	1.40856116627896e-11	122	99	13
+DNA replication	1.67740581301953e-11	227	99	16
+G2/M transition of mitotic cell cycle	6.68610164785784e-11	108	99	12
+mitotic chromosome condensation	1.89100903565744e-10	18	99	7
+regulation of DNA metabolic process	2.31818230673409e-10	418	99	19
+cell cycle G2/M phase transition	2.51541483551346e-10	121	99	12
+chromosome condensation	5.60205531540958e-10	34	99	8
+regulation of cytokinesis	7.83263003545669e-10	76	99	10
+spindle organization	1.03190223621125e-09	172	99	13
+positive regulation of cell cycle phase transition	1.46253424911456e-09	81	99	10
+positive regulation of mitotic cell cycle	3.7496002947077e-09	89	99	10
+establishment of organelle localization	4.52696244773649e-09	385	99	17
+positive regulation of mitotic cell cycle phase transition	5.20399348070091e-09	66	99	9
+cellular component organization or biogenesis	5.88918319855181e-09	5031	99	62
+negative regulation of organelle organization	6.54026657179793e-09	291	99	15
+DNA repair	6.63601408362114e-09	513	99	19
+cytokinesis	7.28693786835959e-09	163	99	12
+positive regulation of chromosome condensation	8.17219947613718e-09	8	99	5
+DNA replication initiation	1.53289439506194e-08	32	99	7
+cellular component organization	1.79366056236748e-08	4880	99	60
+organelle localization	2.19455924497255e-08	490	99	18
+microtubule cytoskeleton organization	2.22937962877851e-08	554	99	19
+regulation of DNA replication	2.45283681575205e-08	109	99	10
+DNA damage response	2.89900552824076e-08	772	99	22
+DNA-templated DNA replication	2.89900552824076e-08	146	99	11
+regulation of G2/M transition of mitotic cell cycle	3.25718759203008e-08	82	99	9
+regulation of chromosome condensation	3.28859722066354e-08	10	99	5
+regulation of cell division	3.93638332059813e-08	115	99	10
+mitotic metaphase chromosome alignment	4.0155084417499e-08	58	99	8
+double-strand break repair	5.20809519952273e-08	290	99	14
+regulation of spindle checkpoint	5.27582369075275e-08	22	99	6
+regulation of cellular component organization	6.97849356489914e-08	1781	99	33
+attachment of mitotic spindle microtubules to kinetochore	9.23066079816266e-08	24	99	6
+regulation of cell cycle G2/M phase transition	9.29175321148215e-08	93	99	9
+double-strand break repair via break-induced replication	9.42237865608376e-08	12	99	5
+regulation of DNA-templated DNA replication	1.15587154159902e-07	43	99	7
+positive regulation of chromosome organization	1.1881938082078e-07	96	99	9
+double-strand break repair via homologous recombination	1.1881938082078e-07	169	99	11
+regulation of DNA-templated DNA replication initiation	1.45809994107593e-07	13	99	5
+microtubule-based process	1.45809994107593e-07	774	99	21
+recombinational repair	1.47478971756095e-07	173	99	11
+cell division	5.37363878045083e-07	244	99	12
+positive regulation of cytokinesis	5.41985363839748e-07	32	99	6
+mitotic cytokinesis	6.27314744312876e-07	83	99	8
+positive regulation of mitotic sister chromatid separation	1.21553574772598e-06	19	99	5
+DNA recombination	1.33395220662465e-06	266	99	12
+positive regulation of cell division	1.81656847171164e-06	39	99	6
+DNA unwinding involved in DNA replication	2.01529190624316e-06	21	99	5
+regulation of mitotic spindle checkpoint	2.01529190624316e-06	21	99	5
+regulation of mitotic cell cycle spindle assembly checkpoint	2.01529190624316e-06	21	99	5
+positive regulation of organelle organization	2.05754465731004e-06	395	99	14
+regulation of cell cycle checkpoint	2.37321706320985e-06	41	99	6
+cytoskeleton-dependent cytokinesis	3.93797244292957e-06	106	99	8
+mitotic spindle midzone assembly	5.47467287310469e-06	11	99	4
+positive regulation of mitotic cell cycle spindle assembly checkpoint	7.97303102388229e-06	12	99	4
+mitotic spindle elongation	7.97303102388229e-06	12	99	4
+spindle midzone assembly	7.97303102388229e-06	12	99	4
+sister chromatid cohesion	8.59812726949744e-06	51	99	6
+positive regulation of spindle checkpoint	1.11881187831127e-05	13	99	4
+spindle elongation	1.11881187831127e-05	13	99	4
+protein-DNA complex assembly	1.21956888378085e-05	168	99	9
+negative regulation of cellular component organization	1.24859124925318e-05	533	99	15
+negative regulation of G2/M transition of mitotic cell cycle	1.61543192383724e-05	57	99	6
+negative regulation of cell cycle G2/M phase transition	1.97030127002755e-05	59	99	6
+regulation of ubiquitin protein ligase activity	2.01919221133451e-05	15	99	4
+DNA strand elongation involved in DNA replication	2.01919221133451e-05	15	99	4
+kinetochore organization	2.65911950213626e-05	16	99	4
+protein-DNA complex organization	2.93688073032901e-05	188	99	9
+positive regulation of cell cycle checkpoint	4.36219486843904e-05	18	99	4
+mitotic spindle assembly	4.3711056533518e-05	68	99	6
+cell cycle DNA replication	4.41379679411528e-05	39	99	5
+positive regulation of nuclear division	4.98291288948541e-05	40	99	5
+DNA duplex unwinding	8.0038994864985e-05	44	99	5
+positive regulation of mitotic cytokinesis	8.04964642538131e-05	7	99	3
+regulation of attachment of spindle microtubules to kinetochore	8.04964642538131e-05	21	99	4
+chromatin remodeling at centromere	8.04964642538131e-05	7	99	3
+CENP-A containing chromatin assembly	8.04964642538131e-05	7	99	3
+centromere complex assembly	8.04964642538131e-05	21	99	4
+mitotic DNA integrity checkpoint signaling	9.14574092837196e-05	78	99	6
+DNA integrity checkpoint signaling	0.000100481360991273	120	99	7
+mitotic G2/M transition checkpoint	0.000105315060528783	47	99	5
+chromatin organization	0.000117436613489045	492	99	13
+DNA geometric change	0.000171322237264331	52	99	5
+cellular response to stress	0.000171322237264331	1420	99	23
+positive regulation of ubiquitin protein ligase activity	0.000182554192876567	9	99	3
+meiotic cell cycle process	0.000218179539528033	136	99	7
+positive regulation of cellular process	0.000220076638262986	4241	99	46
+regulation of mitotic cytokinesis	0.000254542251512125	10	99	3
+mitotic sister chromatid cohesion	0.000279632024466738	29	99	4
+establishment of mitotic spindle orientation	0.000319040361021157	30	99	4
+DNA conformation change	0.000329108357000243	60	99	5
+positive regulation of attachment of spindle microtubules to kinetochore	0.000339575705559511	11	99	3
+mitotic G2 DNA damage checkpoint signaling	0.000353220843884454	31	99	4
+regulation of ubiquitin-protein transferase activity	0.000353220843884454	31	99	4
+regulation of cellular process	0.000353220843884454	8148	99	71
+cytoskeleton organization	0.000449520196674854	1206	99	20
+positive regulation of mitotic nuclear division	0.000506832269202202	34	99	4
+establishment of mitotic spindle localization	0.000555836557929219	35	99	4
+mitotic DNA replication	0.000555836557929219	13	99	3
+establishment of spindle orientation	0.000555836557929219	35	99	4
+nuclear DNA replication	0.000555836557929219	35	99	4
+spindle assembly	0.000619074944216754	112	99	6
+DNA strand elongation	0.000686165547266546	37	99	4
+kinetochore assembly	0.000686746594378071	14	99	3
+mitotic DNA damage checkpoint signaling	0.000831378318308642	74	99	5
+positive regulation of mitotic metaphase/anaphase transition	0.00083969547904971	15	99	3
+positive regulation of metaphase/anaphase transition of cell cycle	0.00083969547904971	15	99	3
+positive regulation of biological process	0.000872255968087118	4486	99	46
+meiotic cell cycle	0.000906658111044671	174	99	7
+positive regulation of exit from mitosis	0.000928279630234779	3	99	2
+positive regulation of DNA metabolic process	0.000979901377962281	237	99	8
+regulation of transferase activity	0.000992279620351752	452	99	11
+centrosome cycle	0.00102072923278521	124	99	6
+membraneless organelle assembly	0.0011613009407284	311	99	9
+positive regulation of ubiquitin-protein transferase activity	0.00118853878253167	17	99	3
+regulation of biological process	0.00141482978954888	8453	99	71
+signal transduction by p53 class mediator	0.00146495730531714	133	99	6
+positive regulation of transferase activity	0.00173020025052705	259	99	8
+positive regulation of mitochondrial ATP synthesis coupled electron transport	0.00174952328849402	4	99	2
+establishment of spindle localization	0.00174952328849402	48	99	4
+DNA replication checkpoint signaling	0.00189222893864481	20	99	3
+positive regulation of G2/M transition of mitotic cell cycle	0.00189222893864481	20	99	3
+cell cycle G1/S phase transition	0.00192081851984426	199	99	7
+microtubule organizing center organization	0.00193668026528176	141	99	6
+spindle localization	0.00198858949088666	50	99	4
+intracellular signal transduction	0.0022226268298109	2172	99	27
+nucleic acid metabolic process	0.00229019203581038	3980	99	41
+chromatin remodeling	0.00240588588030254	424	99	10
+biological regulation	0.00245687493055776	8757	99	72
+nucleobase-containing compound metabolic process	0.00255820821060965	4419	99	44
+mitotic DNA replication initiation	0.00266070921127569	5	99	2
+regulation of anaphase-promoting complex-dependent catabolic process	0.00266070921127569	5	99	2
+nuclear cell cycle DNA replication initiation	0.00266070921127569	5	99	2
+regulation of mitochondrial ATP synthesis coupled electron transport	0.00266070921127569	5	99	2
+cell cycle DNA replication initiation	0.00266070921127569	5	99	2
+mitotic sister chromatid cohesion, centromeric	0.00266070921127569	5	99	2
+metaphase/anaphase transition of meiotic cell cycle	0.00266070921127569	5	99	2
+positive regulation of cell cycle G2/M phase transition	0.00267216604833261	23	99	3
+positive regulation of cellular component organization	0.00268353544526621	786	99	14
+anaphase-promoting complex-dependent catabolic process	0.00301047835963516	24	99	3
+cellular process	0.00318496872907694	12661	99	92
+establishment of cell polarity	0.00321719692590537	103	99	5
+negative regulation of cytokinesis	0.00382397572213114	6	99	2
+positive regulation of programmed necrotic cell death	0.00382397572213114	6	99	2
+positive regulation of necroptotic process	0.00382397572213114	6	99	2
+regulation of DNA recombination	0.00392109423785115	108	99	5
+signal transduction in response to DNA damage	0.00439042142674368	168	99	6
+DNA damage checkpoint signaling	0.00440049862200386	111	99	5
+negative regulation of DNA metabolic process	0.00474977702830117	113	99	5
+positive regulation of mitotic sister chromatid segregation	0.00520817514803945	7	99	2
+protein localization to chromosome	0.00529825521310385	116	99	5
+G1/S transition of mitotic cell cycle	0.0054697746155526	176	99	6
+meiotic nuclear division	0.00611596915565632	120	99	5
+regulation of double-strand break repair via homologous recombination	0.00624398435300696	70	99	4
+regulation of attachment of mitotic spindle microtubules to kinetochore	0.00672883150014448	8	99	2
+positive regulation of attachment of mitotic spindle microtubules to kinetochore	0.00672883150014448	8	99	2
+regulation of double-strand break repair	0.00747230635441082	126	99	5
+regulation of macromolecule metabolic process	0.00783533404738772	4523	99	43
+centromeric sister chromatid cohesion	0.00838914409213028	9	99	2
+meiotic cell cycle phase transition	0.00838914409213028	9	99	2
+purine nucleobase biosynthetic process	0.00838914409213028	9	99	2
+tetrahydrofolate interconversion	0.00838914409213028	9	99	2
+protein localization to chromosome, centromeric region	0.00979826599209176	37	99	3
+deoxyribose phosphate biosynthetic process	0.0102193398694159	10	99	2
+negative regulation of cell division	0.0102193398694159	10	99	2
+2'-deoxyribonucleotide biosynthetic process	0.0102193398694159	10	99	2
+deoxyribonucleotide biosynthetic process	0.0102193398694159	10	99	2
+cytokinetic process	0.0103635612756294	38	99	3
+establishment of localization in cell	0.0108411253847149	1468	99	19
+mitotic DNA replication checkpoint signaling	0.0121268536319648	11	99	2
+protein localization to nuclear envelope	0.0121268536319648	11	99	2
+negative regulation of cGAS/STING signaling pathway	0.0121268536319648	11	99	2
+positive regulation of DNA-templated DNA replication	0.0121268536319648	11	99	2
+positive regulation of cell cycle G1/S phase transition	0.0125431191643609	41	99	3
+regulation of mitotic spindle organization	0.0125431191643609	41	99	3
+positive regulation of protein ubiquitination	0.0126506267492906	87	99	4
+regulation of circadian rhythm	0.0126506267492906	87	99	4
+regulation of primary metabolic process	0.0126898670666927	4217	99	40
+regulation of metabolic process	0.0130560468573588	4941	99	45
+meiotic chromosome segregation	0.0140401862822887	43	99	3
+cGAS/STING signaling pathway	0.0140401862822887	12	99	2
+negative regulation of cellular process	0.0143815535337983	3689	99	36
+meiosis I cell cycle process	0.0145430931115639	91	99	4
+regulation of spindle organization	0.0147602181292675	44	99	3
+regulation of meiotic cell cycle	0.0147602181292675	44	99	3
+response to stress	0.0154524945532995	2636	99	28
+regulation of protein ubiquitination	0.0158812753873544	154	99	5
+regulation of metaphase plate congression	0.0160502193583255	13	99	2
+biological_process	0.0170530784755857	13264	99	93
+establishment or maintenance of cell polarity	0.0170530784755857	157	99	5
+reproductive process	0.0171577275458236	668	99	11
+nucleobase biosynthetic process	0.0182886377722384	14	99	2
+purine nucleobase metabolic process	0.0182886377722384	14	99	2
+cellular response to stimulus	0.0186390631898907	4891	99	44
+tetrahydrofolate metabolic process	0.0204617301863165	15	99	2
+protein localization to kinetochore	0.0204617301863165	15	99	2
+regulation of meiotic nuclear division	0.0204617301863165	15	99	2
+protein localization to condensed chromosome	0.0204617301863165	15	99	2
+phosphorylation	0.0204617301863165	1001	99	14
+regulation of exit from mitosis	0.0204617301863165	15	99	2
+regulation of telomere maintenance	0.0204617301863165	102	99	4
+sexual reproduction	0.0220939987868896	500	99	9
+organelle inheritance	0.0229455806949924	16	99	2
+Golgi inheritance	0.0229455806949924	16	99	2
+negative regulation of macromolecule metabolic process	0.0241363776044798	1963	99	22
+positive regulation of protein modification by small protein conjugation or removal	0.024615672191072	108	99	4
+positive regulation of post-translational protein modification	0.025338834442684	109	99	4
+positive regulation of telomere capping	0.0255206725914206	17	99	2
+protein phosphorylation	0.0262632199342682	924	99	13
+regulation of cyclin-dependent protein serine/threonine kinase activity	0.0265116981227766	56	99	3
+protein localization to chromatin	0.0265116981227766	56	99	3
+negative regulation of biological process	0.0274071191466142	3852	99	36
+regulation of catalytic activity	0.0289343381557673	829	99	12
+karyogamy	0.0301549833204307	1	99	1
+meiotic DNA recombinase assembly	0.0301549833204307	1	99	1
+cellular response to tetrahydrofolate	0.0301549833204307	1	99	1
+response to tetrahydrofolate	0.0301549833204307	1	99	1
+metaphase/anaphase transition of meiosis I	0.0301549833204307	1	99	1
+regulation of cyclin-dependent protein kinase activity	0.0301549833204307	59	99	3
+positive regulation of maintenance of mitotic sister chromatid cohesion, centromeric	0.0301549833204307	1	99	1
+post-translational protein modification	0.0301549833204307	729	99	11
+positive regulation of lateral attachment of mitotic spindle microtubules to kinetochore	0.0301549833204307	1	99	1
+regulation of lateral attachment of mitotic spindle microtubules to kinetochore	0.0301549833204307	1	99	1
+pronuclear fusion	0.0301549833204307	1	99	1
+cell cycle comprising mitosis without cytokinesis	0.0301549833204307	1	99	1
+negative regulation of DNA replication	0.0330480807702134	20	99	2
+regulation of protein modification by small protein conjugation or removal	0.0339940835091037	191	99	5
+activation of protein kinase activity	0.0346692107528785	63	99	3
+regulation of post-translational protein modification	0.035765471843648	194	99	5
+regulation of necroptotic process	0.035765471843648	21	99	2
+nucleobase metabolic process	0.035765471843648	21	99	2
+macromolecule metabolic process	0.0357892185276491	6756	99	55
+regulation of protein kinase activity	0.0383234537796504	365	99	7
+folic acid-containing compound metabolic process	0.0386609992606321	22	99	2
+nucleoside monophosphate biosynthetic process	0.0386609992606321	22	99	2
+one-carbon metabolic process	0.0416174635649706	23	99	2
+microtubule organizing center localization	0.0416174635649706	23	99	2
+regulation of programmed necrotic cell death	0.0416174635649706	23	99	2
+centrosome localization	0.0416174635649706	23	99	2
+regulation of DNA repair	0.0417571318124569	203	99	5
+regulation of molecular function	0.0430598965688133	1343	99	16
+protein-containing complex assembly	0.0441102073220189	1229	99	15
+cellular response to radiation	0.0447260397543282	133	99	4
+positive regulation of protein localization to nucleus	0.0454988835284071	71	99	3
+positive regulation of intracellular protein transport	0.0454988835284071	71	99	3
+protein modification process	0.0471994312634469	2105	99	22
+exit from mitosis	0.0473939468514489	25	99	2
+regulation of telomere capping	0.0473939468514489	25	99	2
+mitotic cytokinetic process	0.0473939468514489	25	99	2
+peptidyl-threonine phosphorylation	0.0482913670268053	73	99	3
+negative regulation of metabolic process	0.0492445793171007	2116	99	22
+regulation of circadian sleep/wake cycle, non-REM sleep	0.0497031714245241	2	99	1
+dTMP biosynthetic process	0.0497031714245241	2	99	1
+negative regulation of vascular associated smooth muscle cell apoptotic process	0.0497031714245241	2	99	1
+dTMP metabolic process	0.0497031714245241	2	99	1
+lateral attachment of mitotic spindle microtubules to kinetochore	0.0497031714245241	2	99	1
+maintenance of mitotic sister chromatid cohesion, centromeric	0.0497031714245241	2	99	1
+meiotic sister chromatid cohesion, centromeric	0.0497031714245241	2	99	1
+regulation of reciprocal meiotic recombination	0.0497031714245241	2	99	1
+negative regulation of cell differentiation involved in phenotypic switching	0.0497031714245241	2	99	1
+regulation of cytokinetic process	0.0497031714245241	2	99	1
+glycine biosynthetic process from serine	0.0497031714245241	2	99	1
+regulation of maintenance of mitotic sister chromatid cohesion, centromeric	0.0497031714245241	2	99	1
+homologous chromosome orientation in meiotic metaphase I	0.0497031714245241	2	99	1
+positive regulation of reciprocal meiotic recombination	0.0497031714245241	2	99	1
+circadian sleep/wake cycle, non-REM sleep	0.0497031714245241	2	99	1
+negative regulation of vascular associated smooth muscle cell differentiation involved in phenotypic switching	0.0497031714245241	2	99	1
+regulation of meiosis I spindle assembly checkpoint	0.0497031714245241	2	99	1
+meiosis I spindle assembly checkpoint signaling	0.0497031714245241	2	99	1
+negative regulation of meiosis I	0.0497031714245241	2	99	1
+negative regulation of phenotypic switching	0.0497031714245241	2	99	1
+regulation of mitotic cytokinetic process	0.0497031714245241	2	99	1
+positive regulation of mitotic cytokinetic process	0.0497031714245241	2	99	1
+positive regulation of DNA endoreduplication	0.0497031714245241	2	99	1
+pteridine-containing compound metabolic process	0.0497031714245241	27	99	2
+positive regulation of single strand break repair	0.0497031714245241	2	99	1
+regulation of phenotypic switching	0.0497031714245241	2	99	1
+negative regulation of nucleobase-containing compound metabolic process	0.0497031714245241	1137	99	14
+negative regulation of adipose tissue development	0.0497031714245241	2	99	1
+regulation of kinase activity	0.0497031714245241	393	99	7
+chorion development	0.0497031714245241	2	99	1
+glycine biosynthetic process	0.0497031714245241	2	99	1
+chorionic trophoblast cell differentiation	0.0497031714245241	2	99	1
+regulation of base-excision repair	0.0497031714245241	2	99	1
+pyrimidine deoxyribonucleoside monophosphate biosynthetic process	0.0497031714245241	2	99	1
+regulation of microtubule-based process	0.0497031714245241	219	99	5
+regulation of microtubule cytoskeleton organization	0.0499200367262592	143	99	4
+circadian rhythm	0.0499200367262592	143	99	4

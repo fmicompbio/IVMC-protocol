@@ -1,0 +1,307 @@
+term_name	p_value	term_size	query_size	intersection_size
+response to unfolded protein	8.9017108235888e-17	101	99	17
+response to topologically incorrect protein	5.28168121629615e-16	116	99	17
+protein folding	5.60127744023891e-15	163	99	18
+protein refolding	3.0747377110831e-14	23	99	10
+response to heat	9.56414464279222e-14	68	99	13
+response to temperature stimulus	6.701845429508e-12	94	99	13
+regulation of apoptotic process	7.13567194897695e-11	931	99	29
+regulation of programmed cell death	1.42201741233233e-10	962	99	29
+apoptotic process	6.18360333016768e-10	1181	99	31
+programmed cell death	1.59898586327238e-09	1230	99	31
+cell death	1.6141566741129e-09	1235	99	31
+cellular response to heat	2.79554542182779e-09	49	99	9
+response to stress	1.36704956073494e-08	2636	99	44
+protein maturation	1.9396672625918e-08	426	99	18
+chaperone cofactor-dependent protein refolding	2.35727508367325e-08	26	99	7
+chaperone-mediated protein folding	2.60099584967949e-08	64	99	9
+negative regulation of cellular process	3.65807184000553e-08	3689	99	52
+'de novo' post-translational protein folding	7.65382371588781e-08	31	99	7
+negative regulation of macromolecule metabolic process	9.21470913571213e-08	1963	99	36
+inclusion body assembly	1.27209397662296e-07	19	99	6
+response to abiotic stimulus	1.2925157836975e-07	621	99	20
+cellular response to stress	1.2927124247909e-07	1420	99	30
+negative regulation of biological process	1.39785656237045e-07	3852	99	52
+negative regulation of metabolic process	1.39877273678584e-07	2116	99	37
+'de novo' protein folding	1.39877273678584e-07	35	99	7
+negative regulation of inclusion body assembly	1.58387821276969e-07	10	99	5
+gene expression	2.4987385504946e-07	4596	99	57
+regulation of metabolic process	4.11390854169007e-07	4941	99	59
+regulation of macromolecule metabolic process	4.11390854169007e-07	4523	99	56
+regulation of inclusion body assembly	6.90633522823469e-07	13	99	5
+macromolecule metabolic process	1.21100119550971e-06	6756	99	70
+regulation of cellular process	1.39523311583591e-06	8148	99	78
+positive regulation of apoptotic process	1.98196959490277e-06	347	99	14
+positive regulation of biological process	2.53745985496272e-06	4486	99	54
+regulation of primary metabolic process	2.53745985496272e-06	4217	99	52
+positive regulation of programmed cell death	2.68032112813248e-06	358	99	14
+macromolecule biosynthetic process	3.9116888460109e-06	4966	99	57
+negative regulation of RNA metabolic process	3.96513822739534e-06	1035	99	23
+negative regulation of nucleobase-containing compound metabolic process	4.96923464527311e-06	1137	99	24
+negative regulation of macromolecule biosynthetic process	4.96923464527311e-06	1608	99	29
+positive regulation of cellular process	7.99234589124652e-06	4241	99	51
+negative regulation of biosynthetic process	8.03482451633476e-06	1650	99	29
+regulation of biological process	8.03482451633476e-06	8453	99	78
+negative regulation of transcription by RNA polymerase II	8.03482451633476e-06	675	99	18
+response to stimulus	9.19987334921423e-06	5690	99	61
+negative regulation of DNA-templated transcription	1.2571818289942e-05	941	99	21
+biological regulation	1.56240336983645e-05	8757	99	79
+negative regulation of RNA biosynthetic process	1.56240336983645e-05	955	99	21
+regulation of apoptotic signaling pathway	1.77803174410478e-05	249	99	11
+positive regulation of metabolic process	2.65628076626685e-05	2645	99	37
+regulation of biosynthetic process	2.65628076626685e-05	3887	99	47
+regulation of macromolecule biosynthetic process	3.09120231144899e-05	3778	99	46
+cellular response to stimulus	3.68665380255225e-05	4891	99	54
+regulation of gene expression	3.68665380255225e-05	3675	99	45
+regulation of intrinsic apoptotic signaling pathway	3.81698824510572e-05	124	99	8
+regulation of cell cycle	4.36856593699451e-05	854	99	19
+protein metabolic process	7.0212402802114e-05	3378	99	42
+positive regulation of biosynthetic process	7.04580466297857e-05	1857	99	29
+RNA metabolic process	7.92787512002447e-05	3525	99	43
+apoptotic signaling pathway	8.01130026971507e-05	425	99	13
+positive regulation of macromolecule biosynthetic process	0.000105739396256615	1792	99	28
+regulation of RNA metabolic process	0.000119611640941881	2835	99	37
+nucleic acid metabolic process	0.000119611640941881	3980	99	46
+regulation of response to stimulus	0.000156962659142	2869	99	37
+negative regulation of apoptotic process	0.000173045248810648	533	99	14
+positive regulation of macromolecule metabolic process	0.000175550627112011	2409	99	33
+negative regulation of intrinsic apoptotic signaling pathway	0.000247258113084121	77	99	6
+negative regulation of programmed cell death	0.00024785529017831	553	99	14
+nucleic acid biosynthetic process	0.00024785529017831	3436	99	41
+primary metabolic process	0.000248391150663751	7542	99	69
+mRNA metabolic process	0.000261326807996364	557	99	14
+regulation of nucleobase-containing compound metabolic process	0.000302102546927842	3090	99	38
+macromolecule catabolic process	0.000302102546927842	1087	99	20
+intrinsic apoptotic signaling pathway	0.000307768767854813	225	99	9
+intrinsic apoptotic signaling pathway in response to endoplasmic reticulum stress	0.000417245920417972	51	99	5
+biosynthetic process	0.000436539164338796	5766	99	57
+regulation of protein kinase activity	0.000447379776207355	365	99	11
+cell cycle	0.000447379776207355	1319	99	22
+positive regulation of response to stimulus	0.000549143314371649	1651	99	25
+regulation of DNA-templated transcription	0.000708439352694028	2595	99	33
+RNA biosynthetic process	0.000714867766722494	3347	99	39
+cellular process	0.000782015393684814	12661	99	94
+regulation of RNA biosynthetic process	0.000787905980836906	2614	99	33
+regulation of protein metabolic process	0.000787905980836906	1479	99	23
+regulation of kinase activity	0.000800317502621501	393	99	11
+positive regulation of tau-protein kinase activity	0.000856175771038185	2	99	2
+intracellular signal transduction	0.000993296823536476	2172	99	29
+nucleobase-containing compound biosynthetic process	0.00104003585740665	3675	99	41
+regulation of response to stress	0.00105102341840922	1006	99	18
+regulation of protein ubiquitination	0.00110055639267318	154	99	7
+biological_process	0.00112381891984333	13264	99	96
+negative regulation of apoptotic signaling pathway	0.00116852284398778	156	99	7
+regulation of signal transduction	0.00121787093989477	2204	99	29
+regulation of cellular response to stress	0.00134735775791555	421	99	11
+regulation of protein modification process	0.00143013873451767	846	99	16
+nucleobase-containing compound metabolic process	0.00143360740918125	4419	99	46
+DNA-templated transcription	0.0014642071180064	2714	99	33
+signal transduction	0.00147259638229815	3879	99	42
+regulation of intracellular signal transduction	0.00147303496243427	1449	99	22
+positive regulation of multicellular organismal process	0.00154730052942	1046	99	18
+signaling	0.00193785075486296	4201	99	44
+cell communication	0.0020489966791359	4212	99	44
+regulation of signaling	0.00223745952998378	2412	99	30
+regulation of cell communication	0.00224995479399502	2414	99	30
+regulation of cellular response to heat	0.0022607532868894	16	99	3
+regulation of transferase activity	0.0022607532868894	452	99	11
+protein catabolic process	0.00227892274050485	796	99	15
+regulation of transcription by RNA polymerase II	0.00231266578631004	1950	99	26
+cellular response to unfolded protein	0.00239684948384231	79	99	5
+negative regulation of protein metabolic process	0.00247193449806156	540	99	12
+integrated stress response signaling	0.00255356980258323	43	99	4
+metabolic process	0.00264322738195681	8420	99	71
+positive regulation of developmental process	0.00323512168902187	826	99	15
+regulation of protein modification by small protein conjugation or removal	0.00333630529352972	191	99	7
+response to endoplasmic reticulum stress	0.00352545755547358	193	99	7
+regulation of post-translational protein modification	0.00360744756459116	194	99	7
+regulation of molecular function	0.00364941844928012	1343	99	20
+regulation of tau-protein kinase activity	0.00368202904118255	4	99	2
+positive regulation of extrinsic apoptotic signaling pathway via death domain receptors	0.00368202904118255	4	99	2
+supramolecular fiber organization	0.00411590675059715	664	99	13
+cellular response to topologically incorrect protein	0.00441728807404415	92	99	5
+chaperone-mediated protein complex assembly	0.00448992570783552	21	99	3
+positive regulation of p38MAPK cascade	0.00448992570783552	21	99	3
+transcription by RNA polymerase II	0.00448992570783552	2049	99	26
+positive regulation of DNA-templated transcription	0.00470003756853856	1164	99	18
+positive regulation of RNA biosynthetic process	0.00486109092896215	1168	99	18
+positive regulation of RNA metabolic process	0.00511302084837155	1279	99	19
+regulation of protein serine/threonine kinase activity	0.00544548806456478	211	99	7
+heat acclimation	0.00550961203578967	5	99	2
+protein targeting to vacuole involved in autophagy	0.00550961203578967	5	99	2
+cellular heat acclimation	0.00550961203578967	5	99	2
+positive regulation of nucleotide-binding oligomerization domain containing 2 signaling pathway	0.00550961203578967	5	99	2
+positive regulation of gene expression	0.00556943391283136	786	99	14
+negative regulation of protein modification process	0.0056650765299535	282	99	8
+cellular response to chemical stress	0.00578058875275428	215	99	7
+extrinsic apoptotic signaling pathway via death domain receptors	0.00582674286257011	56	99	4
+positive regulation of transforming growth factor beta receptor signaling pathway	0.00596452953214414	24	99	3
+positive regulation of cellular response to transforming growth factor beta stimulus	0.00596452953214414	24	99	3
+modification-dependent protein catabolic process	0.00596452953214414	523	99	11
+regulation of endoplasmic reticulum stress-induced intrinsic apoptotic signaling pathway	0.00596452953214414	24	99	3
+extrinsic apoptotic signaling pathway	0.00624718268742175	157	99	6
+modification-dependent macromolecule catabolic process	0.00625529940283684	527	99	11
+regulation of extrinsic apoptotic signaling pathway	0.00630095592009848	103	99	5
+positive regulation of cell communication	0.00643982112244086	1209	99	18
+regulation of protein catabolic process	0.00659509623704268	292	99	8
+regulation of cyclin-dependent protein kinase activity	0.00662939468472032	59	99	4
+positive regulation of signaling	0.00669097493453092	1215	99	18
+regulation of catabolic process	0.00692495526432488	812	99	14
+response to growth factor	0.00723151612015833	455	99	10
+telomerase holoenzyme complex assembly	0.00723151612015833	6	99	2
+negative regulation of protein ubiquitination	0.00723151612015833	61	99	4
+positive regulation of nucleotide-binding domain, leucine rich repeat containing receptor signaling pathway	0.00723151612015833	6	99	2
+proteolysis involved in protein catabolic process	0.007270041070857	631	99	12
+positive regulation of nucleobase-containing compound metabolic process	0.007270041070857	1447	99	20
+regulation of cellular component biogenesis	0.007270041070857	724	99	13
+regulation of proteasomal protein catabolic process	0.00734256655028764	165	99	6
+protein phosphorylation	0.00764415875791886	924	99	15
+regulation of catalytic activity	0.00785767715245867	829	99	14
+intracellular signaling cassette	0.00785767715245867	1349	99	19
+regulation of protein phosphorylation	0.00785767715245867	639	99	12
+regulation of JNK cascade	0.0078757384598112	111	99	5
+transforming growth factor beta receptor superfamily signaling pathway	0.00859624801640028	237	99	7
+cellular response to oxidative stress	0.00912499726288192	174	99	6
+regulation of nucleotide-binding oligomerization domain containing 2 signaling pathway	0.00912499726288192	7	99	2
+regulation of MHC class I biosynthetic process	0.00912499726288192	7	99	2
+MHC class I biosynthetic process	0.00912499726288192	7	99	2
+positive regulation of transmembrane receptor protein serine/threonine kinase signaling pathway	0.00981465760494194	68	99	4
+regulation of translational initiation	0.00981465760494194	68	99	4
+negative regulation of protein modification by small protein conjugation or removal	0.00981465760494194	68	99	4
+regulation of p38MAPK cascade	0.010565973132845	31	99	3
+positive regulation of protein polymerization	0.010691530584133	70	99	4
+negative regulation of post-translational protein modification	0.010691530584133	70	99	4
+erythrocyte differentiation	0.010691530584133	70	99	4
+cell surface receptor protein serine/threonine kinase signaling pathway	0.0109375816715461	250	99	7
+erythrocyte homeostasis	0.0111467729560697	71	99	4
+positive regulation of extrinsic apoptotic signaling pathway	0.0111470139884761	32	99	3
+regulation of erythrocyte differentiation	0.0111470139884761	32	99	3
+positive regulation of microtubule nucleation	0.0112998876127271	8	99	2
+RNA catabolic process	0.0116579214995854	254	99	7
+positive regulation of JNK cascade	0.0118322679151243	73	99	4
+protein stabilization	0.0118322679151243	186	99	6
+homeostasis of number of cells	0.0118322679151243	125	99	5
+regulation of response to endoplasmic reticulum stress	0.0118322679151243	73	99	4
+regulation of phosphorylation	0.0121129694962878	683	99	12
+negative regulation of gene expression	0.0122195779732163	781	99	13
+regulation of proteolysis involved in protein catabolic process	0.0131660660947843	191	99	6
+regulation of biological quality	0.0136204034713845	1778	99	22
+positive regulation of tumor necrosis factor-mediated signaling pathway	0.0136267470910543	9	99	2
+aggrephagy	0.0136267470910543	9	99	2
+regulation of cellular component organization	0.0137030930477823	1781	99	22
+regulation of developmental process	0.0139902586860904	1551	99	20
+phosphorylation	0.0140595784135074	1001	99	15
+signal transduction by p53 class mediator	0.0147798721870064	133	99	5
+JNK cascade	0.0151984769119278	134	99	5
+nucleic acid catabolic process	0.0152049258810871	270	99	7
+positive regulation of signal transduction	0.0152546071055759	1118	99	16
+negative regulation of protein kinase activity	0.0153881351635806	135	99	5
+regulation of signal transduction by p53 class mediator	0.0153881351635806	80	99	4
+regulation of cell population proliferation	0.0157115265455488	1016	99	15
+regulation of protein stability	0.0157883754772399	273	99	7
+regulation of protein complex stability	0.0159508637509377	10	99	2
+negative regulation of cell growth	0.016092841648358	137	99	5
+cellular response to growth factor stimulus	0.0162457931519561	438	99	9
+myeloid cell homeostasis	0.0163296312997319	82	99	4
+positive regulation of cell differentiation	0.0163994225401324	528	99	10
+positive regulation of apoptotic signaling pathway	0.0169087797647665	83	99	4
+negative regulation of response to endoplasmic reticulum stress	0.0170115267140483	39	99	3
+regulation of ubiquitin-dependent protein catabolic process	0.0171882774735184	140	99	5
+mRNA catabolic process	0.0175455574571722	207	99	6
+cell migration	0.0175455574571722	1033	99	15
+p38MAPK cascade	0.017960364325146	40	99	3
+negative regulation of kinase activity	0.0190746141292278	144	99	5
+proteasomal protein catabolic process	0.0191711116868165	452	99	9
+cell population proliferation	0.0200041104397747	1158	99	16
+long-term synaptic potentiation	0.0211290051221733	43	99	3
+microtubule-based protein transport	0.0211290051221733	12	99	2
+protein transport along microtubule	0.0211290051221733	12	99	2
+chaperone-mediated autophagy	0.0211290051221733	12	99	2
+dosage compensation by inactivation of X chromosome	0.0211290051221733	12	99	2
+cell motility	0.0211290051221733	1168	99	16
+regulation of nucleotide-binding domain, leucine rich repeat containing receptor signaling pathway	0.0211290051221733	12	99	2
+positive regulation of transcription by RNA polymerase II	0.0215722288689358	850	99	13
+RNA splicing	0.022229783068377	378	99	8
+regulation of cell growth	0.022229783068377	296	99	7
+regulation of phosphorus metabolic process	0.0242235428789309	761	99	12
+long-term synaptic depression	0.0242235428789309	13	99	2
+regulation of phosphate metabolic process	0.0242235428789309	761	99	12
+negative regulation of phosphorylation	0.024495582748245	225	99	6
+response to endogenous stimulus	0.0249505469247128	868	99	13
+positive regulation of protein-containing complex assembly	0.0249505469247128	156	99	5
+negative regulation of cell communication	0.0268141909422802	982	99	14
+cellular component organization	0.0268357046176664	4880	99	44
+nucleotide-binding oligomerization domain containing 2 signaling pathway	0.0272234702072225	14	99	2
+memory	0.0272234702072225	48	99	3
+sex-chromosome dosage compensation	0.0272234702072225	14	99	2
+regulation of cell migration	0.0272340553239239	675	99	11
+membraneless organelle assembly	0.0273150337848472	311	99	7
+protein-RNA complex assembly	0.0273150337848472	161	99	5
+cell differentiation	0.0273150337848472	2419	99	26
+negative regulation of signaling	0.0273150337848472	987	99	14
+translational initiation	0.0273150337848472	99	99	4
+cellular developmental process	0.0273150337848472	2419	99	26
+transforming growth factor beta receptor signaling pathway	0.0275503876609605	162	99	5
+negative regulation of transferase activity	0.0275503876609605	162	99	5
+regulation of protein-containing complex assembly	0.0281594380573754	314	99	7
+negative regulation of growth	0.0295476206648241	165	99	5
+negative regulation of endoplasmic reticulum stress-induced intrinsic apoptotic signaling pathway	0.0296724952774726	15	99	2
+negative regulation of intracellular signal transduction	0.0305099902599673	496	99	9
+cellular response to ionizing radiation	0.0322391934329438	52	99	3
+regulation of synaptic plasticity	0.0326292611213848	105	99	4
+developmental process	0.0329427452590924	3804	99	36
+protein-RNA complex organization	0.033555450039306	171	99	5
+positive regulation of protein catabolic process	0.0342549583356851	172	99	5
+cellular response to nutrient levels	0.0349635653768161	173	99	5
+response to oxidative stress	0.0352228123996162	248	99	6
+negative regulation of phosphorus metabolic process	0.0356330043352668	249	99	6
+negative regulation of phosphate metabolic process	0.0356330043352668	249	99	6
+PERK-mediated unfolded protein response	0.036074778257179	17	99	2
+cellular component assembly	0.036074778257179	2353	99	25
+negative regulation of synaptic transmission	0.036074778257179	17	99	2
+mesoderm development	0.036074778257179	55	99	3
+cell growth	0.0362212565493678	333	99	7
+catabolic process	0.0364617032686133	1977	99	22
+protein modification by small protein conjugation	0.0365462686711003	612	99	10
+protein modification process	0.0367495339838883	2105	99	23
+regulation of proteasomal ubiquitin-dependent protein catabolic process	0.036922287762033	111	99	4
+ubiquitin-dependent protein catabolic process	0.036922287762033	517	99	9
+positive regulation of angiogenesis	0.036922287762033	111	99	4
+regulation of cyclin-dependent protein serine/threonine kinase activity	0.036922287762033	56	99	3
+regulation of cell motility	0.0377683200508781	718	99	11
+regulation of transforming growth factor beta receptor signaling pathway	0.0401078426449717	114	99	4
+positive regulation of vasculature development	0.0401078426449717	114	99	4
+regulation of microtubule nucleation	0.0404641786091627	19	99	2
+abducens nerve development	0.0404641786091627	1	99	1
+abducens nerve morphogenesis	0.0404641786091627	1	99	1
+positive regulation of TRAIL-activated apoptotic signaling pathway	0.0404641786091627	1	99	1
+abducens nerve formation	0.0404641786091627	1	99	1
+chaperone-mediated autophagy translocation complex disassembly	0.0404641786091627	1	99	1
+response to cold	0.0404641786091627	19	99	2
+regulation of cellular response to transforming growth factor beta stimulus	0.0404641786091627	115	99	4
+slow axonal transport	0.0404641786091627	1	99	1
+cellular component organization or biogenesis	0.0404641786091627	5031	99	44
+positive regulation of endoribonuclease activity	0.0404641786091627	1	99	1
+negative regulation of peptidyl-serine phosphorylation of STAT protein	0.0404641786091627	1	99	1
+adrenal cortex development	0.0404641786091627	1	99	1
+cellular response to transforming growth factor beta stimulus	0.0404641786091627	184	99	5
+L-asparagine metabolic process	0.0404641786091627	1	99	1
+adrenal cortex formation	0.0404641786091627	1	99	1
+positive regulation of cellular response to heat	0.0404641786091627	1	99	1
+regulation of translational initiation by eIF2 alpha dephosphorylation	0.0404641786091627	1	99	1
+regulation of adenylate cyclase-inhibiting adrenergic receptor signaling pathway	0.0404641786091627	1	99	1
+negative regulation of MHC class I biosynthetic process	0.0404641786091627	1	99	1
+multicellular organismal-level homeostasis	0.040779330951024	438	99	8
+circadian regulation of gene expression	0.040779330951024	60	99	3
+regulation of locomotion	0.041840149300721	737	99	11
+positive regulation of catabolic process	0.0421456243233655	441	99	8
+regulation of transmembrane receptor protein serine/threonine kinase signaling pathway	0.0423009550721046	188	99	5
+protein ubiquitination	0.0427686267925515	538	99	9
+positive regulation of translational initiation	0.0431682157058053	20	99	2
+nucleotide-binding domain, leucine rich repeat containing receptor signaling pathway	0.0431682157058053	20	99	2
+long-term memory	0.0431682157058053	20	99	2
+response to transforming growth factor beta	0.0434581898928923	190	99	5
+positive regulation of signal transduction by p53 class mediator	0.0472040518374519	21	99	2
+mRNA splicing, via spliceosome	0.0473133519813509	274	99	6
+RNA splicing, via transesterification reactions with bulged adenosine as nucleophile	0.0473133519813509	274	99	6
+regulation of cell differentiation	0.0492470077775862	975	99	13

@@ -1,0 +1,418 @@
+term_name	p_value	term_size	query_size	intersection_size
+defense response to symbiont	7.20290919693579e-12	645	97	26
+defense response to other organism	7.20290919693579e-12	699	97	27
+immune response	7.20290919693579e-12	1043	97	32
+response to biotic stimulus	1.22135704625657e-11	863	97	29
+response to external biotic stimulus	2.40390296240152e-11	831	97	28
+response to other organism	2.40390296240152e-11	831	97	28
+biological process involved in interspecies interaction between organisms	8.05060488585753e-11	950	97	29
+innate immune response	4.28741357416815e-10	545	97	22
+defense response	4.85345610562073e-10	1031	97	29
+immune system process	7.81193832953491e-10	1561	97	35
+response to peptide	5.05456510299832e-09	506	97	20
+response to cytokine	5.05456510299832e-09	506	97	20
+defense response to virus	5.65160987132153e-09	207	97	14
+response to external stimulus	6.24587913723821e-09	1335	97	31
+peptide antigen assembly with MHC class II protein complex	1.11005839874749e-08	13	97	6
+MHC class II protein complex assembly	1.11005839874749e-08	13	97	6
+response to virus	2.82760534970225e-08	285	97	15
+antigen processing and presentation of exogenous peptide antigen	8.03359540853962e-08	31	97	7
+peptide antigen assembly with MHC protein complex	8.8978182587795e-08	18	97	6
+MHC protein complex assembly	8.8978182587795e-08	18	97	6
+regulation of immune response	8.8978182587795e-08	616	97	20
+antigen processing and presentation of exogenous antigen	8.8978182587795e-08	32	97	7
+regulation of immune system process	1.64863857489932e-07	1020	97	25
+response to type II interferon	1.69798399767408e-07	82	97	9
+positive regulation of immune system process	1.95553639147449e-07	721	97	21
+antigen processing and presentation of exogenous peptide antigen via MHC class II	5.07294304451422e-07	24	97	6
+regulation of immune effector process	6.79302311701967e-07	215	97	12
+antigen processing and presentation of peptide antigen via MHC class II	1.0206462818411e-06	27	97	6
+antigen processing and presentation of peptide or polysaccharide antigen via MHC class II	1.56575990978349e-06	29	97	6
+antigen processing and presentation	2.63483191789661e-06	81	97	8
+antigen processing and presentation of peptide antigen	4.11639621190538e-06	57	97	7
+cellular response to cytokine stimulus	5.52182412088235e-06	441	97	15
+positive regulation of immune response	6.55697852321688e-06	515	97	16
+immune effector process	1.42661144238234e-05	348	97	13
+regulation of viral process	1.65112724841307e-05	144	97	9
+regulation of response to biotic stimulus	4.1301058995309e-05	384	97	13
+cytokine-mediated signaling pathway	4.22666462329322e-05	323	97	12
+positive regulation of cell-cell adhesion	4.74002466303765e-05	214	97	10
+regulation of viral life cycle	5.25129311196604e-05	123	97	8
+leukocyte proliferation	5.31784894127414e-05	168	97	9
+response to stress	6.29960556944587e-05	2636	97	36
+regulation of mononuclear cell proliferation	7.00189586274304e-05	129	97	8
+leukocyte activation	7.35368257037615e-05	553	97	15
+positive regulation of response to stimulus	7.699927922878e-05	1651	97	27
+positive regulation of leukocyte cell-cell adhesion	8.40097558660285e-05	180	97	9
+cell activation	9.84330278879285e-05	648	97	16
+cellular response to type II interferon	9.84330278879285e-05	61	97	6
+regulation of leukocyte proliferation	0.00014020912100221	144	97	8
+regulation of cell activation	0.000173631531626886	380	97	12
+mononuclear cell proliferation	0.000173632878304599	149	97	8
+viral process	0.000213208854032212	323	97	11
+positive regulation of cell adhesion	0.000215365497707203	324	97	11
+leukocyte cell-cell adhesion	0.000259964655314216	269	97	10
+regulation of defense response	0.000259964655314216	545	97	14
+positive regulation of lymphocyte activation	0.000263043465457235	212	97	9
+positive regulation of T cell activation	0.00031518971573852	164	97	8
+regulation of leukocyte activation	0.000328107888015406	342	97	11
+regulation of response to external stimulus	0.000334004507886856	726	97	16
+viral life cycle	0.000334004507886856	220	97	9
+negative regulation of immune response	0.000348988257175237	120	97	7
+antigen processing and presentation of endogenous antigen	0.000404851148353826	23	97	4
+positive regulation of leukocyte activation	0.000404851148353826	227	97	9
+negative regulation of viral process	0.000438105477220952	83	97	6
+regulation of lymphocyte proliferation	0.000499477548081689	128	97	7
+positive regulation of canonical NF-kappaB signal transduction	0.000514653185351009	179	97	8
+regulation of leukocyte cell-cell adhesion	0.000518875009250425	236	97	9
+positive regulation of cell activation	0.000528629238929114	237	97	9
+positive regulation of leukocyte proliferation	0.000606602827174805	89	97	6
+positive regulation of monocyte differentiation	0.000613766038706955	9	97	3
+regulation of leukocyte mediated immunity	0.000677406459631873	136	97	7
+positive regulation of biological process	0.000788233631508699	4486	97	47
+response to chemical	0.000881483186051631	2047	97	28
+leukocyte mediated immunity	0.000881483186051631	196	97	8
+regulation of cell-cell adhesion	0.00090130520698043	322	97	10
+T cell activation	0.0009622675160224	325	97	10
+lymphocyte proliferation	0.00103006225961496	147	97	7
+regulation of protein phosphorylation	0.00106117064008625	639	97	14
+myeloid dendritic cell antigen processing and presentation	0.00108521240250181	2	97	2
+antigen processing and presentation of endogenous peptide antigen via MHC class II	0.00108521240250181	2	97	2
+positive regulation of immune effector process	0.00110806603782453	150	97	7
+regulation of T cell mediated immunity	0.00110806603782453	62	97	5
+regulation of extrinsic apoptotic signaling pathway	0.00115487557163985	103	97	6
+positive regulation of peptidyl-tyrosine phosphorylation	0.00120484032924924	104	97	6
+positive regulation of protein phosphorylation	0.00127337141921119	413	97	11
+cytokine production involved in immune response	0.00148562725568307	67	97	5
+regulation of multicellular organismal process	0.00148562725568307	1893	97	26
+regulation of cytokine production involved in immune response	0.00148562725568307	67	97	5
+leukocyte activation involved in immune response	0.00148562725568307	159	97	7
+negative regulation of defense response	0.00153942758430063	161	97	7
+positive regulation of myeloid cell differentiation	0.00153942758430063	68	97	5
+regulation of monocyte differentiation	0.00153942758430063	13	97	3
+biological process involved in interaction with host	0.00153942758430063	110	97	6
+cell activation involved in immune response	0.00168882329875775	164	97	7
+regulation of cytokine-mediated signaling pathway	0.00169426857317768	113	97	6
+positive regulation of phosphorylation	0.00172252027533068	433	97	11
+regulation of phosphorylation	0.00172987216441518	683	97	14
+positive regulation of cellular process	0.00172987216441518	4241	97	44
+positive regulation of response to external stimulus	0.00184992586493336	438	97	11
+T cell activation involved in immune response	0.0018672340618962	72	97	5
+regulation of viral entry into host cell	0.00192662267881314	38	97	4
+positive regulation of myeloid leukocyte differentiation	0.00192662267881314	38	97	4
+myeloid leukocyte activation	0.00196735103568584	118	97	6
+lymphocyte activation involved in immune response	0.00196735103568584	118	97	6
+regulation of T cell activation	0.00204867524994449	233	97	8
+positive regulation of hemopoiesis	0.00204867524994449	120	97	6
+negative regulation of cytokine production involved in immune response	0.00204867524994449	15	97	3
+positive regulation of leukocyte differentiation	0.00204867524994449	120	97	6
+positive regulation of tyrosine phosphorylation of STAT protein	0.00204867524994449	39	97	4
+regulation of cytokine production	0.00204867524994449	528	97	12
+cytokine production	0.00206353153202571	530	97	12
+regulation of canonical NF-kappaB signal transduction	0.00208462362439024	235	97	8
+positive regulation of cytokine-mediated signaling pathway	0.00213086289001322	40	97	4
+regulation of response to cytokine stimulus	0.00214688229351568	122	97	6
+positive regulation of molecular function	0.00214688229351568	800	97	15
+regulation of lymphocyte activation	0.00214688229351568	304	97	9
+positive regulation of protein modification process	0.00217587052264691	536	97	12
+positive regulation of microglial cell migration	0.00218939718385838	3	97	2
+lymphocyte activation	0.0021953035840687	456	97	11
+regulation of cell adhesion	0.00219663216836981	538	97	12
+T cell mediated immunity	0.0022575695782547	78	97	5
+positive regulation of cell communication	0.00237367464291421	1209	97	19
+positive regulation of mononuclear cell proliferation	0.00237367464291421	79	97	5
+positive regulation of phosphorus metabolic process	0.00238857957589763	463	97	11
+positive regulation of phosphate metabolic process	0.00238857957589763	463	97	11
+negative regulation of immune system process	0.00239140667064217	312	97	9
+positive regulation of signaling	0.00245228668847276	1215	97	19
+regulation of response to stimulus	0.00258028332730731	2869	97	33
+positive regulation of regulatory T cell differentiation	0.00258028332730731	17	97	3
+positive regulation of ERK1 and ERK2 cascade	0.00258028332730731	129	97	6
+regulation of apoptotic signaling pathway	0.00264918408865061	249	97	8
+response to stimulus	0.00264918408865061	5690	97	53
+regulation of ERK1 and ERK2 cascade	0.00279190858557915	188	97	7
+positive regulation of response to cytokine stimulus	0.0028293636548387	45	97	4
+negative regulation of response to biotic stimulus	0.0028293636548387	84	97	5
+negative regulation of response to external stimulus	0.0028293636548387	253	97	8
+modulation by symbiont of entry into host	0.0028293636548387	45	97	4
+negative regulation of production of molecular mediator of immune response	0.00288417946328568	18	97	3
+antiviral innate immune response	0.00300184284299197	46	97	4
+regulation of innate immune response	0.0031291656918255	328	97	9
+regulation of tyrosine phosphorylation of STAT protein	0.0032190040110965	47	97	4
+regulation of protein modification process	0.00322154558296779	846	97	15
+type II interferon-mediated signaling pathway	0.00322154558296779	19	97	3
+positive regulation of multicellular organismal process	0.00322154558296779	1046	97	17
+canonical NF-kappaB signal transduction	0.00322154558296779	260	97	8
+myeloid leukocyte differentiation	0.00322154558296779	137	97	6
+regulation of myeloid cell differentiation	0.00325623105645898	138	97	6
+regulation of leukocyte migration	0.00325623105645898	138	97	6
+regulation of microglial cell migration	0.00340170994724431	4	97	2
+positive regulation of glial cell migration	0.00340170994724431	4	97	2
+microglial cell migration	0.00340170994724431	4	97	2
+positive regulation of T cell mediated immunity	0.00342134740311285	49	97	4
+regulation of phosphorus metabolic process	0.00342134740311285	761	97	14
+tyrosine phosphorylation of STAT protein	0.00342134740311285	49	97	4
+regulation of phosphate metabolic process	0.00342134740311285	761	97	14
+regulation of biological process involved in symbiotic interaction	0.00342134740311285	49	97	4
+cell surface receptor signaling pathway	0.00349645110064795	1830	97	24
+positive regulation of leukocyte migration	0.00356870000578319	91	97	5
+regulation of hemopoiesis	0.00360310327713973	268	97	8
+regulation of leukocyte mediated cytotoxicity	0.00360826147314866	50	97	4
+regulation of peptide secretion	0.00366576831887209	92	97	5
+ERK1 and ERK2 cascade	0.00366576831887209	203	97	7
+regulation of peptidyl-tyrosine phosphorylation	0.00372028333297212	144	97	6
+lymphocyte mediated immunity	0.00383807567352238	145	97	6
+regulation of peptide transport	0.00397425163034575	94	97	5
+negative regulation of viral genome replication	0.00404906488882653	52	97	4
+antigen processing and presentation of endogenous peptide antigen	0.00438614720980189	22	97	3
+monocyte differentiation	0.00438614720980189	22	97	3
+regulation of T cell proliferation	0.0044892059402617	97	97	5
+positive regulation of defense response	0.00461581946345609	355	97	9
+regulation of CD4-positive, CD25-positive, alpha-beta regulatory T cell differentiation	0.00495324842127888	5	97	2
+positive regulation of CD4-positive, CD25-positive, alpha-beta regulatory T cell differentiation	0.00495324842127888	5	97	2
+extrinsic apoptotic signaling pathway via death domain receptors	0.00517145959250187	56	97	4
+positive regulation of intracellular signal transduction	0.00523746452915937	804	97	14
+regulation of production of molecular mediator of immune response	0.00523746452915937	101	97	5
+positive regulation of cell differentiation	0.00524259315879469	528	97	11
+extrinsic apoptotic signaling pathway	0.00541167462504084	157	97	6
+regulation of regulatory T cell differentiation	0.00541167462504084	24	97	3
+positive regulation of response to biotic stimulus	0.00542652825849078	290	97	8
+multicellular organismal process	0.00551724180786077	4129	97	41
+cell surface receptor signaling pathway via JAK-STAT	0.00552838497545523	103	97	5
+positive regulation of signal transduction	0.0055926346862907	1118	97	17
+regulation of cell killing	0.0055926346862907	58	97	4
+regulation of lymphocyte mediated immunity	0.00566279317247162	104	97	5
+regulation of cell population proliferation	0.00566279317247162	1016	97	16
+response to interferon-beta	0.00583458563646642	25	97	3
+cell surface receptor signaling pathway via STAT	0.00610408285867142	106	97	5
+negative regulation of immune effector process	0.00619745136460096	60	97	4
+positive regulation of I-kappaB phosphorylation	0.00669522863879497	6	97	2
+CD4-positive, CD25-positive, alpha-beta regulatory T cell differentiation	0.00669522863879497	6	97	2
+T cell proliferation	0.00678946711904463	109	97	5
+adaptive immune response based on somatic recombination of immune receptors built from immunoglobulin superfamily domains	0.00695519781933204	167	97	6
+regulatory T cell differentiation	0.00708594383114855	27	97	3
+peptide secretion	0.0072618734422528	111	97	5
+response to type I interferon	0.00763873751836714	64	97	4
+negative regulation of interleukin-6 production	0.00770036060851295	28	97	3
+cell population proliferation	0.00770036060851295	1158	97	17
+positive regulation of T cell mediated cytotoxicity	0.00770036060851295	28	97	3
+peptidyl-tyrosine phosphorylation	0.00832345043550682	174	97	6
+negative regulation of innate immune response	0.00832621068260987	66	97	4
+leukocyte mediated cytotoxicity	0.00832621068260987	66	97	4
+positive regulation of cell development	0.00836537165635337	242	97	7
+peptidyl-tyrosine modification	0.00836537165635337	175	97	6
+regulation of extrinsic apoptotic signaling pathway via death domain receptors	0.00836537165635337	29	97	3
+regulation of I-kappaB phosphorylation	0.00856522106404186	7	97	2
+T cell activation via T cell receptor contact with antigen bound to MHC molecule on antigen presenting cell	0.00856522106404186	7	97	2
+positive regulation of chemokine (C-X-C motif) ligand 2 production	0.00856522106404186	7	97	2
+inflammatory response to antigenic stimulus	0.00896183375951579	30	97	3
+symbiont entry into host cell	0.00896183375951579	68	97	4
+regulation of adaptive immune response based on somatic recombination of immune receptors built from immunoglobulin superfamily domains	0.00919336233717141	119	97	5
+myeloid cell differentiation	0.00974412624991823	250	97	7
+regulation of multicellular organismal development	0.0102834646048485	878	97	14
+regulation of T cell mediated cytotoxicity	0.0105920949016871	32	97	3
+positive regulation of extrinsic apoptotic signaling pathway	0.0105920949016871	32	97	3
+interferon-mediated signaling pathway	0.0106992114495224	72	97	4
+regulation of glial cell migration	0.0106992114495224	8	97	2
+N-acylphosphatidylethanolamine metabolic process	0.0106992114495224	8	97	2
+indole-containing compound catabolic process	0.0106992114495224	8	97	2
+tryptophan catabolic process	0.0106992114495224	8	97	2
+regulation of T cell mediated immune response to tumor cell	0.0106992114495224	8	97	2
+production of molecular mediator of immune response	0.0108946702611683	125	97	5
+regulation of myeloid leukocyte differentiation	0.0110114271375972	73	97	4
+regulation of developmental process	0.0111689691452332	1551	97	20
+peptide transport	0.0111689691452332	126	97	5
+regulation of type II interferon production	0.0113801774882095	74	97	4
+type II interferon production	0.0113801774882095	74	97	4
+negative regulation of cytokine production	0.0115107657663636	190	97	6
+T cell mediated cytotoxicity	0.0117804569475177	34	97	3
+positive regulation of lymphocyte mediated immunity	0.0117804569475177	75	97	4
+symbiont entry into host	0.0117804569475177	75	97	4
+regulation of leukocyte differentiation	0.0119361031459106	192	97	6
+regulation of response to stress	0.0120556839576284	1006	97	15
+enamel mineralization	0.012660305035363	9	97	2
+regulation of molecular function	0.012660305035363	1343	97	18
+regulation of viral genome replication	0.012660305035363	77	97	4
+positive regulation of memory T cell differentiation	0.012660305035363	9	97	2
+T cell mediated immune response to tumor cell	0.012660305035363	9	97	2
+dendritic cell antigen processing and presentation	0.012660305035363	9	97	2
+regulation of adaptive immune response	0.0128405020758854	132	97	5
+positive regulation of lymphocyte proliferation	0.0130346610936066	78	97	4
+cell-cell adhesion	0.0131953739058159	614	97	11
+biological process involved in symbiotic interaction	0.0133349781516041	198	97	6
+positive regulation of adaptive immune response based on somatic recombination of immune receptors built from immunoglobulin superfamily domains	0.0134406687337175	79	97	4
+regulation of insulin secretion	0.0134406687337175	79	97	4
+leukocyte differentiation	0.0139026512991345	352	97	8
+protein phosphorylation	0.0144115705489591	924	97	14
+positive regulation of innate immune response	0.0144250881501535	275	97	7
+adaptive immune response	0.0146492475691773	203	97	6
+memory T cell differentiation	0.0146492475691773	10	97	2
+immune response-regulating signaling pathway	0.0146492475691773	356	97	8
+regulation of memory T cell differentiation	0.0146492475691773	10	97	2
+amelogenesis	0.0146492475691773	10	97	2
+immunological memory formation process	0.0146492475691773	10	97	2
+regulation of type II interferon-mediated signaling pathway	0.0146492475691773	10	97	2
+regulation of response to type II interferon	0.0146492475691773	10	97	2
+negative regulation of T cell mediated immunity	0.0146492475691773	10	97	2
+positive regulation of developmental process	0.0146525400085873	826	97	13
+hemopoiesis	0.0149862200439317	535	97	10
+positive regulation of adaptive immune response	0.016586730992294	85	97	4
+regulation of transferase activity	0.0166032866875796	452	97	9
+positive regulation of leukocyte mediated cytotoxicity	0.0166794075426693	40	97	3
+sensory perception of bitter taste	0.0171598537283668	11	97	2
+detection of chemical stimulus involved in sensory perception of bitter taste	0.0171598537283668	11	97	2
+indolalkylamine metabolic process	0.0171598537283668	11	97	2
+positive regulation of insulin secretion involved in cellular response to glucose stimulus	0.0171598537283668	11	97	2
+phosphatidylethanolamine acyl-chain remodeling	0.0171598537283668	11	97	2
+negative regulation of lymphocyte proliferation	0.0173901746256617	41	97	3
+negative regulation of mononuclear cell proliferation	0.0173901746256617	41	97	3
+positive regulation of leukocyte mediated immunity	0.0173901746256617	87	97	4
+positive regulation of cell killing	0.0198699842407914	43	97	3
+regulation of mast cell activation	0.0201294324254685	12	97	2
+regulation of mononuclear cell migration	0.0201920106522582	91	97	4
+regulation of peptide hormone secretion	0.0201920106522582	91	97	4
+regulation of signaling	0.0207843229966314	2412	97	26
+regulation of cell communication	0.0209532052813865	2414	97	26
+immune response-regulating cell surface receptor signaling pathway	0.0212787177544057	223	97	6
+response to bacterium	0.0214078194465619	301	97	7
+positive regulation of MAPK cascade	0.0216503463964579	302	97	7
+amide transport	0.0216503463964579	154	97	5
+activation of immune response	0.0224503281279982	390	97	8
+chemokine (C-X-C motif) ligand 2 production	0.0224503281279982	13	97	2
+negative regulation of inflammatory response to antigenic stimulus	0.0224503281279982	13	97	2
+detection of chemical stimulus involved in sensory perception of taste	0.0224503281279982	13	97	2
+regulation of chemokine (C-X-C motif) ligand 2 production	0.0224503281279982	13	97	2
+insulin secretion	0.0224503281279982	95	97	4
+immunological memory process	0.0224503281279982	13	97	2
+negative regulation of apoptotic signaling pathway	0.0224503281279982	156	97	5
+negative regulation of leukocyte proliferation	0.0226045777814448	46	97	3
+interleukin-6 production	0.0230751114801285	96	97	4
+regulation of interleukin-6 production	0.0230751114801285	96	97	4
+regulation of kinase activity	0.0231922148478287	393	97	8
+tolerance induction	0.0243517104613343	14	97	2
+macrophage cytokine production	0.0243517104613343	14	97	2
+negative regulation of leukocyte activation	0.0243517104613343	98	97	4
+regulation of macrophage cytokine production	0.0243517104613343	14	97	2
+phosphorylation	0.0243517104613343	1001	97	14
+I-kappaB phosphorylation	0.0243517104613343	14	97	2
+tooth mineralization	0.0243517104613343	14	97	2
+positive regulation by symbiont of entry into host	0.0243517104613343	14	97	2
+cellular extravasation	0.0243517104613343	48	97	3
+toll-like receptor 2 signaling pathway	0.0243517104613343	14	97	2
+indole-containing compound metabolic process	0.0243517104613343	14	97	2
+positive regulation of viral entry into host cell	0.0243517104613343	14	97	2
+regulation of inflammatory response	0.0243517104613343	234	97	6
+positive regulation of macrophage migration	0.0243517104613343	14	97	2
+positive regulation of osteoclast differentiation	0.0243517104613343	14	97	2
+cell killing	0.0243517104613343	99	97	4
+phosphorus metabolic process	0.0247092121091558	1826	97	21
+phosphate-containing compound metabolic process	0.0247092121091558	1826	97	21
+positive regulation of cytokine production involved in immune response	0.0251445409908691	49	97	3
+cell adhesion	0.0253513764316836	1008	97	14
+regulation of cell development	0.025406348029697	495	97	9
+odontogenesis	0.026290668043385	50	97	3
+positive regulation of type II interferon production	0.026290668043385	50	97	3
+glial cell proliferation	0.0272069377533921	15	97	2
+leukocyte migration	0.0272351453768708	241	97	6
+positive regulation of cytokine production	0.0305119697846333	329	97	7
+positive regulation of metabolic process	0.0315499366596267	2645	97	27
+macrophage activation	0.0320710098811895	54	97	3
+negative regulation of cytokine-mediated signaling pathway	0.0320710098811895	54	97	3
+positive regulation of T cell proliferation	0.0335769006664404	55	97	3
+apoptotic signaling pathway	0.0335769006664404	425	97	8
+peptide hormone secretion	0.0337145192228239	110	97	4
+erythrose 4-phosphate/phosphoenolpyruvate family amino acid metabolic process	0.0339838757534534	17	97	2
+regulation of catalytic activity	0.0345269585158753	829	97	12
+viral genome replication	0.0356018788927291	112	97	4
+positive regulation of macromolecule metabolic process	0.0357828532115275	2409	97	25
+immune response-activating signaling pathway	0.0357828532115275	341	97	7
+regulation of ATP-dependent activity	0.0361801035446663	57	97	3
+positive regulation of NF-kappaB transcription factor activity	0.0361801035446663	113	97	4
+negative regulation of cell activation	0.0361801035446663	113	97	4
+positive regulation of cyclic nucleotide-gated ion channel activity	0.0362892433542706	1	97	1
+negative regulation of translational frameshifting	0.0362892433542706	1	97	1
+acute-phase response	0.0362892433542706	19	97	2
+regulation of translational frameshifting	0.0362892433542706	1	97	1
+positive regulation of blood microparticle formation	0.0362892433542706	1	97	1
+lipid modification by small protein conjugation	0.0362892433542706	1	97	1
+lipid ubiquitination	0.0362892433542706	1	97	1
+regulation of blood microparticle formation	0.0362892433542706	1	97	1
+negative regulation of natural killer cell cytokine production	0.0362892433542706	1	97	1
+negative regulation of shelterin complex assembly	0.0362892433542706	1	97	1
+isoleucine transmembrane transport	0.0362892433542706	1	97	1
+translational frameshifting	0.0362892433542706	1	97	1
+regulation of interleukin-33 production	0.0362892433542706	1	97	1
+positive regulation of interleukin-4-mediated signaling pathway	0.0362892433542706	1	97	1
+chronic inflammatory response to antigenic stimulus	0.0362892433542706	1	97	1
+positive regulation of interleukin-33 production	0.0362892433542706	1	97	1
+regulation of voltage-gated chloride channel activity	0.0362892433542706	1	97	1
+L-isoleucine import across plasma membrane	0.0362892433542706	1	97	1
+positive regulation of inorganic anion transmembrane transport	0.0362892433542706	1	97	1
+negative regulation of extrinsic apoptotic signaling pathway via death domain receptors	0.0362892433542706	19	97	2
+regulation of inflammatory response to antigenic stimulus	0.0362892433542706	19	97	2
+positive regulation of macrophage colony-stimulating factor signaling pathway	0.0362892433542706	1	97	1
+regulation of inorganic anion transmembrane transport	0.0362892433542706	1	97	1
+regulation of immune response to tumor cell	0.0362892433542706	19	97	2
+regulation of cyclic nucleotide-gated ion channel activity	0.0362892433542706	1	97	1
+positive regulation of voltage-gated chloride channel activity	0.0362892433542706	1	97	1
+negative regulation of glutamate receptor signaling pathway	0.0362892433542706	1	97	1
+positive regulation of vitamin metabolic process	0.0362892433542706	1	97	1
+indoleacetic acid metabolic process	0.0362892433542706	1	97	1
+negative regulation of interleukin-1 alpha production	0.0362892433542706	1	97	1
+positive regulation of calcium-independent cell-cell adhesion	0.0362892433542706	1	97	1
+regulation of secretion	0.0362892433542706	352	97	7
+positive regulation of DNA-binding transcription factor activity	0.0362892433542706	184	97	5
+granulocyte differentiation	0.0362892433542706	19	97	2
+positive regulation of transferase activity	0.0362892433542706	259	97	6
+tryptophan catabolic process to indole-3-acetate	0.0362892433542706	1	97	1
+negative regulation of natural killer cell degranulation	0.0362892433542706	1	97	1
+positive regulation of vitamin D biosynthetic process	0.0362892433542706	1	97	1
+positive regulation of macrophage tolerance induction	0.0362892433542706	1	97	1
+negative regulation of response to cytokine stimulus	0.0362892433542706	58	97	3
+positive regulation of apoptotic process	0.0362892433542706	347	97	7
+myeloid leukocyte cytokine production	0.0362892433542706	19	97	2
+positive regulation of viral process	0.0362892433542706	59	97	3
+regulation of macrophage tolerance induction	0.0362892433542706	1	97	1
+negative regulation of branching involved in lung morphogenesis	0.0362892433542706	1	97	1
+positive regulation of macromolecule biosynthetic process	0.0362892433542706	1792	97	20
+viral translational frameshifting	0.0362892433542706	1	97	1
+interleukin-33 production	0.0362892433542706	1	97	1
+blood microparticle formation	0.0362892433542706	1	97	1
+positive regulation of mononuclear cell migration	0.0362892433542706	58	97	3
+protein transport into plasma membrane raft	0.0362892433542706	1	97	1
+macrophage tolerance induction	0.0362892433542706	1	97	1
+tooth eruption	0.0362892433542706	1	97	1
+positive regulation of mast cell proliferation	0.0362892433542706	1	97	1
+auxin metabolic process	0.0362892433542706	1	97	1
+cellular response to type I interferon	0.0362892433542706	58	97	3
+regulation of MAPK cascade	0.0362892433542706	441	97	8
+regulation of hormone secretion	0.0369039939473153	119	97	4
+positive regulation of amyloid precursor protein catabolic process	0.0384901089885799	20	97	2
+negative regulation of peptide secretion	0.0384901089885799	20	97	2
+positive regulation of programmed cell death	0.0384901089885799	358	97	7
+positive regulation of leukocyte apoptotic process	0.0384901089885799	20	97	2
+regulation of response to tumor cell	0.0384901089885799	20	97	2
+NAD biosynthetic process	0.0384901089885799	20	97	2
+positive regulation of phosphatidylinositol 3-kinase/protein kinase B signal transduction	0.039540648860366	122	97	4
+regulation of signal transduction	0.0401747682062578	2204	97	23
+positive regulation of protein metabolic process	0.0406412996739066	869	97	12
+microglial cell activation	0.0411854314141228	21	97	2
+response to exogenous dsRNA	0.0411854314141228	21	97	2
+negative regulation of extrinsic apoptotic signaling pathway	0.0411854314141228	64	97	3
+nicotinamide nucleotide biosynthetic process	0.0411854314141228	21	97	2
+immune response to tumor cell	0.0411854314141228	21	97	2
+pyridine nucleotide biosynthetic process	0.0411854314141228	21	97	2
+aromatic amino acid family catabolic process	0.0411854314141228	21	97	2
+leukocyte activation involved in inflammatory response	0.0411854314141228	21	97	2
+sensory perception of taste	0.04435645882667	22	97	2
+positive regulation of viral life cycle	0.04435645882667	22	97	2
+positive regulation of cell population proliferation	0.04435645882667	563	97	9
+positive regulation of CD4-positive, alpha-beta T cell differentiation	0.04435645882667	22	97	2
+response to ischemia	0.04435645882667	22	97	2
+regulation of neuroinflammatory response	0.04435645882667	22	97	2
+glial cell migration	0.04435645882667	22	97	2
+intracellular signaling cassette	0.0448616786814073	1349	97	16
+mononuclear cell differentiation	0.0469115014616443	286	97	6
+odontogenesis of dentin-containing tooth	0.0478068518911569	23	97	2
+regulation of insulin secretion involved in cellular response to glucose stimulus	0.0478068518911569	23	97	2
+positive regulation of biosynthetic process	0.0478068518911569	1857	97	20

@@ -79,11 +79,12 @@ format:
 ## Links to publication
 
 The accompanying manuscript is:
+
 Nikolakopoulou et al.: An organoid model of the menstrual cycle reveals the role of the luminal epithelium in regeneration of the human endometrium (2025)
 
-and is available from:
+which is available from:
 
-- [bioRxiv]()
+- [bioRxiv](https://doi.org/10.1101/2025.07.03.663000)
 
 ## Links to analysis code
 

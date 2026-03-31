@@ -55,9 +55,9 @@ organ <- readRDS("organoid_scrnaseq_timecourse.rds")
 stopifnot(all(organ$leiden_res0.125_annot %in% sc_leiden_res0.125_annot_order))
 stopifnot(all(organ$pred_from_invivo %in% tissue_leiden_res0.4_annot_order))
 
-organ$leiden_res0.125_annot <- factor(organ$leiden_res0.125_annot,
+organ$leiden_res0.125_annot <- factor(as.character(organ$leiden_res0.125_annot),
                                       levels = sc_leiden_res0.125_annot_order)
-organ$pred_from_invivo <- factor(organ$pred_from_invivo, 
+organ$pred_from_invivo <- factor(as.character(organ$pred_from_invivo), 
                                  levels = tissue_leiden_res0.4_annot_order)
 
 stopifnot(all(organ$timepoint %in% sc_timepoint_order))
@@ -118,12 +118,13 @@ dev.off()
 (umap_clusters <- plotReducedDim(
     organ, dimred = "UMAP_sketch", 
     colour_by = "leiden_res0.125_annot", point_size = 0.5) + 
-        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = "") + 
+        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = "",
+                           labels = sc_leiden_res0.125_annot_labels) + 
         guides(color = guide_legend(override.aes = list(size = 5, alpha = 1, 
                                                         shape = 15), 
                                     ncol = 2)) + 
         theme_void() + 
-        theme(legend.text = element_text(size = 12)))
+        theme(legend.text = element_markdown(size = 12)))
 png("paper_figures/UMAP_organoids_clusters.png", 
     height = 4, width = 4, units = "in", res = 500)
 umap_clusters + theme(legend.position = "none")
@@ -133,7 +134,7 @@ pdf("paper_figures/UMAP_organoids_clusters_legend.pdf",
 grid.newpage()
 grid.draw(get_legend2(umap_clusters + 
                           theme(legend.position = "bottom",
-                                legend.text = element_text(size = 12))))
+                                legend.text = element_markdown(size = 12))))
 dev.off()
 pdf("paper_figures/UMAP_organoids_clusters.pdf", height = 4, width = 4)
 umap_clusters + theme(legend.position = "none")
@@ -149,9 +150,10 @@ dev.off()
 
 (umap_preds <- plotReducedDim(
     organ, "UMAP_sketch", colour_by = "pred_from_invivo", point_size = 0.5) + 
-        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "") +  
+        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "",
+                           labels = tissue_leiden_res0.4_annot_labels) +  
         theme_void() + 
-        theme(legend.text = element_text(size = 12),       
+        theme(legend.text = element_markdown(size = 12),       
               legend.title = element_text(size = 12),      
               legend.key.size = unit(1.5, "lines")) + 
         guides(color = guide_legend(override.aes = list(size = 4), title = NULL))
@@ -164,7 +166,7 @@ pdf("paper_figures/UMAP_organoids_pred_from_invivo_legend.pdf",
     height = 1.75, width = 9)
 grid.newpage()
 grid.draw(get_legend2(umap_preds + theme(legend.position = "bottom",
-                                         legend.text = element_text(size = 12))))
+                                         legend.text = element_markdown(size = 12))))
 dev.off()
 ```
 
@@ -182,6 +184,7 @@ markers <- intersect(sc_timecourse_markers, rownames(organ))
     cluster_column = "leiden_res0.125_annot", 
     cluster_order = sc_leiden_res0.125_annot_order, 
     cluster_colors = sc_leiden_res0.125_annot_colors, 
+    cluster_labels = sc_leiden_res0.125_annot_labels,
     transpose = TRUE, 
     split_by_ciliated = TRUE))
 
@@ -208,6 +211,7 @@ fzd <- paste0("FZD", 1:10)
     cluster_column = "leiden_res0.125_annot", 
     cluster_order = sc_leiden_res0.125_annot_order, 
     cluster_colors = sc_leiden_res0.125_annot_colors, 
+    cluster_labels = sc_leiden_res0.125_annot_labels, 
     transpose = TRUE, 
     split_by_ciliated = FALSE))
 
@@ -219,7 +223,6 @@ png("paper_figures/dotplot_organoids_fzd_normalized.png", height = 6, width = 7,
 dotplot_norm_fzd
 dev.off()
 ```
-
 
 # Figures 4D + 4G + 4I, Extended Data 9G (relative abundance over time)
 
@@ -259,13 +262,15 @@ dfdonor <- data.frame(colData(organ)[, c("timepoint", "donor", "leiden_res0.125_
         labs(x = "", y = "Relative\nabundance (%)",
              title = "") + 
         theme(legend.position = "bottom",
+              legend.text = element_markdown(),
               axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
               axis.text.y = element_text(size = 16),
               axis.title = element_text(size = 16),
               strip.text = element_text(size = 16, margin = margin(0.2, 0, 0.2, 0, "cm")),
               strip.background = element_rect(fill = "white", color = "white")) + 
         facet_wrap(~ cluster_group, ncol = 1) + 
-        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = ""))
+        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = "",
+                           labels = sc_leiden_res0.125_annot_labels))
 
 pdf(paste0("paper_figures/relative_abundance_leiden_res0.125_annot_ciliated.pdf"), 
     height = 4.5, width = 6)
@@ -276,7 +281,7 @@ pdf("paper_figures/relative_abundance_leiden_res0.125_annot_ciliated_legend.pdf"
 grid.newpage()
 grid.draw(get_legend2(plot_relab_cil + 
                           theme(legend.position = "bottom",
-                                legend.text = element_text(size = 12)) + 
+                                legend.text = element_markdown(size = 12)) + 
                           guides(color = guide_legend(ncol = 1))))
 dev.off()
 
@@ -290,13 +295,15 @@ dev.off()
         labs(x = "", y = "Relative\nabundance (%)",
              title = "") + 
         theme(legend.position = "bottom",
+              legend.text = element_markdown(),
               axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
               axis.text.y = element_text(size = 16),
               axis.title = element_text(size = 16),
               strip.text = element_text(size = 16, margin = margin(0.2, 0, 0.2, 0, "cm")),
               strip.background = element_rect(fill = "white", color = "white")) + 
         facet_wrap(~ cluster_group, ncol = 1) + 
-        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = ""))
+        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = "",
+                           labels = sc_leiden_res0.125_annot_labels))
 
 pdf(paste0("paper_figures/relative_abundance_leiden_res0.125_annot_nonciliated.pdf"), 
     height = 4.5, width = 6)
@@ -307,7 +314,7 @@ pdf("paper_figures/relative_abundance_leiden_res0.125_annot_nonciliated_legend.p
 grid.newpage()
 grid.draw(get_legend2(plot_relab_noncil + 
                           theme(legend.position = "bottom",
-                                legend.text = element_text(size = 12)) + 
+                                legend.text = element_markdown(size = 12)) + 
                           guides(color = guide_legend(ncol = 2))))
 dev.off()
 ```
@@ -330,12 +337,15 @@ dev.off()
         theme_cowplot() + 
         labs(x = "", y = "Relative abundance (%)",
              title = "") + 
-        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = "") + 
-        facet_wrap(~ leiden_res0.125_annot, scales = "free_y") + 
+        scale_color_manual(values = sc_leiden_res0.125_annot_colors, name = "",
+                           labels = sc_leiden_res0.125_annot_labels) + 
+        facet_wrap(~ leiden_res0.125_annot, scales = "free_y",
+                   labeller = labeller(leiden_res0.125_annot = sc_leiden_res0.125_annot_labels)) + 
         guides(alpha = "none", linewidth = "none") + 
         theme(legend.position = "none",
+              legend.text = element_markdown(),
               axis.text.x = element_text(angle = 45, hjust = 1),
-              strip.text = element_text(size = 16),
+              strip.text = element_markdown(size = 16),
               strip.background = element_rect(fill = "white", color = "white")))
 
 pdf(paste0("paper_figures/relative_abundance_cluster_leiden_res0.125_annot.pdf"), 
@@ -356,9 +366,11 @@ dev.off()
         labs(x = "", y = "Relative abundance (%)", title = "") +
         coord_flip() + 
         theme(legend.position = "bottom",
+              legend.text = element_markdown(),
               axis.text = element_text(size = 20),
               axis.title = element_text(size = 20)) + 
-        scale_fill_manual(values = sc_leiden_res0.125_annot_colors, name = ""))
+        scale_fill_manual(values = sc_leiden_res0.125_annot_colors, name = "",
+                          labels = sc_leiden_res0.125_annot_labels))
 pdf("paper_figures/relative_abundance_barplot_leiden_res0.125_annot.pdf", 
     height = 5, width = 8)
 plotbar + theme(legend.position = "none")
@@ -371,7 +383,7 @@ pdf("paper_figures/relative_abundance_barplot_leiden_res0.125_annot_legend.pdf",
     height = 1.75, width = 9)
 grid.newpage()
 grid.draw(get_legend2(plotbar + theme(legend.position = "bottom",
-                                      legend.text = element_text(size = 12))))
+                                      legend.text = element_markdown(size = 12))))
 dev.off()
 ```
 
@@ -406,11 +418,13 @@ dfdonor <- data.frame(colData(organ)[, c("timepoint", "donor", "pred_from_invivo
         labs(x = "", y = "Relative\nabundance (%)",
              title = "") + 
         theme(legend.position = "bottom",
+              legend.text = element_markdown(),
               axis.text.x = element_text(angle = 45, hjust = 1, size = 16),
               axis.text.y = element_text(size = 16),
               axis.title = element_text(size = 16),
               strip.background = element_rect(fill = "white", color = "black")) + 
-        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = ""))
+        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "",
+                           labels = tissue_leiden_res0.4_annot_labels))
 
 pdf(paste0("paper_figures/relative_abundance_pred_from_invivo.pdf"), 
     height = 4, width = 6)
@@ -420,7 +434,7 @@ pdf("paper_figures/relative_abundance_pred_from_invivo_legend.pdf",
     height = 1.75, width = 11)
 grid.newpage()
 grid.draw(get_legend2(plot_relab + theme(legend.position = "bottom",
-                                         legend.text = element_text(size = 12))))
+                                         legend.text = element_markdown(size = 12))))
 dev.off()
 ```
 
@@ -444,10 +458,13 @@ dev.off()
              title = "") + 
         theme(legend.position = "none",
               axis.text.x = element_text(angle = 45, hjust = 1)) + 
-        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "") + 
-        facet_wrap(~ pred_from_invivo, scales = "free_y") + 
+        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "",
+                           labels = tissue_leiden_res0.4_annot_labels) + 
+        facet_wrap(~ pred_from_invivo, scales = "free_y", 
+                   labeller = labeller(pred_from_invivo = tissue_leiden_res0.4_annot_labels)) + 
         guides(alpha = "none", linewidth = "none") + 
-        theme(strip.text = element_text(size = 16),
+        theme(strip.text.x = element_markdown(size = 14),
+              strip.text.y = element_markdown(size = 14),
               strip.background = element_rect(fill = "white", color = "white")))
 
 pdf(paste0("paper_figures/relative_abundance_cluster_pred_from_invivo.pdf"), 
@@ -468,9 +485,11 @@ dev.off()
         labs(x = "", y = "Relative abundance (%)", title = "") +
         coord_flip() + 
         theme(legend.position = "bottom",
+              legend.text = element_markdown(),
               axis.text = element_text(size = 20),
               axis.title = element_text(size = 20)) + 
-        scale_fill_manual(values = tissue_leiden_res0.4_annot_colors, name = ""))
+        scale_fill_manual(values = tissue_leiden_res0.4_annot_colors, name = "",
+                          labels = tissue_leiden_res0.4_annot_labels))
 pdf("paper_figures/relative_abundance_barplot_pred_from_invivo.pdf", 
     height = 5, width = 8)
 plotbar + theme(legend.position = "none")
@@ -479,7 +498,7 @@ pdf("paper_figures/relative_abundance_barplot_pred_from_invivo_legend.pdf",
     height = 1.75, width = 11)
 grid.newpage()
 grid.draw(get_legend2(plotbar + theme(legend.position = "bottom",
-                                      legend.text = element_text(size = 12))))
+                                      legend.text = element_markdown(size = 12))))
 dev.off()
 ```
 
@@ -638,14 +657,15 @@ luminal_early_markers <- read.delim("../scRNAseq_invivo_endometrium_epithelial_c
     slice_head(n = 100) |>
     pull(gene)
 
+set.seed(478L)
 organ$lum_early_score <- swissknife::normGenesetExpression(
     organ, genes = luminal_early_markers, 
-    BPPARAM = MulticoreParam(workers = 8L))
+    BPPARAM = MulticoreParam(workers = 8L, RNGseed = 478L))
 (ggrep <- ggplot(as.data.frame(colData(organ)), 
                  aes(x = timepoint, y = lum_early_score,
                      fill = timepoint)) + 
         geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + 
-        labs(x = "", y = "Luminal early gene set score") + 
+        labs(x = "", y = "Regeneration associated\nluminal gene set score") + 
         scale_fill_manual(values = sc_timepoint_colors) + 
         theme_bw(base_size = 14) + 
         theme(legend.position = "none",
@@ -665,21 +685,22 @@ luminal late cluster.
 ```{r}
 #| label: fig-lum-early-vs-late-signature
 #| fig.width: 7
-#| fig.height: 5
+#| fig.height: 5.5
 
 luminal_early_vs_late_markers <- read.delim("../scRNAseq_invivo_endometrium_epithelial_cell_atlas/pairwise_ttests_leiden_res0.4_annot/leiden_res0.4_annot_cluster_luminal early_vs_luminal late.txt") |>
     arrange(p.value) |>
     slice_head(n = 100) |>
     pull(gene)
 
+set.seed(478L)
 organ$lum_early_vs_late_score <- swissknife::normGenesetExpression(
     organ, genes = luminal_early_vs_late_markers, 
-    BPPARAM = MulticoreParam(workers = 8L))
+    BPPARAM = MulticoreParam(workers = 8L, RNGseed = 478L))
 (ggrep3 <- ggplot(as.data.frame(colData(organ)), 
                  aes(x = timepoint, y = lum_early_vs_late_score,
                      fill = timepoint)) + 
         geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + 
-        labs(x = "", y = "Luminal early vs late gene set score") + 
+        labs(x = "", y = "Regeneration vs receptivity\nassociated luminal gene set score") + 
         scale_fill_manual(values = sc_timepoint_colors) + 
         theme_bw(base_size = 14) + 
         theme(legend.position = "none",
@@ -687,7 +708,7 @@ organ$lum_early_vs_late_score <- swissknife::normGenesetExpression(
               axis.text.y = element_text(size = 16),
               axis.title = element_text(size = 16)))
 
-pdf("paper_figures/luminal_early_vs_late_signature.pdf", width = 7, height = 5)
+pdf("paper_figures/luminal_early_vs_late_signature.pdf", width = 7, height = 5.5)
 ggrep3
 dev.off()
 ```
@@ -704,14 +725,15 @@ luminal_late_markers <- read.delim("../scRNAseq_invivo_endometrium_epithelial_ce
     slice_head(n = 100) |>
     pull(gene)
 
+set.seed(478L)
 organ$lum_late_score <- swissknife::normGenesetExpression(
     organ, genes = luminal_late_markers, 
-    BPPARAM = MulticoreParam(workers = 8L))
+    BPPARAM = MulticoreParam(workers = 8L, RNGseed = 478L))
 (ggrep2 <- ggplot(as.data.frame(colData(organ)), 
                   aes(x = timepoint, y = lum_late_score,
                       fill = timepoint)) + 
         geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + 
-        labs(x = "", y = "Luminal late gene set score") + 
+        labs(x = "", y = "Receptivity associated\nluminal gene set score") + 
         scale_fill_manual(values = sc_timepoint_colors) + 
         theme_bw(base_size = 14) + 
         theme(legend.position = "none",
@@ -795,7 +817,8 @@ plotdf <- do.call(bind_rows, lapply(clusters_to_consider, function(cl) {
                                                     gsub(" ", "\n", levels(cluster)))))
 (ggprof <- ggplot(plotdf, aes(x = -log10(p_value), y = fct_reorder(term_name, -p_value))) + 
     geom_point(size = 4, aes(color = cluster)) + 
-    scale_color_manual(values = sc_leiden_res0.125_annot_colors) + 
+    scale_color_manual(values = sc_leiden_res0.125_annot_colors, 
+                       labels = sc_leiden_res0.125_annot_labels) + 
     facet_grid2(cluster2 ~ .,
                 strip = strip_themed(clip = "off", background_y = elem_list_rect(
                     fill = alpha(sc_leiden_res0.125_annot_colors[levels(plotdf$cluster)], 0.5))), 
@@ -811,7 +834,7 @@ dev.off()
 # Save count matrix and cell type annotations
 
 ```{r}
-#| eval: true
+#| eval: false
 
 if (!file.exists("upload_data")) {
     dir.create("upload_data", showWarnings = FALSE, recursive = FALSE)

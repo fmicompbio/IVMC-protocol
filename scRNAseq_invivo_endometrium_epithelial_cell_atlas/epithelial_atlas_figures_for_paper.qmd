@@ -66,12 +66,12 @@ tmp
 vapply(tmp, function(x) length(unique(x)), NA_real_)
 ```
 
-# Define colors
+# Define factor levels
 
 ```{r}
 #| label: define-colors
 
-dat$leiden_res0.4_annot <- factor(dat$leiden_res0.4_annot,
+dat$leiden_res0.4_annot <- factor(as.character(dat$leiden_res0.4_annot),
                                   levels = tissue_leiden_res0.4_annot_order)
 ```
 
@@ -85,12 +85,13 @@ dat$leiden_res0.4_annot <- factor(dat$leiden_res0.4_annot,
 (umap_clusters <- plotReducedDim(dat, dimred = "UMAP_fastMNNcorr_sketch", 
                              colour_by = "leiden_res0.4_annot", 
                              point_size = 0.5) + 
-     scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "") + 
+     scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "",
+                        labels = tissue_leiden_res0.4_annot_labels) + 
      guides(color = guide_legend(nrow = 4, byrow = FALSE, title = "",
                                  override.aes = list(size = 5, alpha = 1, 
                                                      shape = 15))) + 
      theme_void() + 
-     theme(legend.text = element_text(size = 20),
+     theme(legend.text = element_markdown(size = 20),
            legend.position = "bottom",
            axis.title = element_blank()))
 
@@ -102,7 +103,7 @@ pdf("paper_figures/UMAP_tissue_clusters_legend.pdf",
     height = 1.75, width = 9)
 grid.newpage()
 grid.draw(get_legend2(umap_clusters + theme(legend.position = "bottom",
-                                            legend.text = element_text(size = 12))))
+                                            legend.text = element_markdown(size = 12))))
 dev.off()
 pdf("paper_figures/UMAP_tissue_clusters.pdf", height = 4, width = 4)
 umap_clusters + theme(legend.position = "none")
@@ -131,11 +132,13 @@ df <- data.frame(colData(dat)[, c("StageFactor", "leiden_res0.4_annot")]) |>
         geom_line(aes(x = as.numeric(StageFactor)), linewidth = 1) + 
         theme_cowplot() + 
         labs(x = "", y = "Relative abundance (%)") + 
-        facet_wrap(~ leiden_res0.4_annot, scales = "free_y", nrow = 3) + 
-        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "") + 
+        facet_wrap(~ leiden_res0.4_annot, scales = "free_y", nrow = 3,
+                   labeller = labeller(leiden_res0.4_annot = tissue_leiden_res0.4_annot_labels)) + 
+        scale_color_manual(values = tissue_leiden_res0.4_annot_colors, name = "",
+                           labels = tissue_leiden_res0.4_annot_labels) + 
         theme(legend.position = "none",
-              axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
-              strip.text = element_text(size = 10),
+              axis.text.x = element_markdown(angle = 90, hjust = 1, vjust = 0.5),
+              strip.text = element_markdown(size = 10),
               strip.background = element_rect(fill = "white", color = "white")))
 
 pdf("paper_figures/rel_abund_allclusters_tissue.pdf", height = 5, width = 11)
@@ -157,6 +160,7 @@ markers <- intersect(tissue_markers, rownames(dat))
     cluster_column = "leiden_res0.4_annot", 
     cluster_order = tissue_leiden_res0.4_annot_order, 
     cluster_colors = tissue_leiden_res0.4_annot_colors, 
+    cluster_labels = tissue_all_lineages_celltype_labels,
     transpose = TRUE
 ))
 
@@ -310,6 +314,7 @@ dev.off()
     cluster_column = "leiden_res0.4_annot",
     cluster_order = tissue_leiden_res0.4_annot_order, 
     cluster_colors = tissue_leiden_res0.4_annot_colors, 
+    cluster_labels = tissue_leiden_res0.4_annot_labels,
     transpose = FALSE,
     split_by_ciliated = FALSE,
     normalize = FALSE, 
@@ -410,7 +415,7 @@ for (cl in clusters_to_consider) {
                      aes(x = -log10(p_value), y = forcats::fct_reorder(term_name, -p_value))) + 
             geom_point(size = 4, color = tissue_leiden_res0.4_annot_colors[cl]) + 
             theme_cowplot() + 
-            labs(x = "-log10 FDR", y = "", title = cl) + 
+            labs(x = "-log10 FDR", y = "", title = gsub(" ", "\n", tissue_leiden_res0.4_annot_labels[cl])) + 
             coord_cartesian(xlim = c(0, NA))
         print(gg)
         pdf(paste0("paper_figures/gprofiler_tissue_", sub(" ", "_", cl), ".pdf"), 

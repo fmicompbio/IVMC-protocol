@@ -122,6 +122,25 @@ sc_timecourse_markers <- c(
     "CDC20B", "MAD2L1", "CRELD2", "DNAJB11", "NEK2", "PIFO", "FOXJ1", 
     "RSPH1", "TPPP3") 
 
+sc_leiden_res0.125_annot_labels <- c(
+    "ciliated" = "ciliated",
+    "ciliated immunomodulatory" = "ciliated immunomodulatory",
+    "ciliated wound responsive 24h" = "ciliated wound responsive 24h",
+    "ciliated wound responsive 12h" = "ciliated wound responsive 12h",
+    "ciliated stress responsive" = "ciliated stress responsive",
+    "ciliated cycling" = "ciliated cycling",
+    "pre-ciliated" = "pre-ciliated",
+    "secretory late" = "secretory PAEP<sup>+</sup>",
+    "secretory early" = "secretory SCGB<sup>high</sup>",
+    "hormone responsive" = "hormone responsive",
+    "immunomodulatory" = "immunomodulatory",
+    "OxPhos high" = "OxPhos high",
+    "wound responsive 24h" = "wound responsive 24h",
+    "wound responsive 12h" = "wound responsive 12h",
+    "stress responsive" = "stress responsive",
+    "cycling" = "cycling"
+)
+
 # ------------------------------------------------------------------------------
 # scRNAseq tissue atlas (epithelial)
 # ------------------------------------------------------------------------------
@@ -143,6 +162,23 @@ tissue_leiden_res0.4_annot_colors <- c(
 )
 tissue_leiden_res0.4_annot_order <- names(tissue_leiden_res0.4_annot_colors)
 
+tissue_leiden_res0.4_annot_labels <- c(
+    "ciliated" = "ciliated",
+    "pre-ciliated" = "pre-ciliated",
+    "secretory late" = "secretory late",
+    "secretory mid" = "secretory mid",
+    "secretory early" = "secretory early",
+    "hormone responsive late" = "hormone responsive PGR<sup>low</sup>",
+    "hormone responsive early" = "hormone responsive PGR<sup>high</sup>",
+    "luminal late" = "receptivity associated luminal",
+    "luminal early" = "regeneration associated luminal",
+    "KRT5+" = "KRT5<sup>+</sup>",
+    "MUC5B+" = "MUC5B<sup>+</sup>",
+    "transcriptionally active" = "transcriptionally active",
+    "remodeling" = "VIM<sup>+</sup>",
+    "cycling" = "cycling"
+)
+
 tissue_markers <- c(
     "PAX8", "EPCAM", "FOXA2", "MKI67", "STMN1", "PCNA", "VIM", "NABP1",
     "TEAD1", "NKTR", "PNN", "MACF1", "PHLDA1", "KRT5", "KRT17", "CLU",
@@ -153,7 +189,7 @@ tissue_markers <- c(
     "COL1A2", "MMP26", "SOX17", "SCGB1D2", "SCGB2A1", "SCGB2A2", "IL6ST",
     "VEGFA", "VCAN", "DYNLT3", "MAOA", "PPIB", "GPX3", "PAEP", "TSPAN8",
     "NUPR1", "SOD3", "FGF7", "IGFBP7", "CCNO", "CDC20B", "MAD2L1", "NEK2",
-    "PIFO", "FOXJ1", "RSPH1", "TPPP3")
+    "MCIDAS", "GMNC", "PIFO", "FOXJ1", "RSPH1", "TPPP3")
 
 tissue_goterms <- list(
     "luminal early" = c("epithelium development", "cell-cell junction organization",
@@ -262,6 +298,41 @@ tissue_all_lineages_celltype_lineage <- c(
     HOXA13 = "Epithelial",
     sHormones = "Epithelial",
     dHormones = "Epithelial"
+)
+tissue_all_lineages_celltype_labels <- c(
+    Venous = "Venous", 
+    Arterial = "Arterial",
+    Lymphatic = "Lymphatic",
+    Mast_cell = "Mast_cell",
+    pDC = "pDC",
+    cDC1 = "cDC1",
+    cDC2 = "cDC2",
+    Monocyte = "Monocyte",
+    eM1 = "eM1",
+    eM2 = "eM2",
+    ILC3 = "ILC3",
+    Peripheral_lymphocyte = "Peripheral_lymphocyte",
+    T_cell_CD4 = "T_cell_CD4",
+    T_cell_CD8 = "T_cell_CD8",
+    T_cell_cycling = "T_cell_cycling",
+    T_Reg = "T_Reg",
+    uNK1_cycling = "uNK1_cycling",
+    uNK1 = "uNK1",
+    uNK2 = "uNK2",
+    uNK3 = "uNK3",
+    B_cell = "B_cell",
+    Plasma_B_cell = "Plasma_B_cell",
+    Red_blood_cell = "Red_blood_cell",
+    uSMCs = "uSMCs",
+    ePV = "ePV",
+    mPV = "mPV",
+    eStromal = "eStromal",
+    dStromal = "dStromal",
+    Fibroblast_basalis = "Fibroblast_basalis",
+    tissue_leiden_res0.4_annot_labels,
+    HOXA13 = "HOXA13",
+    sHormones = "sHormones",
+    dHormones = "dHormones"
 )
 
 # ------------------------------------------------------------------------------

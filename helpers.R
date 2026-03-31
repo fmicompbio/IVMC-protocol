@@ -34,7 +34,7 @@ get_legend2 <- function(plot, legend = NULL) {
 
 # Function to create normalized dot plots
 .makeDotPlot <- function(dat, markers, cluster_column, cluster_order,
-                         cluster_colors, transpose = TRUE,
+                         cluster_colors, cluster_labels = NULL, transpose = TRUE,
                          split_by_ciliated = FALSE, normalize = TRUE,
                          subset_to_clusters = NULL,
                          min_fraction = 0) {
@@ -85,16 +85,29 @@ get_legend2 <- function(plot, legend = NULL) {
     }
     
     # reorder groups
-    plot.data <- plot.data |> 
-        mutate(Group = factor(Group, levels = rev(cluster_order))) |>
-        arrange(Group) |>
-        mutate(Group = as.character(Group)) |>
-        mutate(Group = paste("<span style = 'color: ",
-                             cluster_colors[Group],
-                             ";'>",
-                             Group,
-                             "</span>", sep = "")) |>
-        mutate(Group = factor(Group, levels = unique(Group)))
+    if (is.null(cluster_labels)) {
+        plot.data <- plot.data |> 
+            mutate(Group = factor(Group, levels = rev(cluster_order))) |>
+            arrange(Group) |>
+            mutate(Group = as.character(Group)) |>
+            mutate(Group = paste("<span style = 'color: ",
+                                 cluster_colors[Group],
+                                 ";'>",
+                                 Group,
+                                 "</span>", sep = "")) |>
+            mutate(Group = factor(Group, levels = unique(Group)))
+    } else {
+        plot.data <- plot.data |> 
+            mutate(Group = factor(Group, levels = rev(cluster_order))) |>
+            arrange(Group) |>
+            mutate(Group = as.character(Group)) |>
+            mutate(Group = paste("<span style = 'color: ",
+                                 cluster_colors[Group],
+                                 ";'>",
+                                 cluster_labels[Group],
+                                 "</span>", sep = "")) |>
+            mutate(Group = factor(Group, levels = unique(Group)))
+    }
 
     # plot
     gg <- ggplot(plot.data) +

@@ -32,6 +32,7 @@ suppressPackageStartupMessages({
     library(tibble)
     library(patchwork)
     library(ggforce)
+    library(ggtext)
 })
 
 source("../params.R")
@@ -49,6 +50,7 @@ if (!file.exists("paper_figures")) {
 
 atlas <- readRDS("invivo_cell_atlas.rds")
 cellchat <- readRDS("cellchat_menstrual_proliferative.rds")
+organ <- readRDS("../scRNAseq_timecourse/organoid_scrnaseq_timecourse.rds")
 
 # pathways of interest
 poi <- c("CXCL", "ANNEXIN", "CSF", "EDN", "SEMA3", "IL6", "WNT")
@@ -80,15 +82,17 @@ plotdf <- as.data.frame(cellchat@netP$prob["luminal early", , poi]) |>
     mutate(pathway = factor(pathway, levels = poi))
 (ggs <- ggplot(plotdf,
                aes(x = receiver, y = pathway, fill = prob_scaled)) + 
-     geom_tile() + 
-     scale_fill_gradient(low = "grey98", high = "firebrick", 
-                         limits = c(0, 1), oob = scales::squish,
-                         name = "relative\ninteraction\nprobability") +
-     labs(x = "Receiving population", y = "Pathway", 
-          title = "luminal early as sender") + 
-     theme_minimal() + 
-     theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)))
-pdf("paper_figures/cellchat_pathways_luminal_early_sender.pdf", 
+        geom_tile() + 
+        scale_fill_gradient(low = "grey98", high = "firebrick", 
+                            limits = c(0, 1), oob = scales::squish,
+                            name = "relative\ninteraction\nprobability") +
+        scale_x_discrete(labels = tissue_all_lineages_celltype_labels) + 
+        labs(x = "Receiving population", y = "Pathway", 
+             title = "regeneration associated luminal as sender") + 
+        theme_void() + 
+        theme(axis.text.x = element_markdown(angle = 90, hjust = 1, vjust = 0.5),
+              axis.text.y = element_markdown()))
+ pdf("paper_figures/cellchat_pathways_luminal_early_sender.pdf", 
     width = 7, height = 5)
 ggs
 dev.off()
@@ -122,14 +126,16 @@ plotdf <- as.data.frame(cellchat@netP$prob["luminal early", , ]) |>
     )
 (ggs <- ggplot(plotdf,
                aes(x = pathway, y = receiver, fill = prob_scaled)) + 
-     geom_tile() + 
-     scale_fill_gradient(low = "grey98", high = "firebrick", 
-                         limits = c(0, 1), oob = scales::squish,
-                         name = "relative\ninteraction\nprobability") +
-     labs(y = "Receiving population", x = "Pathway", 
-          title = "luminal early as sender") + 
-     theme_minimal() + 
-     theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)))
+        geom_tile() + 
+        scale_fill_gradient(low = "grey98", high = "firebrick", 
+                            limits = c(0, 1), oob = scales::squish,
+                            name = "relative\ninteraction\nprobability") +
+        scale_y_discrete(labels = tissue_all_lineages_celltype_labels) + 
+        labs(y = "Receiving population", x = "Pathway", 
+             title = "regeneration associated luminal as sender") + 
+        theme_void() + 
+        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+              axis.text.y = element_markdown(hjust = 1)))
 pdf("paper_figures/cellchat_pathways_luminal_early_sender_all.pdf", 
     width = 7, height = 6)
 ggs
@@ -152,22 +158,28 @@ plotdf <- as.data.frame(cellchat@net$weight["luminal early", , drop = FALSE]) |>
     mutate(lineage = tissue_all_lineages_celltype_lineage[receiver]) |>
     mutate(receiver = factor(receiver, levels = names(tissue_all_lineages_celltype_cols)))
 ggc1 <- ggplot(plotdf |> dplyr::filter(lineage %in% c("Endothelial", "Immune")), 
-               aes(x = receiver, y = prob, fill = receiver)) + 
-    geom_col() + 
+               # aes(x = receiver, y = prob, fill = receiver)) + 
+               aes(x = receiver, y = prob)) + 
+    geom_col(fill = "grey80") + 
     theme_bw() + 
-    scale_fill_manual(values = tissue_all_lineages_celltype_cols) + 
+    # scale_fill_manual(values = tissue_all_lineages_celltype_cols) + 
+    scale_x_discrete(labels = tissue_all_lineages_celltype_labels) + 
     facet_col(~ lineage, scales = "free_y", space = "free") + 
-    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+    theme(axis.text.x = element_markdown(angle = 90, hjust = 1, vjust = 0.5),
+          axis.text.y = element_markdown(),
           legend.position = "none") + 
     coord_flip(ylim = c(0, max(plotdf$prob))) + 
     labs(x = "Receiver", y = "Summed interaction probabilities")
 ggc2 <- ggplot(plotdf |> dplyr::filter(lineage %in% c("Epithelial", "Mesenchymal")), 
-               aes(x = receiver, y = prob, fill = receiver)) + 
-    geom_col() + 
+               # aes(x = receiver, y = prob, fill = receiver)) + 
+               aes(x = receiver, y = prob)) + 
+    geom_col(fill = "grey80") + 
     theme_bw() + 
-    scale_fill_manual(values = tissue_all_lineages_celltype_cols) + 
+    # scale_fill_manual(values = tissue_all_lineages_celltype_cols) + 
+    scale_x_discrete(labels = tissue_all_lineages_celltype_labels) + 
     facet_col(~ lineage, scales = "free_y", space = "free") + 
-    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+    theme(axis.text.x = element_markdown(angle = 90, hjust = 1, vjust = 0.5),
+          axis.text.y = element_markdown(),
           legend.position = "none") + 
     coord_flip(ylim = c(0, max(plotdf$prob))) + 
     labs(x = "Receiver", y = "Summed interaction probabilities")
@@ -198,6 +210,8 @@ lr <- subsetCommunication(
     signaling = NULL, pairLR.use = NULL, thresh = 0.05
 )
 
+allgray <- setNames(rep("gray10", length(tissue_all_lineages_celltype_cols)),
+                    names(tissue_all_lineages_celltype_cols))
 for (pw in unique(lr$pathway_name)) {
     lrsub <- lr |> 
         filter(pathway_name == pw)
@@ -215,7 +229,8 @@ for (pw in unique(lr$pathway_name)) {
     dp <- .makeDotPlot(
         atlas, markers = markers, cluster_column = "celltype_annot",
         cluster_order = names(tissue_all_lineages_celltype_cols), 
-        cluster_colors = tissue_all_lineages_celltype_cols, 
+        cluster_colors = allgray, 
+        cluster_labels = tissue_all_lineages_celltype_labels,
         transpose = TRUE, split_by_ciliated = FALSE, normalize = TRUE,
         min_fraction = 0.2) + 
         ggtitle(pw)
@@ -226,6 +241,81 @@ for (pw in unique(lr$pathway_name)) {
     dev.off()
 }
 ```
+
+# Dotplot of WNT+Annexin+CXCL pathways
+
+```{r}
+#| fig.width: 9
+#| fig.height: 9
+#| label: fig-ligands-receptors-merged
+#| warning: false
+
+lrsubWNT <- lr |> 
+    filter(pathway_name == "WNT")
+lrsubANNEXIN <- lr |> 
+    filter(pathway_name == "ANNEXIN")
+lrsubCXCL <- lr |> 
+    filter(pathway_name == "CXCL")
+
+markersWNT <- unique(c(lrsubWNT$ligand, unlist(strsplit(lrsubWNT$receptor, "_"))))
+markersANNEXIN <- unique(c(lrsubANNEXIN$ligand, unlist(strsplit(lrsubANNEXIN$receptor, "_"))))
+markersCXCL <- unique(c(lrsubCXCL$ligand, unlist(strsplit(lrsubCXCL$receptor, "_"))))
+
+wntligands <- cellchat@DB$interaction |> 
+    filter(pathway_name == "WNT") |>
+    pull(ligand) |> 
+    unique()
+markers <- unique(c(wntligands, markersWNT, paste0("FZD", 1:10), markersANNEXIN, 
+                    markersCXCL, "CXCR1", "CXCR2"))
+markers <- markers[rowSums(assay(atlas, "logcounts")[markers, ]) > 0]
+
+dp <- .makeDotPlot(
+    atlas, markers = markers, cluster_column = "celltype_annot",
+    cluster_order = names(tissue_all_lineages_celltype_cols), 
+    cluster_colors = allgray, 
+    cluster_labels = tissue_all_lineages_celltype_labels,
+    transpose = TRUE, split_by_ciliated = FALSE, normalize = TRUE,
+    min_fraction = 0.2)
+print(dp)
+pdf(paste0("paper_figures/cellchat_pathways_ligands_receptors_WNT_ANNEXIN_CXCL.pdf"), 
+    height = 9, width = 8)
+print(dp)
+dev.off()
+```
+
+
+# Dotplot of all ligands in organoid timecourse
+
+```{r}
+#| label: plot-dotplot-timecourse-ligands
+#| fig.width: 10
+#| fig.height: 6
+
+(ligands <- subsetCommunication(
+    cellchat, slot.name = "net", 
+    sources.use = "luminal early", targets.use = receivers, 
+    signaling = NULL, pairLR.use = NULL, thresh = 0.05) |>
+        pull(ligand) |>
+        unique())
+
+(dotplot_norm_ligands <- .makeDotPlot(
+    dat = organ, markers = ligands, 
+    cluster_column = "leiden_res0.125_annot", 
+    cluster_order = sc_leiden_res0.125_annot_order, 
+    cluster_colors = sc_leiden_res0.125_annot_colors, 
+    cluster_labels = sc_leiden_res0.125_annot_labels,
+    transpose = TRUE, 
+    split_by_ciliated = FALSE))
+
+pdf("paper_figures/dotplot_organoids_ligands_normalized.pdf", height = 6, width = 10)
+dotplot_norm_ligands
+dev.off()
+png("paper_figures/dotplot_organoids_ligands_normalized.png", height = 6, width = 10, 
+    unit = "in", res = 500)
+dotplot_norm_ligands
+dev.off()
+```
+
 
 # Session info
 

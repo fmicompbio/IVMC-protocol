@@ -24,6 +24,7 @@ suppressPackageStartupMessages({
     library(ggnewscale)
     library(ggh4x)
     library(grid)
+    library(ggtext)
 })
 
 source("../params.R")
@@ -115,6 +116,7 @@ above 1%. Put together t0-t3 (no breakdown) and t4-t6 (breakdown)
                           group = celltype, fill = celltype)) + 
         geom_area() + 
         scale_fill_manual(values = tissue_leiden_res0.4_annot_colors, 
+                          labels = tissue_leiden_res0.4_annot_labels,
                           name = "") + 
         guides(fill = guide_legend(nrow = 5)) + 
         new_scale_fill() + 
@@ -135,7 +137,7 @@ above 1%. Put together t0-t3 (no breakdown) and t4-t6 (breakdown)
         theme(legend.position = "bottom", 
               axis.text.x = element_text(size = 16, angle = 90, hjust = 0.5, vjust = 0.5),
               axis.title = element_text(size = 20),
-              legend.text = element_text(size = 16),
+              legend.text = element_markdown(size = 16),
               strip.text = element_text(size = 16),
               panel.border = element_rect(fill = NA, colour = "grey20"),
               strip.background = element_rect(color = "black", fill = "white")) + 
@@ -162,7 +164,8 @@ table(paste(mprop$timepointexp, mprop$breakdown, mprop$hormones, sep = "_"),
                       aes(x = timepointexp, y = proportion,
                           group = celltype, fill = celltype)) + 
         geom_area() + 
-        scale_fill_manual(values = tissue_leiden_res0.4_annot_colors, name = "") + 
+        scale_fill_manual(values = tissue_leiden_res0.4_annot_colors, name = "", 
+                          labels = tissue_leiden_res0.4_annot_labels) + 
         new_scale_fill() + 
         geom_rect(data = data.frame(
             timepointexp = levels(mprop$timepointexp),
@@ -177,6 +180,7 @@ table(paste(mprop$timepointexp, mprop$breakdown, mprop$hormones, sep = "_"),
         scale_y_continuous(expand = expansion(mult = c(0, 0), add = c(0, 0))) +
         coord_cartesian(clip = "off", ylim = c(0, 1.05)) + 
         theme(legend.position = "bottom", 
+              legend.text = element_markdown(),
               axis.text.y = element_text(size = 16),
               axis.title.y = element_text(size = 20),
               axis.text.x = element_text(size = 20, angle = 90, hjust = 0.5, vjust = 0.5)))
@@ -192,7 +196,7 @@ pdf("paper_figures_deconvolution/areaplot_allclusters_avg_donors_legend.pdf",
     height = 1.75, width = 11)
 grid.newpage()
 grid.draw(get_legend2(p_area_avg + theme(legend.position = "bottom",
-                                         legend.text = element_text(size = 12))))
+                                         legend.text = element_markdown(size = 12))))
 dev.off()
 ```
 
@@ -203,32 +207,35 @@ dev.off()
 #| fig.width: 12
 #| fig.height: 18
 
+mprop <- mprop |> 
+    mutate(celltypenew = tissue_leiden_res0.4_annot_labels[celltype])
+
 (p_box <- ggplot(
     mprop |> 
         filter(ndet >= 2) |>
-        mutate(celltype = replace(celltype, celltype == "hormone responsive late",
-                                  "hormone\nresponsive\nlate")) |>
-        mutate(celltype = replace(celltype, celltype == "hormone responsive early",
-                                  "hormone\nresponsive\nearly")) |>
-        mutate(celltype = replace(celltype, celltype == "secretory late",
-                                  "secretory\nlate")) |>
-        mutate(celltype = replace(celltype, celltype == "secretory mid",
-                                  "secretory\nmid")) |>
-        mutate(celltype = replace(celltype, celltype == "secretory early",
-                                  "secretory\nearly")) |>
-        mutate(celltype = replace(celltype, celltype == "luminal late",
-                                  "luminal\nlate")) |>
-        mutate(celltype = replace(celltype, celltype == "luminal early",
-                                  "luminal\nearly")) |>
-        mutate(celltype = replace(celltype, celltype == "transcriptionally active",
-                                  "trans-\ncriptionally\nactive")), 
+        mutate(celltypenew = replace(celltypenew, celltypenew == "hormone responsive PGR<sup>high</sup>",
+                                  "hormone<br>responsive<br>PGR<sup>high</high>")) |>
+        mutate(celltypenew = replace(celltypenew, celltypenew == "hormone responsive PGR<sup>low</sup>",
+                                  "hormone<br>responsive<br>PGR<sup>low</sup>")) |>
+        mutate(celltypenew = replace(celltypenew, celltypenew == "secretory late",
+                                  "secretory<br>late")) |>
+        mutate(celltypenew = replace(celltypenew, celltypenew == "secretory mid",
+                                  "secretory<br>mid")) |>
+        mutate(celltypenew = replace(celltypenew, celltypenew == "secretory early",
+                                  "secretory<br>early")) |>
+        mutate(celltypenew = replace(celltypenew, celltypenew == "receptivity associated luminal",
+                                  "receptivity<br>associated<br>luminal")) |>
+        mutate(celltypenew = replace(celltypenew, celltypenew == "regeneration associated luminal",
+                                  "regeneration<br>associated<br>luminal")) |>
+        mutate(celltypenew = replace(celltypenew, celltypenew == "transcriptionally active",
+                                  "trans-<br>criptionally<br>active")), 
     aes(x = timepointexp, y = proportion)) + 
         geom_boxplot(position = position_dodge2(0.75, preserve = "single"), 
                      outlier.size = -1, alpha = 0.5) + 
         geom_jitter(position = position_dodge2(0.75, preserve = "single"), 
                     size = 2, aes(color = donor)) + 
         geom_rect(data = data.frame(
-            celltype = "trans-\ncriptionally\nactive", 
+            celltypenew = "VIM<sup>+</sup>", 
             protocol = rep(c("IVMC", "B_NH"), c(7, 7)),
             timepointexp = c(levels(mprop$timepointexp),
                              levels(mprop$timepointexp)),
@@ -239,7 +246,7 @@ dev.off()
             show.legend = FALSE) +
         scale_fill_manual(values = alpha(bulk_timepoint_colors, 0.5)) + 
         guides(color = guide_legend(override.aes = list(size = 4))) + 
-        facet_grid(celltype ~ protocol,
+        facet_grid(celltypenew ~ protocol,
                    scales = "free") + 
         labs(x = "", y = "Proportion") + 
         scale_y_continuous(expand = expansion(mult = c(0, 0), add = c(0.05, 0.05))) +
@@ -248,7 +255,8 @@ dev.off()
         theme(axis.text.y = element_text(size = 12),
               axis.text.x = element_text(size = 16, angle = 90, hjust = 0.5, vjust = 0.5),
               axis.title = element_text(size = 20),
-              strip.text = element_text(size = 14),
+              strip.text.y = element_markdown(size = 14),
+              strip.text.x = element_markdown(size = 14),
               panel.border = element_rect(fill = NA, colour = "grey20"),
               strip.background = element_rect(fill = "white", color = "black")) + 
         scale_color_manual(values = donor_colors, name = "Donor"))
@@ -270,14 +278,17 @@ dev.off()
 #| fig.height: 5
 
 mpropsub <- mprop |> 
-    filter(celltype %in% c("cycling", "luminal early"),
+    filter(celltypenew %in% c("cycling", "regeneration associated luminal"),
            protocol == "IVMC") |>
-    mutate(celltype = factor(celltype, 
-                             levels = c("luminal early", 
-                                        "cycling")))
+    mutate(celltypenew = factor(celltypenew, 
+                             levels = c("regeneration associated luminal", 
+                                        "cycling")),
+           celltype = factor(celltype, 
+                             levels = c("luminal early", "cycling")))
 sz <- mpropsub |> 
-    group_by(celltype) |>
-    summarize(rng = 0.1 + 1.0 * (max(proportion) - min(proportion)))
+    group_by(celltype, celltypenew) |>
+    summarize(rng = 0.1 + 1.0 * (max(proportion) - min(proportion)), 
+              .groups = "drop")
 (p_box_sub <- ggplot(mpropsub, 
                      aes(x = timepointexp, y = proportion)) + 
         geom_boxplot(position = position_dodge2(0.75, preserve = "single"), 
@@ -285,20 +296,20 @@ sz <- mpropsub |>
         geom_jitter(position = position_dodge2(0.75, preserve = "single"), 
                     size = 2, aes(color = donor)) + 
         geom_rect(data = data.frame(
-            timepointexp = rep(levels(mpropsub$timepointexp), nlevels(mpropsub$celltype)),
-            celltype = factor(rep(levels(mpropsub$celltype), each = nlevels(mpropsub$timepointexp)),
-                              c("luminal early", "cycling")),
-            xmin = rep((1:nlevels(mpropsub$timepointexp)) - 0.35, nlevels(mpropsub$celltype)), 
-            xmax = rep((1:nlevels(mpropsub$timepointexp)) + 0.35, nlevels(mpropsub$celltype)),
-            ymin = rep(rep(-0.05, nlevels(mpropsub$timepointexp)), nlevels(mpropsub$celltype)), 
-            ymax = rep(rep(-0.9, nlevels(mpropsub$timepointexp)), nlevels(mpropsub$celltype))) |>
-                left_join(sz) |> mutate(ymax = ymax * rng / rng[celltype == "cycling"]),
+            timepointexp = rep(levels(mpropsub$timepointexp), nlevels(mpropsub$celltypenew)),
+            celltypenew = factor(rep(levels(mpropsub$celltypenew), each = nlevels(mpropsub$timepointexp)),
+                              c("regeneration associated luminal", "cycling")),
+            xmin = rep((1:nlevels(mpropsub$timepointexp)) - 0.35, nlevels(mpropsub$celltypenew)), 
+            xmax = rep((1:nlevels(mpropsub$timepointexp)) + 0.35, nlevels(mpropsub$celltypenew)),
+            ymin = rep(rep(-0.05, nlevels(mpropsub$timepointexp)), nlevels(mpropsub$celltypenew)), 
+            ymax = rep(rep(-0.9, nlevels(mpropsub$timepointexp)), nlevels(mpropsub$celltypenew))) |>
+                left_join(sz) |> mutate(ymax = ymax * rng / rng[celltypenew == "cycling"]),
             aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
                 fill = timepointexp), inherit.aes = FALSE, 
             show.legend = FALSE) +
         scale_fill_manual(values = alpha(bulk_timepoint_colors, 0.5)) + 
         facet_wrap2(
-            ~ celltype, nrow = 1, 
+            ~ celltypenew, nrow = 1, 
             strip = strip_themed(clip = "off", background_x = elem_list_rect(
                 fill = alpha(tissue_leiden_res0.4_annot_colors[levels(mpropsub$celltype)], 1))), 
             scales = "free_y") + 
@@ -327,8 +338,8 @@ dev.off()
 #| fig.width: 6.75
 #| fig.height: 5
 
-for (ct in c("cycling", "luminal early")) {
-    tmp <- mpropsub |> filter(celltype == ct) |> droplevels()
+for (ct in c("cycling", "regeneration associated luminal")) {
+    tmp <- mpropsub |> filter(celltypenew == ct) |> droplevels()
     (p_box_sub <- ggplot(tmp, aes(x = timepointexp, y = proportion)) + 
             geom_boxplot(position = position_dodge2(0.75, preserve = "single"), 
                          outlier.size = -1, alpha = 0.5) + 
@@ -336,7 +347,7 @@ for (ct in c("cycling", "luminal early")) {
                         size = 2, aes(color = donor)) + 
             geom_rect(data = data.frame(
                 timepointexp = rep(levels(tmp$timepointexp), 1),
-                celltype = rep(ct, each = 7),
+                celltypenew = rep(ct, each = 7),
                 xmin = rep((1:7) - 0.35, 1), xmax = rep((1:7) + 0.35, 1),
                 ymin = rep(rep(-0.05, 7), 1), ymax = rep(rep(-0.9, 7), 1)) |>
                     left_join(sz) |> mutate(ymax = ymax * rng / sz$rng[sz$celltype == "cycling"]),
@@ -345,7 +356,7 @@ for (ct in c("cycling", "luminal early")) {
                 show.legend = FALSE) +
             scale_fill_manual(values = alpha(bulk_timepoint_colors, 0.5)) + 
             facet_wrap2(
-                ~ celltype, nrow = 1, 
+                ~ celltypenew, nrow = 1, 
                 strip = strip_themed(clip = "off", background_x = elem_list_rect(
                     fill = alpha(tissue_leiden_res0.4_annot_colors[levels(tmp$celltype)], 1))), 
                 scales = "free_y") + 

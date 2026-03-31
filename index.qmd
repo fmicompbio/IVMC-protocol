@@ -88,14 +88,14 @@ which is available from:
 
 ## Links to analysis code
 
-All source code is available from GitHub at [https://github.com/fmicompbio/IVMC-protocol](https://github.com/fmicompbio/IVMC-protocol).
+All source code is available from GitHub at [https://github.com/fmicompbio/IVMC-protocol](https://github.com/fmicompbio/IVMC-protocol) and archived on [Zenodo](https://doi.org/10.5281/zenodo.19334152).
 Click on a thumbnail below to jump directly to the corresponding sources.
 
 ### Bulk RNA-seq
 
 |          |                                                                                                  |
 |----------|:----------:|
-| [Data processing, analysis and plotting](bulkRNAseq_timecourse/IVMC_analysis_and_plots_for_paper.html) <br> [Supplementary Tables](https://github.com/fmicompbio/IVMC-protocol/tree/main/bulkRNAseq_timecourse/paper_tables_IVMC/) | [![](bulkRNAseq_timecourse/paper_figures_IVMC/EDFigure_1_d.png){width="4cm"}](bulkRNAseq_timecourse/IVMC_analysis_and_plots_for_paper.html) |  
+| [Data processing, analysis and plotting](bulkRNAseq_timecourse/IVMC_analysis_and_plots_for_paper.html) <br> [Supplementary Tables](https://github.com/fmicompbio/IVMC-protocol/tree/main/bulkRNAseq_timecourse/paper_tables_IVMC/) | [![](bulkRNAseq_timecourse/paper_figures_IVMC/S_Figure_1_E.pdf){width="4cm"}](bulkRNAseq_timecourse/IVMC_analysis_and_plots_for_paper.html) |  
 | [Deconvolution, processing](bulkRNAseq_timecourse/deconvolve_bulk_timecourse.html) |  |  
 | [Deconvolution, paper figures](bulkRNAseq_timecourse/deconvolution_figures_for_paper.html) | [![](bulkRNAseq_timecourse/paper_figures_deconvolution/areaplot_allclusters_avg_donors.png){width="6cm"}](bulkRNAseq_timecourse/deconvolution_figures_for_paper.html) |  
 : {tbl-colwidths="[50,50]"}

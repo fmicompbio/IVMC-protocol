@@ -7,3 +7,4 @@ and generate the figures in
 
 To browse the rendered reports, go to [https://fmicompbio.github.io/IVMC-protocol/](https://fmicompbio.github.io/IVMC-protocol/)
 
+A code snapshot corresponding to the preprint is also archived on [Zenodo](https://doi.org/10.5281/zenodo.19334152)

@@ -13,17 +13,14 @@ format:
 
 This script will generate the following plots:
 
-- Fig 1 d, e, f, g
-- Fig 3 c
-- Fig 5 d
+- Fig 1 D, E, F, G
+- Fig 3 C, G
+- Fig 5 C
 
-- ExtDat Fig 1 b, b, d
-- ExtDat Fig 2 a
-- ExtDat Fig 3 a, d, e
-- ExtDat Fig 4 a
-- ExtDat Fig 5 a, b
-- ExtDat Fig 9 a
-- ExtDat Fig 10 a, b
+- Supplementary Fig 1 C, D, E, F
+- Supplementary Fig 2 A
+- Supplementary Fig 3 A, C, F, G, I
+- Supplementary Fig 5 F
 
 
 # preparation
@@ -84,6 +81,7 @@ metadata
 #| label: colors
 source("../params.R")
 
+
 timepoint_colors <- bulk_timepoint_colors[c("tp0","tp1","tp2","tp3","tp4","tp5","tp6")]
 timepoint_colors.alt_nlb <- bulk_timepoint_colors[c("Pre-diff","P4-diff","H. W. 24h","H. W. 48h","P. B. 24h","E2-diff 24h","E2-diff 48h")]
 
@@ -102,22 +100,6 @@ metadata$description[metadata$timepoint == "tp3"] <- bulk_timepoint_map_sl["tp3"
 metadata$description[metadata$timepoint == "tp4"] <- bulk_timepoint_map_sl["tp4"]
 metadata$description[metadata$timepoint == "tp5"] <- bulk_timepoint_map_sl["tp5"]
 metadata$description[metadata$timepoint == "tp6"] <- bulk_timepoint_map_sl["tp6"]
-# alternative
-metadata$description.alt <- bulk_timepoint_map_mls["tp0"]
-metadata$description.alt[metadata$timepoint == "tp1"] <- bulk_timepoint_map_mls["tp1"]
-metadata$description.alt[metadata$timepoint == "tp2"] <- bulk_timepoint_map_mls["tp2"]
-metadata$description.alt[metadata$timepoint == "tp3"] <- bulk_timepoint_map_mls["tp3"]
-metadata$description.alt[metadata$timepoint == "tp4"] <- bulk_timepoint_map_mls["tp4"]
-metadata$description.alt[metadata$timepoint == "tp5"] <- bulk_timepoint_map_mls["tp5"]
-metadata$description.alt[metadata$timepoint == "tp6"] <- bulk_timepoint_map_mls["tp6"]
-# alternative no line break
-metadata$description.alt_nlb <- gsub("\n", " ", bulk_timepoint_map_mls["tp0"])
-metadata$description.alt_nlb[metadata$timepoint == "tp1"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp1"])
-metadata$description.alt_nlb[metadata$timepoint == "tp2"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp2"])
-metadata$description.alt_nlb[metadata$timepoint == "tp3"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp3"])
-metadata$description.alt_nlb[metadata$timepoint == "tp4"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp4"])
-metadata$description.alt_nlb[metadata$timepoint == "tp5"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp5"])
-metadata$description.alt_nlb[metadata$timepoint == "tp6"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp6"])
 # alternative2
 metadata$description.alt2 <- bulk_timepoint_map_mlm["tp0"]
 metadata$description.alt2[metadata$timepoint == "tp1"] <- bulk_timepoint_map_mlm["tp1"]
@@ -126,6 +108,24 @@ metadata$description.alt2[metadata$timepoint == "tp3"] <- bulk_timepoint_map_mlm
 metadata$description.alt2[metadata$timepoint == "tp4"] <- bulk_timepoint_map_mlm["tp4"]
 metadata$description.alt2[metadata$timepoint == "tp5"] <- bulk_timepoint_map_mlm["tp5"]
 metadata$description.alt2[metadata$timepoint == "tp6"] <- bulk_timepoint_map_mlm["tp6"]
+# alternative no line break
+metadata$description.alt_nlb <- gsub("\n", " ", bulk_timepoint_map_mls["tp0"])
+metadata$description.alt_nlb[metadata$timepoint == "tp1"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp1"])
+metadata$description.alt_nlb[metadata$timepoint == "tp2"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp2"])
+metadata$description.alt_nlb[metadata$timepoint == "tp3"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp3"])
+metadata$description.alt_nlb[metadata$timepoint == "tp4"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp4"])
+metadata$description.alt_nlb[metadata$timepoint == "tp5"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp5"])
+metadata$description.alt_nlb[metadata$timepoint == "tp6"] <- gsub("\n", " ", bulk_timepoint_map_mls["tp6"])
+# alternative two line breaks
+metadata$description.alt_2lb[metadata$timepoint == "tp0"] <- "Pre-diff"
+metadata$description.alt_2lb[metadata$timepoint == "tp1"] <- "P4-diff"
+metadata$description.alt_2lb[metadata$timepoint == "tp2"] <- "Horm\nWithdr\n24h"
+metadata$description.alt_2lb[metadata$timepoint == "tp3"] <- "Horm\nWithdr\n48h"
+metadata$description.alt_2lb[metadata$timepoint == "tp4"] <- "Post-\nbreakdown\n24h"
+metadata$description.alt_2lb[metadata$timepoint == "tp5"] <- "E2-diff\n24h"
+metadata$description.alt_2lb[metadata$timepoint == "tp6"] <- "E2-diff\n48h"
+
+
 # Pre-diff
 metadata$timeline <- "other"
 metadata$timeline[metadata$timepoint == "tp0"] <- "Pre-diff"
@@ -153,7 +153,7 @@ all_counts.bc.cpm <- cpm(all_counts.CBSeq_byD, log=FALSE)
 ```
 
 ## set up DGE
-only one design matrix for Figures: 1f, ED3a, ED3d, ED3e, ED5a
+only one design matrix for Figures: 1F, S3A, S3C, S3F, S3I
 ```{r}
 #| label: DGE
 groups_all <- metadata$timepoint_B_H
@@ -206,12 +206,12 @@ plotQLDisp(fit_all)
 ```
 
 
-# Fig 1 d
+# Fig 1 D
 PCA of batch corrected samples in the IVMC protocol analysed by bulk RNA sequencing, coloured by timepoint (n=6 independent organoid lines). 
 
 ## using B0xx_tp0_NB_NH, B0xx_tp1_NB_H, B0xx_tp2_NB_H, B0xx_tp3_NB_H, B0xx_tp4_B_H, B0xx_tp5_B_H, B0xx_tp6_B_H => "sel_IVMC"
 ```{r}
-#| label: Fig 1 d
+#| label: Fig 1 D
 metadata.sel_IVMC <- mutate(as.data.frame(metadata), sel_IVMC = case_when(
                                 timepoint == "tp0" ~ TRUE,
                                 timepoint == "tp1" & hormones == "H" ~ TRUE,
@@ -255,23 +255,42 @@ plot_object<- biplot(all_counts.CBSeq_byD.sel_IVMC.log.cpm.pca,
 
 plot_object
 
-file_name <- paste(plot_dir,"/Figure_1_d.pdf", sep = "")
+file_name <- paste(plot_dir,"/Figure_1_D.pdf", sep = "")
 pdf(file_name, width = 8, height = 5)
     plot_object
 dev.off()
 ```
 
 
-# Fig 1 e
+# Fig 1 E
 Heatmap depicting batch corrected centered and scaled counts per million (cpm) of selected genes across the IVMC protocol
 ```{r}
-genes <- c("MKI67", "PCNA", "MCM2", "MCM7", "EXO1", "E2F2", "AXIN2", "CDH2", "ALDH1A1", "LGR5","MMP10", "RXRG",
-           "SCGB1D2", "SCGB1D4", "SCGB2A1", "S100P", "PAEP", "PTGS1", "PTGS2", "ENPP3",
-           "SERPINE1", "SERPINA5", "SERPINA6", "KRT17", "KRT16", "NKD2", "CNN1", "FOXJ1", "PIFO",
-           "RSPH1", "TPPP3", "KISS1R", "EGLN3", "HIF3A", "VEGFA", "ALPP", "ALPG", "CHGA",
-           "TNFRSF11B", "TNFRSF12A", "CSF2", "FGF2", "DKK1","SOX9", "FUT4", "PTGES", "TIGAR", "CD44",
-           "PLAUR", "PLAU", "PLAT", "KRT6A", "CXCL8", "CXCL10", "CXCL1", "CXCL11", "IL1RN", "IL23A",
-           "MMP7","OLFM4", "PGR", "ESR1", "GREB1", "COL1A2")
+genes <- c(#proliferation 
+           "MKI67", "PCNA", "MCM2", "MCM7", "E2F2", 
+           #stem cells 
+           "SOX9", "FUT4","AXIN2", "CDH2", "ALDH1A1", "LGR5", 
+           #inflammation 
+           "IL1A","IL1B","PTGS1","PTGS2", 
+           #diff 
+           "SULT1E1", "GATA2","ALPP","KRT17",'IL6','ENPP3','LIF', "HEY1","NKD2", 
+           #secretory 
+           "SCGB1D2", "SCGB1D4", "SCGB2A1","SCGB2A2", "S100P", "PAEP", "SPP1", "TFF1", 
+           #ciliated 
+           "FOXJ1", "PIFO","RSPH1", "TPPP3", 
+           #hypoxia 
+           "EGLN3", "HIF3A","SLC2A1","HK2","VEGFA","ANGPTL4","HIF1A",  
+           #angiogenesis 
+           "ANG", "FGF2", "NOS2", "CXCL8" , "ADAMTS9" , 
+           #fibrinolysis 
+           "THBS1", "PLAUR", "PLAU", "PLAT",  "HAS3", 
+           #immune recruitement 
+           "CSF2", "CXCL1", "CXCL2", "CXCL5", "CXCL6",'IL23A', 
+           #resolution of inflammation
+           "ANXA1","IL1RN", "IL10","IL19", "DMBT1", "BCL2A1", 
+           #wound healing 
+           "ITGA2", "KRT5","KRT6A","KRT13", "EREG", "AREG", "HBEGF","TGFA", 
+           #regeneration 
+           "MMP7", "PGR", "ESR1","AR", "GREB1", "COL1A2", "CCNO","OLFM4","CXCL10","CXCL11") 
 
 # select the samples (using selection vector from Fig 1 d)
 counts.bc.cpm.sel_IVMC <- all_counts.bc.cpm[,sel_IVMC]
@@ -297,20 +316,21 @@ heatmap_selected_genes<- Heatmap(data2plot.bc.sc, cluster_columns=FALSE, cluster
         column_title = "",
         bottom_annotation = HeatmapAnnotation(foo = anno_block(gp = gpar(fill = timepoint_colors, 
                                                                          col = timepoint_colors),
-        labels = unique(metadata.sel_IVMC$description.alt), 
+        labels = unique(metadata.sel_IVMC$description.alt_2lb), 
+        labels_rot = 90,
         labels_gp = gpar(col = heatmap_labels_colors, fontsize = 8))),
         show_column_names = FALSE)
 
 draw(heatmap_selected_genes, heatmap_legend_side="bottom")
 
-file_name <- paste(plot_dir,"/Figure_1_e.pdf", sep = "")
-pdf(file_name,height = 10,width = 8)
+file_name <- paste(plot_dir,"/Figure_1_E.pdf", sep = "")
+pdf(file_name,height = 16,width = 8)
     draw(heatmap_selected_genes, heatmap_legend_side="bottom")
 dev.off()
 ```
 
 
-# Fig 1 f
+# Fig 1 F
 Volcano plot highlighting selected DEGs of organoids in post-breakdown phase of the IVMC protocol (Post-breakdown 24h) compared to organoids treated with hormones but not subjected to breakdown (NB_H; no breakdown hormones)
 
 ## compare "tp4_B_H" versus "tp4_NB_H"
@@ -337,7 +357,7 @@ results_1F <- mutate(tt_1F, sig = case_when(
 sum(results_1F$sig == "Up")
 sum(results_1F$sig == "Down")
 
-file_name.table  <- paste(table_dir,"/Figure_1_f.DEG.tab",sep = "")
+file_name.table  <- paste(table_dir,"/Figure_1_F.DEG.tab",sep = "")
 write.table(results_1F, file_name.table,
             quote = FALSE, row.names = FALSE, sep = "\t")
 ```
@@ -359,7 +379,7 @@ results_1F <- mutate(results_1F, labels = ifelse(genes %in% genes_1F_label, gene
 
 ## volcano plot
 ```{r}
-#| label: Fig 1 f volcano plot
+#| label: Fig 1 F volcano plot
 # set up base plot
 p <- ggplot(data = results_1F, aes(x = logFC, y = -log10(PValue))) +
   geom_point(aes(colour = sig)) +
@@ -395,17 +415,17 @@ p <- ggplot(data = results_1F, aes(x = logFC, y = -log10(PValue))) +
 
 print(p)
 
-file_name <- paste(plot_dir,"/Figure_1_f.pdf", sep = "")
+file_name <- paste(plot_dir,"/Figure_1_F.pdf", sep = "")
 pdf(file_name,height = 8,width = 10)
     p
 dev.off()
 ```
 
 
-# Fig 1 g
+# Fig 1 G
 Biological processes enriched from genes upregulated during post-breakdown phase of the IVMC protocol. 
 ```{r}
-#| label: Fig 1 g
+#| label: Fig 1 G
 # all upregulated genes
 genes_1F_up <- results_1F$genes[results_1F$sig == "Up"]
 
@@ -421,7 +441,7 @@ gostres_results.BP <- gostres_results.BP[order(gostres_results.BP$neg_log10Pvalu
 
 head(gostres_results.BP[,c("term_name","neg_log10Pvalue")])
 
-file_name.table  <- paste(table_dir,"/Figure_1_g.tab",sep = "")
+file_name.table  <- paste(table_dir,"/Figure_1_G.tab",sep = "")
 write.table(gostres_results.BP[,c("term_name","neg_log10Pvalue")], file_name.table,
             quote = FALSE, row.names = FALSE, sep = "\t")
 
@@ -467,21 +487,21 @@ p <- ggplot(data2plot, aes(x=neg_log10Pvalue,y=term_name)) +
 
 print(p)    
     
-file_name <- paste(plot_dir,"/Figure_1_g.pdf", sep = "")
+file_name <- paste(plot_dir,"/Figure_1_G.pdf", sep = "")
 pdf(file_name,height = 8,width = 12)
     print(p)
 dev.off() 
 ```
 
 
-# Fig 3 c
+# Fig 3 C
 Line plots depicting cpm of WNT7A in organoids undergoing the IVMC protocol (solid lines) and organoids not subjected to breakdown (NB_H) (dotted lines), analysed with bulk RNAseq. 
 
 ## using B0xx_tp0_NB_NH, B0xx_tp1_NB_H, B0xx_tp2_NB_H, B0xx_tp3_NB_H, B0xx_tp4_B_H, B0xx_tp5_B_H, B0xx_tp6_B_H this has been "sel_IVMC"
 ## plus  B0xx_tp3_NB_H, B0xx_tp4_NB_H, B0xx_tp5_NB_H, B0xx_tp6_NB_H  =>  "sel_IVMC_NB"
 
 ```{r}
-#| label: Fig 3 c selection
+#| label: Fig 3 C selection
 # make a new selection (the ‘no passaging’)
 metadata.sel_IVMC_NB <- mutate(as.data.frame(metadata), sel_IVMC_NB = case_when(
                                 timepoint == "tp3" & hormones == "H" ~ TRUE,
@@ -501,7 +521,7 @@ counts.bc.cpm.sel_IVMC_NB <- all_counts.bc.cpm[,sel_IVMC_NB]
 
 
 ```{r}
-#| label: Fig 3 c
+#| label: Fig 3 C
 metadata.sel_IVMC$general_timepoint <- factor(metadata.sel_IVMC$description.alt2, levels = (unique(metadata.sel_IVMC$description.alt2))) 
 metadata.sel_IVMC_NB$general_timepoint <- factor(metadata.sel_IVMC_NB$description.alt2, levels = (unique(metadata.sel_IVMC_NB$description.alt2)))
 
@@ -536,7 +556,7 @@ for (gene in genes_for_line_plots ) {
           theme(legend.title=element_text(size=22)) 
     print(p)
 
-    file_name <- paste(plot_dir,"/Figure_3_c__",gene,".pdf", sep = "")
+    file_name <- paste(plot_dir,"/Figure_3_C__",gene,".pdf", sep = "")
     pdf(file_name, height = 8,width = 10)
         print(p)
     dev.off()
@@ -544,883 +564,12 @@ for (gene in genes_for_line_plots ) {
 ```
 
 
-# Fig 5 d
-
-## using B0xx_tp0_NB_NH, B0xx_tp1_NB_H, B0xx_tp2_NB_H, B0xx_tp3_NB_H, B0xx_tp4_B_H, B0xx_tp5_B_H, B0xx_tp6_B_H this has been "sel_IVMC"
-Line plots showing the (batch coreccted) mean expression levels (in cpm) of ANXA1 and CXCL8 across different timepoints in the IVMC protocol. The red line represents the mean cpm values across donors, while the shaded blue region indicates the standard deviation around the mean. 
-```{r}
-#| label: Fig 5 D
-genes_for_line_plots <- c("ANXA1","CXCL8")
-
-for (gene in genes_for_line_plots ) {
-    expr.values.sel_IVMC <- counts.bc.cpm.sel_IVMC[gene,]
-
-    # data to plot
-    df2plot <- data.frame(samples=colnames(counts.bc.cpm.sel_IVMC), cpm=expr.values.sel_IVMC)
-
-    # combine with metadata
-    df2plot_withMetadata <- merge(df2plot, metadata.sel_IVMC, by.x = "samples", by.y = "sample", sort = FALSE)
- 
-    # aggregate
-    df2plot_aggregate <- data.frame(general_timepoint = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,1],
-                                    cpm_mean = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2],
-                                    cpm_mean_plus_sd = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2] +
-                                                       aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=sd)[,2],
-                                    cpm_mean_minus_sd = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2] -
-                                                        aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=sd)[,2] )
-    
-    p <- ggplot(df2plot_aggregate, aes(y=cpm_mean, x=general_timepoint, group = 1)) + 
-          geom_line(color = "red") +
-          geom_point(color = "red", size = 2) +
-          geom_ribbon(aes(x = general_timepoint, ymax = cpm_mean_plus_sd, ymin = cpm_mean_minus_sd), 
-                      alpha = 0.3, fill = "lightblue") +
-          ggtitle(bquote(italic(.(gene)))) +
-          ylab("cpm (Mean ± SD across donors)") +
-          xlab("") +
-          theme_bw() +
-          theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-          theme(axis.line = element_line(colour = "black")) + 
-          theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 24)) +
-          theme(axis.text.y = element_text(size = 22)) +
-          theme(axis.title.y = element_text(size = 24)) +
-          theme(panel.border = element_blank())
-    print(p)
-    
-    file_name <- paste(plot_dir,"/Figure_5_d__",gene,".pdf", sep = "")
-    pdf(file_name, height = 8,width = 10)
-        print(p)
-    dev.off()
-}
-```
-
-
-# Extended Data Fig 1 b
-PCA of all organoid samples from all conditions colored by the breakdown variable. 
-```{r}
-#| label: ED Fig 1 b
-colnames(metadata)[c(4,5,11)] <- c("Breakdown","Hormones","Timeline")
-all_counts.CBSeq_byD.log.cpm.pca <- pca(cpm(all_counts.CBSeq_byD, log=TRUE), 
-                                        metadata = metadata, removeVar = 0.1)
-
-xlab = paste("PC1, ",round(all_counts.CBSeq_byD.log.cpm.pca$variance["PC1"],digits = 2),"% variance",sep = "")
-ylab = paste("PC2, ",round(all_counts.CBSeq_byD.log.cpm.pca$variance["PC2"],digits = 2),"% variance",sep = "")
-
-plot_object<- biplot(all_counts.CBSeq_byD.log.cpm.pca, 
-       colby = 'Breakdown',
-       colkey = breakdown_colors,
-       shape = 'Timeline',
-       pointSize = 7,
-       lab = NULL,
-       legendPosition = 'bottom',
-       gridlines.major = FALSE,
-       gridlines.minor = FALSE,
-       xlab = xlab,
-       ylab = ylab,
-       title = "")
-
-plot_object
-
-file_name <- paste(plot_dir,"/EDFigure_1_b.pdf", sep = "")
-    pdf(file_name, width = 8, height = 7.5)
-plot_object
-dev.off()
-```
-
-# Extended Data Fig 1 c
-PCA of all organoid samples from all conditions colored by the hormonal treatment variable.
-```{r}
-#| label: ED Fig 1 c
-plot_object<- biplot(all_counts.CBSeq_byD.log.cpm.pca, 
-       colby = 'Hormones',
-       colkey = hormones_colors,
-       shape = 'Timeline',
-       pointSize = 7,
-       lab = NULL,
-       legendPosition = 'bottom',
-       gridlines.major = FALSE,
-       gridlines.minor = FALSE,
-       xlab = xlab,
-       ylab = ylab,
-       title = "")
-
-plot_object
-
-file_name <- paste(plot_dir,"/EDFigure_1_c.pdf", sep = "")
-    pdf(file_name, width = 8, height = 7.5)
-plot_object
-dev.off()
-
-colnames(metadata)[c(4,5,11)] <- c("breakdown","hormones","timeline")
-```
-
-
-# Extended Data Fig 1 d
-Hierarchically clustered heatmap displaying the top 50 differentially upregulated genes from pairwise comparisons of each timepoint against all timepoints.
-
-## using B0xx_tp0_NB_NH, B0xx_tp1_NB_H, B0xx_tp2_NB_H, B0xx_tp3_NB_H, B0xx_tp4_B_H, B0xx_tp5_B_H, B0xx_tp6_B_H this has been "sel_IVMC"
-
-### DGE (specific for each time point) using the raw data
-```{r}
-#| label: ED Fig 1 d define groups
-groups <- metadata.sel_IVMC$timepoint_B_H
-donor <- metadata.sel_IVMC$donor
-```
-setting up DGEList
-```{r}
-#| label: ED Fig 1 d prep DGE 
-counts.sel_IVMC.asDGEList <- DGEList(counts=counts.sel_IVMC,
-                                     genes=rownames(counts.sel_IVMC), 
-                                     group = groups )
-
-counts.sel_IVMC.asDGEList
-
-# filter lowly expressed genes 
-counts.cpm.sel_IVMC <- all_counts.cpm[,metadata.sel_IVMC$sample]
-counts.sel_IVMC.asDGEList <- counts.sel_IVMC.asDGEList[ rowSums(counts.cpm.sel_IVMC > mincpm) >= minsamples, , keep.lib.size=FALSE] 
-dim(counts.sel_IVMC.asDGEList)
-
-# normalization
-counts.sel_IVMC.asDGEList <- calcNormFactors(counts.sel_IVMC.asDGEList)   # same as normLibSizes(y)
-head(counts.sel_IVMC.asDGEList$samples)
-
-plotMDS(counts.sel_IVMC.asDGEList)
-```
-
-### setting up the design matrix
-```{r}
-#| label: ED Fig 1 d design matrix
-# use model.matrix
-design <- model.matrix(~donor +group, data = counts.sel_IVMC.asDGEList$samples)
-colnames(design)[2:12] <- substring(colnames(design)[2:12],6,14)
-design
-```
-
-### dispersion estimation and fitting
-```{r}
-#| label: ED Fig 1 d dispersion estimation and fitting
-# dispersion estimation
-counts.sel_IVMC.asDGEList <- estimateDisp(counts.sel_IVMC.asDGEList, design)
-counts.sel_IVMC.asDGEList$common.dispersion
-
-plotBCV(counts.sel_IVMC.asDGEList)
-
-# fitting
-fit <- glmQLFit(counts.sel_IVMC.asDGEList, design)
-
-plotQLDisp(fit)
-```
-
-### 0) "Pre-diff" (tp0_NB_NH) specific
-```{r}
-#| label: ED Fig 1 d DGE tp0
-contrast_0 <- 1/6 * c(- (colnames(design) == "tp1_NB_H") -  (colnames(design) == "tp2_NB_H") - (colnames(design) == "tp3_NB_H") 
-                      - (colnames(design) == "tp4_B_H") - (colnames(design) == "tp5_B_H") - (colnames(design) == "tp6_B_H") )
-contrast_0
-qlf_0 <- glmQLFTest(fit, contrast = contrast_0)
-tt_0 <- as.data.frame(topTags(qlf_0,n=nrow(counts.sel_IVMC.asDGEList)))
-head(tt_0)
-
-file_name.table <- paste(table_dir,"/EDFigure_1_d.tp0_TopTable.tab",sep = "")
-write.table(tt_0, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-### 1) "P4-diff" (tp1_NB_H) specific
-```{r}
-#| label: ED Fig 1 d DGE tp1
-contrast_1 <- c((colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
-                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
-contrast_1
-qlf_1 <- glmQLFTest(fit, contrast = contrast_1)
-tt_1 <- as.data.frame(topTags(qlf_1,n=nrow(counts.sel_IVMC.asDGEList)))
-head(tt_1)
-
-file_name.table <- paste(table_dir,"/EDFigure_1_d.tp1_TopTable.tab",sep = "")
-write.table(tt_1, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-### 2) "Horm Withdr 24h" (tp2_NB_H) specific
-```{r}
-#| label: ED Fig 1 d DGE tp2
-contrast_2 <-  c((colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
-                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
-contrast_2
-qlf_2 <- glmQLFTest(fit, contrast = contrast_2)
-tt_2 <- as.data.frame(topTags(qlf_2,n=nrow(counts.sel_IVMC.asDGEList)))
-head(tt_2)
-
-file_name.table <- paste(table_dir,"/EDFigure_1_d.tp2_TopTable.tab",sep = "")
-write.table(tt_2, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-### 3) "Horm Withdr 48h" (tp3_NB_H) specific
-```{r}
-#| label: ED Fig 1 d DGE tp3
-contrast_3 <-  c((colnames(design) == "tp3_NB_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") 
-                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
-contrast_3
-qlf_3 <- glmQLFTest(fit, contrast = contrast_3)
-tt_3 <- as.data.frame(topTags(qlf_3,n=nrow(counts.sel_IVMC.asDGEList)))
-head(tt_3)
-
-file_name.table <- paste(table_dir,"/EDFigure_1_d.tp3_TopTable.tab",sep = "")
-write.table(tt_3, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-### 4) "Post-breakdown 24h" (tp4_B_H) specific
-```{r}
-#| label: ED Fig 1 d DGE tp4
-contrast_4 <-  c((colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
-                                - 1/6* (colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
-contrast_4
-qlf_4 <- glmQLFTest(fit, contrast = contrast_4)
-tt_4 <- as.data.frame(topTags(qlf_4,n=nrow(counts.sel_IVMC.asDGEList)))
-head(tt_4)
-
-file_name.table <- paste(table_dir,"/EDFigure_1_d.tp4_TopTable.tab",sep = "")
-write.table(tt_4, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-### 5) "E2-diff 24h" (tp5_B_H) specific
-```{r}
-#| label: ED Fig 1 d DGE tp5
-contrast_5 <- c((colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
-                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
-qlf_5 <- glmQLFTest(fit, contrast = contrast_5)
-contrast_5
-tt_5 <- as.data.frame(topTags(qlf_5,n=nrow(counts.sel_IVMC.asDGEList)))
-head(tt_5)
-
-file_name.table <- paste(table_dir,"/EDFigure_1_d.tp5_TopTable.tab",sep = "")
-write.table(tt_5, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-### 6) "E2 diff 48h" (tp6_B_H) specific
-```{r}
-#| label: ED Fig 1 d DGE tp6
-contrast_6 <-  c((colnames(design) == "tp6_B_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
-                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp5_B_H") )
-qlf_6 <- glmQLFTest(fit, contrast = contrast_6)
-contrast_6
-tt_6 <- as.data.frame(topTags(qlf_6,n=nrow(counts.sel_IVMC.asDGEList)))
-head(tt_6)
-
-file_name.table <- paste(table_dir,"/EDFigure_1_d.tp6_TopTable.tab",sep = "")
-write.table(tt_6, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-## gene list Heatmaps
-```{r}
-#| label: ED Fig 1 d heatmap
-# top 50 genes with logFC > 2
-genes_top50up_all <- c(tt_0[tt_0$logFC > 2,]$genes[1:50],
-                       tt_1[tt_1$logFC > 2,]$genes[1:50],
-                       tt_2[tt_2$logFC > 2,]$genes[1:50],
-                       tt_3[tt_3$logFC > 2,]$genes[1:50],
-                       tt_4[tt_4$logFC > 2,]$genes[1:50],
-                       tt_5[tt_5$logFC > 2,]$genes[1:50],
-                       tt_6[tt_6$logFC > 2,]$genes[1:50])
-
-# define data to plot
-data2plot <- data.frame()
-
-for (gene in genes_top50up_all) {
-    data2plot <- rbind(data2plot, counts.bc.cpm.sel_IVMC[rownames(counts.bc.cpm.sel_IVMC) == gene,])
-}
-# rownames(data2plot) <- genes
-colnames(data2plot) <- colnames(counts.bc.cpm.sel_IVMC)
-
-# center and scale
-data2plot.sc <- t(scale(t(data2plot)))
-
-h <- Heatmap(data2plot.sc, cluster_columns=FALSE, cluster_rows=FALSE, 
-        heatmap_legend_param = list(title = "cpm\n(centered\nscaled)", color_bar = "continuous"),
-        column_split = c(rep(0, 6),rep(1, 6),rep(2,6),rep(3, 6),rep(4,6),rep(5, 6),rep(6,6)),
-        row_split = c(rep(0,50),rep(1,50),rep(2,50),rep(3,50),rep(4,50),rep(5,50),rep(6,50)),
-        column_title = " ",
-        bottom_annotation = HeatmapAnnotation(foo = anno_block(gp = gpar(fill = timepoint_colors, 
-                                                                         col = timepoint_colors),
-                                                               labels = unique(metadata.sel_IVMC$description.alt2), 
-                                                               labels_gp = gpar(col = heatmap_labels_colors, 
-                                                                                fontsize = 6))),
-        show_column_names = FALSE,
-        row_title = NULL)
-
-print(h)
-
-file_name <- paste(plot_dir,"/EDFigure_1_d.pdf",sep = "")
-pdf(file_name, width = 6, height = 7)    
-    print(h)
-dev.off()
-png(sub("\\.pdf$", ".png", file_name), width = 6, height = 7,
-    unit = "in", res = 400)    
-    print(h)
-dev.off()
-```
-
-
-# Extended Data Fig 2 a
-
-## using B0xx_tp0_NB_NH, B0xx_tp1_NB_H, B0xx_tp2_NB_H, B0xx_tp3_NB_H, B0xx_tp4_B_H, B0xx_tp5_B_H, B0xx_tp6_B_H this has been "sel_IVMC"
-Line plots showing the (batch coreccted) mean expression levels (in cpm) of genes reported in literature to mark stem cells of the endometrial epithelium (MKI67, ALDH1A1, CDH2) across different timepoints in the IVMC protocol. The red line represents the mean cpm values across donors, while the shaded blue region indicates the standard deviation around the mean. 
-```{r}
-#| label: ED Fig 2 a
-genes_for_line_plots <- c("MKI67","ALDH1A1","CDH2")
-
-for (gene in genes_for_line_plots ) {
-    expr.values.sel_IVMC <- counts.bc.cpm.sel_IVMC[gene,]
-
-    # data to plot
-    df2plot <- data.frame(samples=colnames(counts.bc.cpm.sel_IVMC), cpm=expr.values.sel_IVMC)
-
-    # combine with metadata
-    df2plot_withMetadata <- merge(df2plot, metadata.sel_IVMC, by.x = "samples", by.y = "sample", sort = FALSE)
- 
-    # aggregate
-    df2plot_aggregate <- data.frame(general_timepoint = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,1],
-                                    cpm_mean = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2],
-                                    cpm_mean_plus_sd = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2] +
-                                                       aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=sd)[,2],
-                                    cpm_mean_minus_sd = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2] -
-                                                        aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=sd)[,2] )
-    
-
-    p <- ggplot(df2plot_aggregate, aes(y=cpm_mean, x=general_timepoint, group = 1)) + 
-          geom_line(color = "red") +
-          geom_point(color = "red", size = 2) +
-          geom_ribbon(aes(x = general_timepoint, ymax = cpm_mean_plus_sd, ymin = cpm_mean_minus_sd), 
-                      alpha = 0.3, fill = "lightblue") +
-          ggtitle(bquote(italic(.(gene)))) +
-          ylab("cpm (Mean ± SD across donors)") +
-          xlab("") +
-          theme_bw() +
-          theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-          theme(axis.line = element_line(colour = "black")) + 
-          theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 24)) +
-          theme(axis.text.y = element_text(size = 22)) +
-          theme(axis.title.y = element_text(size = 24)) +
-          theme(panel.border = element_blank())
-    print(p)
-    
-    file_name <- paste(plot_dir,"/EDFigure_2_a__",gene,".pdf", sep = "")
-    pdf(file_name, height = 8,width = 10)
-        print(p)
-    dev.off()
-}
-```
-
-
-# Extended Data Fig 3 a
-Volcano plot highlighting selected from comparison between organoids at P4-diff phase of the IVMC protocol to organoids not treated with hormones but undergone breakdown (B_NH) at the same timepoint. 
-
-## define contrast
-```{r}
-#| label: EDFig 3 a DGE contrast
-(colnames(design_all) == "tp1_NB_H") - (colnames(design_all) == "tp1_NB_NH")
-qlf_3A<- glmQLFTest(fit_all, contrast = as.vector((colnames(design_all) == "tp1_NB_H") - (colnames(design_all) == "tp1_NB_NH")))
-tt_3A <- as.data.frame(topTags(qlf_3A,n=nrow(counts.all.asDGEList)))
-head(tt_3A)
-```
-
-## define cut offs
-FDR < 0.05 & logFC > 2.0 ~ up; 
-FDR < 0.05 & logFC < -2.0 ~ down
-```{r}
-#| label: EDFig 3 a DGE define cut offs
-# create significant (sig) column
-results_3A <- mutate(tt_3A, sig = case_when(
-                                FDR < 0.05 & logFC > 2.0 ~ up,
-                                FDR < 0.05 & logFC < -2.0 ~ down,
-                                TRUE ~ notsig))
-sum(results_3A$sig == "Up")
-sum(results_3A$sig == "Down")
-
-file_name.table  <- paste(table_dir,"/EDFigure_3_A.DEG.tab",sep = "")
-write.table(results_3A, file_name.table,
-            quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-## define genes to label 
-```{r}
-#| label: EDFig 3 a DGE define display genes
-genes_3A_up_label <- c("SULT1E1", "GATA2", "SCGB1D4", "ALPG", "PAEP", "SCGB1D2", 
-                       "SERPINA5", "S100P", "SCGB2A2", "SCGB2A1", "PTGS2", "ENPP3", 
-                       "KRT17", "TPPP3", "IL1A")
-genes_3A_down_label <- c("NCAM1", "SHISA3", "KRT4", "FZD10", "SSTR1", "SCTR", 
-                         "FAM20A", "PTPRG", "RXRG", "MMP10", "FN1", "S100A9", 
-                         "MMP3", "MMP1", "ASCL2")
-genes_3A_label <- c(genes_3A_up_label,genes_3A_down_label)
-
-# add gene labels
-results_3A <- mutate(results_3A, labels = ifelse(genes %in% genes_3A_label, genes, ""))
-```
-
-## volcano plot
-```{r}
-#| label: EDFig 3 a volcano plot
-# set up base plot
-p <- ggplot(data = results_3A, aes(x = logFC, y = -log10(PValue))) +
-  geom_point(aes(colour = sig)) +
-    xlim(-12, +12) +
-  scale_color_manual(name = "|log2FC| > 2, FDR < 0.05", values = volcano_colors) +
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(),
-    axis.line = element_line(colour = "black"),
-    legend.key = element_blank(),
-    legend.position = "bottom",
-    
-    # increase text sizes
-    axis.text = element_text(size = 18), 
-    axis.title = element_text(size = 22),  
-    plot.title = element_text(size = 26, hjust = 0.5), 
-    legend.title = element_text(size = 20), 
-    legend.text = element_text(size = 20) 
-  ) +
-  xlab('log2 FC') +
-  ylab('-log10 p-value') +
-  guides(color = guide_legend(override.aes = list(size=5))) +
-  
-  # add gene labels
-  geom_text_repel(data = filter(results_3A, labels != ""), 
-                         aes(label = labels),
-                         min.segment.length = 0,
-                         max.overlaps = Inf,
-                         size = 7,  
-                         show.legend = FALSE) +
-  ggtitle('P4-diff (IVMC vs NH)')
-
-print(p)
-
-file_name <- paste(plot_dir,"/EDFigure_3_a.pdf", sep = "")
-pdf(file_name,height = 8,width = 10)
-    p
-dev.off()
-```
-
-
-# Extended Data Fig 3 d
-Volcano plot highlighting selected DEGs from comparison between organoids of the IVMC protocol at P4-diff phase to organoids at hormonal withdrawal 48 h. 
-
-## define contrast
-```{r}
-#| label: EDFig 3 d DGE contrast
-(colnames(design_all) == "tp3_NB_H") - (colnames(design_all) == "tp1_NB_H")  - ((colnames(design_all) == "tp3_NB_NH") - (colnames(design_all) == "tp1_NB_NH") )
-qlf_3D<- glmQLFTest(fit_all, contrast = as.vector( (colnames(design_all) == "tp3_NB_H") - (colnames(design_all) == "tp1_NB_H")  - ((colnames(design_all) == "tp3_NB_NH") - (colnames(design_all) == "tp1_NB_NH") ) ) )
-tt_3D <- as.data.frame(topTags(qlf_3D,n=nrow(counts.all.asDGEList)))
-head(tt_3D)
-```
-
-## define cut offs
-FDR < 0.05 & logFC > 2.0 ~ up; 
-FDR < 0.05 & logFC < -2.0 ~ down
-```{r}
-#| label: EDFig 3 d DGE define cut offs
-# create significant (sig) column
-results_3D <- mutate(tt_3D, sig = case_when(
-                                FDR < 0.05 & logFC > 2.0 ~ up,
-                                FDR < 0.05 & logFC < -2.0 ~ down,
-                                TRUE ~ notsig))
-sum(results_3D$sig == "Up")
-sum(results_3D$sig == "Down")
-
-file_name.table  <- paste(table_dir,"/EDFigure_3_d.DEG.tab",sep = "")
-write.table(results_3D, file_name.table,
-            quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-## define genes to label 
-```{r}
-#| label: EDFig 3 d DGE define display genes
-genes_3D_up_label <- c("HMGA2-AS1", "SIGLEC15", "MEOX1", "VTCN1", "RXRG", "MT1E", 
-                       "MMP10", "CASP1", "MT1G", "SSTR1")
-genes_3D_down_label <- c("PHACTR3", "KRT16", "SERPINA3", "KRT17", "SFRP1", "NOTUM", 
-                         "S100P", "CXCL8", "PAEP", "PLAUR", "AREG")
-genes_3D_label <- c(genes_3D_up_label,genes_3D_down_label)
-
-# add gene labels
-results_3D <- mutate(results_3D, labels = ifelse(genes %in% genes_3D_label, genes, ""))
-```
-
-## volcano plot
-```{r}
-#| label: EDFig 3 d volcano plot
-# set up base plot
-p <- ggplot(data = results_3D, aes(x = logFC, y = -log10(PValue))) +
-  geom_point(aes(colour = sig)) +
-    xlim(-12, +12) +
-  scale_color_manual(name = "|log2FC| > 2, FDR < 0.05", values = volcano_colors) +
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(),
-    axis.line = element_line(colour = "black"),
-    legend.key = element_blank(),
-    legend.position = "bottom",
-    
-    # increase text sizes
-    axis.text = element_text(size = 18), 
-    axis.title = element_text(size = 22),  
-    plot.title = element_text(size = 26, hjust = 0.5), 
-    legend.title = element_text(size = 20), 
-    legend.text = element_text(size = 20) 
-  ) +
-  xlab('log2 FC') +
-  ylab('-log10 p-value') +
-  guides(color = guide_legend(override.aes = list(size=5))) +
-  
-  # add gene labels 4
-  geom_text_repel(data = filter(results_3D, labels != ""), 
-                         aes(label = labels),
-                         min.segment.length = 0,
-                         max.overlaps = Inf,
-                         size = 7,  
-                         show.legend = FALSE) +
-  ggtitle('Horm.Withdr. 48h vs P4-diff (controlled for hormone)')
-
-print(p)
-
-file_name <- paste(plot_dir,"/EDFigure_3_d.pdf", sep = "")
-pdf(file_name,height = 8,width = 10)
-    p
-dev.off()
-```
-
-
-# Extended Data Fig 3 e
-Volcano plot highlighting selected DEGs from comparison of organoids between E2-diff 48h phase of the IVMC protocol to organoids not treated with hormones but undergone breakdown (B_NH) at the same timepoint. 
-
-## define contrast
-```{r}
-#| label: EDFig 3 e DGE contrast
-(colnames(design_all) == "tp6_B_H") - (colnames(design_all) == "tp6_B_NH")
-qlf_3E<- glmQLFTest(fit_all, contrast = as.vector((colnames(design_all) == "tp6_B_H") - (colnames(design_all) == "tp6_B_NH")))
-tt_3E <- as.data.frame(topTags(qlf_3E,n=nrow(counts.all.asDGEList)))
-head(tt_3E)
-```
-
-## define cut offs
-FDR < 0.05 & logFC > 2.0 ~ up; 
-FDR < 0.05 & logFC < -2.0 ~ down
-```{r}
-#| label: EDFig 3 e DGE define cut offs
-# create significant (sig) column
-results_3E <- mutate(tt_3E, sig = case_when(
-                                FDR < 0.05 & logFC > 2.0 ~ up,
-                                FDR < 0.05 & logFC < -2.0 ~ down,
-                                TRUE ~ notsig))
-sum(results_3E$sig == "Up")
-sum(results_3E$sig == "Down")
-
-file_name.table  <- paste(table_dir,"/EDFigure_3_e.DEG.tab",sep = "")
-write.table(results_3E, file_name.table,
-            quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-## define genes to label 
-```{r}
-#| label: EDFig 3 e DGE define display genes
-genes_3E_up_label <- c("OLFM4", "COL1A2", "PGR", "CDC20B", "GMNC", "GREB1", "GATA5", "CCN5")
-genes_3E_down_label <- c("KRT5", "MMP1", "PAX2", "FRZB", "MMP10", "SHISA3", "PLXNA4", "SSTR1")
-genes_3E_label <- c(genes_3E_up_label,genes_3E_down_label)
- 
-# add gene labels
-results_3E <- mutate(results_3E, labels = ifelse(genes %in% genes_3E_label, genes, ""))
-```
-
-## volcano plot
-```{r}
-#| label: EDFig 3 e volcano plot
-# set up base plot
-p <- ggplot(data = results_3E, aes(x = logFC, y = -log10(PValue))) +
-  geom_point(aes(colour = sig)) +
-    xlim(-12, +12) +
-  scale_color_manual(name = "|log2FC| > 2, FDR < 0.05", values = volcano_colors) +
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(),
-    axis.line = element_line(colour = "black"),
-    legend.key = element_blank(),
-    legend.position = "bottom",
-    
-    # increase text sizes
-    axis.text = element_text(size = 18), 
-    axis.title = element_text(size = 22),  
-    plot.title = element_text(size = 26, hjust = 0.5), 
-    legend.title = element_text(size = 20), 
-    legend.text = element_text(size = 20) 
-  ) +
-  xlab('log2 FC') +
-  ylab('-log10 p-value') +
-  guides(color = guide_legend(override.aes = list(size=5))) +
-  
-  # add gene labels 4
-  geom_text_repel(data = filter(results_3E, labels != ""), 
-                         aes(label = labels),
-                         min.segment.length = 0,
-                         max.overlaps = Inf,
-                         size = 7,  
-                         show.legend = FALSE) +
-  ggtitle('E2-diff 48h (IVMC vs B_NH)')
-
-print(p)
-
-file_name <- paste(plot_dir,"/EDFigure_3_e.pdf", sep = "")
-pdf(file_name,height = 8,width = 10)
-    p
-dev.off()
-```
-
-
-# Extended Data Fig 4 a
-
-## using B0xx_tp0_NB_NH, B0xx_tp1_NB_H, B0xx_tp2_NB_H, B0xx_tp3_NB_H, B0xx_tp4_B_H, B0xx_tp5_B_H, B0xx_tp6_B_H this has been "sel_IVMC"
-Line plots showing the mean expression levels (in cpm) of SOX9, FUT4, THBS1 and KRT13 genes across different timepoints in the IVMC protocol. The red line represents the mean cpm values across donors, while the shaded blue region indicates the standard deviation around the mean. 
-```{r}
-#| label: ED Fig 4 a
-genes_for_line_plots <- c("SOX9", "FUT4","THBS1", "KRT13")
-
-for (gene in genes_for_line_plots ) {
-    expr.values.sel_IVMC <- counts.bc.cpm.sel_IVMC[gene,]
-
-    # data to plot
-    df2plot <- data.frame(samples=colnames(counts.bc.cpm.sel_IVMC), cpm=expr.values.sel_IVMC)
-
-    # combine with metadata
-    df2plot_withMetadata <- merge(df2plot, metadata.sel_IVMC, by.x = "samples", by.y = "sample", sort = FALSE)
- 
-    # aggregate
-    df2plot_aggregate <- data.frame(general_timepoint = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,1],
-                                    cpm_mean = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2],
-                                    cpm_mean_plus_sd = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2] +
-                                                       aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=sd)[,2],
-                                    cpm_mean_minus_sd = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2] -
-                                                        aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=sd)[,2] )
-    
-
-    p <- ggplot(df2plot_aggregate, aes(y=cpm_mean, x=general_timepoint, group = 1)) + 
-          geom_line(color = "red") +
-          geom_point(color = "red", size = 2) +
-          geom_ribbon(aes(x = general_timepoint, ymax = cpm_mean_plus_sd, ymin = cpm_mean_minus_sd), 
-                      alpha = 0.3, fill = "lightblue") +
-          ggtitle(bquote(italic(.(gene))) ) +
-          ylab("cpm (Mean ± SD across donors)") +
-          xlab("") +
-          theme_bw() +
-          theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-          theme(axis.line = element_line(colour = "black")) + 
-          theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 24)) +
-          theme(axis.text.y = element_text(size = 22)) +
-          theme(axis.title.y = element_text(size = 24)) +
-          theme(panel.border = element_blank())
-    print(p)
-    
-    file_name <- paste(plot_dir,"/EDFigure_4_a__",gene,".pdf", sep = "")
-    pdf(file_name, height = 8,width = 10)
-        print(p)
-    dev.off()
-}
-```
-
-
-# Extended Data Fig 5 a
-Volcano plot highlighting selected DEGs comparing EOs at Post-breakdown 24h phase of the IVMC protocol to control EOs (B_NH) at the same timepoint. 
-
-```{r}
-#| label: EDFig 5 a DGE contrast
-(colnames(design_all) == "tp4_B_H") - (colnames(design_all) == "tp4_B_NH")
-qlf_5A<- glmQLFTest(fit_all, contrast = as.vector((colnames(design_all) == "tp4_B_H") - (colnames(design_all) == "tp4_B_NH")))
-tt_5A <- as.data.frame(topTags(qlf_5A,n=nrow(counts.all.asDGEList)))
-head(tt_5A)
-```
-
-## define cut offs
-FDR < 0.05 & logFC > 2.0 ~ up; 
-FDR < 0.05 & logFC < -2.0 ~ down
-```{r}
-#| label: EDFig 5 a DGE define cut offs
-# create significant (sig) column
-results_5A <- mutate(tt_5A, sig = case_when(
-                                FDR < 0.05 & logFC > 2.0 ~ up,
-                                FDR < 0.05 & logFC < -2.0 ~ down,
-                                TRUE ~ notsig))
-sum(results_5A$sig == "Up")
-sum(results_5A$sig == "Down")
-
-file_name.table  <- paste(table_dir,"/EDFigure_5_a.DEG.tab",sep = "")
-write.table(results_5A, file_name.table,
-            quote = FALSE, row.names = FALSE, sep = "\t")
-```
-
-## define genes to label 
-```{r}
-#| label: EDFig 5 a DGE define display genes
-genes_5A_up_label <- c("DUOXA2", "DUOX2", " IL19", "SAA2", "SAA1", "SAA4", "TREM1", 
-                       "CCR7", "MUC13", "IL10", "CCL20", "IRAK3", "PF4V1")
-genes_5A_down_label <- c("FBN2", "CALCA", "SHISA3", "KRT4", "CYP1A2", "NGFR", "KRT5",
-                         "ESRRB", "SSTR1", "PLXNA4", "FRZB")
-genes_5A_label <- c(genes_5A_up_label,genes_5A_down_label)
-
-# add gene labels
-results_5A <- mutate(results_5A, labels = ifelse(genes %in% genes_5A_label, genes, ""))
-```
-
-## volcano plot
-```{r}
-#| label: EDFig 5 a volcano plot
-# set up base plot
-p <- ggplot(data = results_5A, aes(x = logFC, y = -log10(PValue))) +
-  geom_point(aes(colour = sig)) +
-    xlim(-12, +12) +
-  scale_color_manual(name = "|log2FC| > 2, FDR < 0.05", values = volcano_colors) +
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(),
-    axis.line = element_line(colour = "black"),
-    legend.key = element_blank(),
-    legend.position = "bottom",
-    
-    # increase text sizes
-    axis.text = element_text(size = 18), 
-    axis.title = element_text(size = 22),  
-    plot.title = element_text(size = 26, hjust = 0.5), 
-    legend.title = element_text(size = 20), 
-    legend.text = element_text(size = 20) 
-  ) +
-  xlab('log2 FC') +
-  ylab('-log10 p-value') +
-  guides(color = guide_legend(override.aes = list(size=5))) +
-  
-  # add gene labels 
-  geom_text_repel(data = filter(results_5A, labels != ""), 
-                         aes(label = labels),
-                         min.segment.length = 0,
-                         max.overlaps = Inf,
-                         size = 7,  
-                         show.legend = FALSE) +
-  ggtitle('Post-breakdown 24h (IVMC vs B_NH)')
-
-print(p)
-
-file_name <- paste(plot_dir,"/EDFigure_5_a.pdf", sep = "")
-pdf(file_name,height = 8,width = 10)
-    p
-dev.off()
-```
-
-
-# Extended Data Fig 5 b
-Biological processes enriched in Post-breakdown 24h phase of the IVMC protocol using genes upregulated in A. 
-
-```{r}
-#| label: EDFig 5 b
-# all upregulated genes
-genes_5A_up <- results_5A$genes[results_5A$sig == "Up"]
-
-gostres <- gost(query = genes_5A_up, custom_bg = results_5A$genes, organism = "hsapiens", correction_method = "fdr")
-head(gostres$result)
-unique(gostres$result$source)
-
-gostres_results.BP <- gostres$result[gostres$result$source == "GO:BP",]
-unique(gostres_results.BP$source)
-
-gostres_results.BP$neg_log10Pvalue <- ( -log10(gostres_results.BP$p_value) )
-gostres_results.BP <- gostres_results.BP[order(gostres_results.BP$neg_log10Pvalue, decreasing = TRUE),]
-head(gostres_results.BP[,c("term_name","neg_log10Pvalue")])
-
-file_name.table  <- paste(table_dir,"/EDFigure_5_b.tab",sep = "")
-write.table(gostres_results.BP[,c("term_name","neg_log10Pvalue")], file_name.table,
-            quote = FALSE, row.names = FALSE, sep = "\t")
-
-representative_GO_terms <- c("cilium movement", 
-                             "cell motility", 
-                             "acute inflammatory response", 
-                             "acute-phase response", 
-                             "defense response",
-                             "sperm motility",
-                             "response to bacterium",
-                             "leukocyte migration",
-                             "neutrophil chemotaxis",
-                             "extracellular transport")
-
-head(gostres_results.BP[,c("term_name","neg_log10Pvalue")])
-gostres_results.BP$term_name[gostres_results.BP$term_name %in% representative_GO_terms]
-
-data2plot <- gostres_results.BP[gostres_results.BP$term_name %in% representative_GO_terms,]
-
-data2plot$term_name <- factor(data2plot$term_name, levels = rev(data2plot$term_name))
-
-p <- ggplot(data2plot, aes(x=neg_log10Pvalue,y=term_name)) +
-  geom_point(size = 10, color = "#00C5CD") +
-  xlab('-log10 p-value') +
-  xlim(0, 10) +
-  ylab('') +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-  theme(axis.text.y = element_text(size=22)) +
-  theme(axis.text.x = element_text(size=18)) +
-  theme(axis.title.x =element_text(size=18)) +
-  theme(panel.border = element_blank(), axis.line = element_line())
-
-print(p)    
-    
-file_name <- paste(plot_dir,"/EDFigure_5_b.pdf", sep = "")
-pdf(file_name,height = 8,width = 7)
-    print(p)
-dev.off() 
-```
-
-
-# Extended Data Fig 9 a
-Heatmap depicting centered and scaled counts per million (cpm) of ligands involved in interactions between luminal early epithelial cells and other cell types, across batch corrected samples of EOs in the IVMC protocol. 
-
-```{r}
-genes <- c("WNT7A", "IL6", "CXCL1", "CXCL2", "CXCL3", "CXCL6", "CXCL8", "CXCL16", "ANXA1", "EDN1", "PDGFA",
-           "PDGFB", "AREG", "C3", "CSF1", "CSF3", "NAMPT", "VEGFA", "TNF", "LIF", "ADM", "GDF15", "SEMA3A")
-
-# define data to plot
-data2plot.bc <- data.frame()
-
-for (gene in genes) {
-    # use counts.bc.cpm.sel_IVMC from figure 1e
-    data2plot.bc <- rbind(data2plot.bc, counts.bc.cpm.sel_IVMC[rownames(counts.bc.cpm.sel_IVMC) == gene,])
-}
-
-rownames(data2plot.bc) <- genes
-colnames(data2plot.bc) <- colnames(counts.bc.cpm.sel_IVMC)
-
-# center and scale
-data2plot.bc.sc <- t(scale(t(data2plot.bc)))
-
-heatmap_selected_genes<- Heatmap(data2plot.bc.sc, cluster_columns=FALSE, cluster_rows=TRUE,
-        heatmap_legend_param = list(legend_direction = "horizontal", 
-                                    title = "cpm (centered \nand scaled)", 
-                                    color_bar = "continuous"),
-        column_split = c(rep(0, 6),rep(1, 6),rep(2,6),rep(3, 6),rep(4,6),rep(5, 6),rep(6,6)),
-        column_title = "",
-        bottom_annotation = HeatmapAnnotation(foo = anno_block(gp = gpar(fill = timepoint_colors, 
-                                                                         col = timepoint_colors),
-        labels = unique(metadata.sel_IVMC$description.alt), 
-        labels_gp = gpar(col = heatmap_labels_colors, fontsize = 8))),
-        show_column_names = FALSE)
-
-draw(heatmap_selected_genes, heatmap_legend_side="bottom")
-
-file_name <- paste(plot_dir,"/EDFigure_9_a.pdf", sep = "")
-pdf(file_name,height = 10,width = 8)
-    draw(heatmap_selected_genes, heatmap_legend_side="bottom")
-dev.off()
-```
-
-
-# Extended Data Fig 10 a
+# Fig 3 G
 Bar plot showing the average transcripts per million (TPM) of WNT ligands at Post-breakdown 24h in EOs undergoing the IVMC protocol, analysed with bulk RNAseq.
 
 ## using TPM for B0xx_tp4_H_B
 ```{r}
-#| label: ED Fig 10 a
+#| label: Fig 3 G
 metadata.sel3 <- mutate(as.data.frame(metadata), sel3 = case_when(
                                 timepoint == "tp4" & hormones == "H" & breakdown == "B" ~ TRUE,
                                 TRUE ~ FALSE))
@@ -1470,65 +619,905 @@ p <- ggplot(tpm.selected.WNT, aes(x=paralogue,y=WNT)) +
     
 print(p)    
     
-file_name <- paste(plot_dir,"/EDFigure_10_a.pdf", sep = "")
+file_name <- paste(plot_dir,"/Figure_3_G.pdf", sep = "")
 pdf(file_name,height = 6,width = 8)
     print(p)
 dev.off()    
 ```
 
-# Extended Data Fig 10 b
+
+# Fig 5 C
+Heatmap depicting centered and scaled counts per million (cpm) of ligands involved in interactions between luminal early epithelial cells and other cell types, across batch corrected samples of EOs in the IVMC protocol. 
+
+```{r}
+genes <- c("WNT7A", "IL6", "CXCL1", "CXCL2", "CXCL3", "CXCL6", "CXCL8", "CXCL16", "ANXA1", "EDN1", "PDGFA", "PDGFB", 
+           "AREG", "C3", "CSF1", "CSF2", "CSF3", "NAMPT", "VEGFA", "TNF", "LIF", "ADM", "GDF15", "SEMA3A","TNFSF10")
+
+# define data to plot
+data2plot.bc <- data.frame()
+
+for (gene in genes) {
+    # use counts.bc.cpm.sel_IVMC from figure 1E
+    data2plot.bc <- rbind(data2plot.bc, counts.bc.cpm.sel_IVMC[rownames(counts.bc.cpm.sel_IVMC) == gene,])
+}
+
+rownames(data2plot.bc) <- genes
+colnames(data2plot.bc) <- colnames(counts.bc.cpm.sel_IVMC)
+
+# center and scale
+data2plot.bc.sc <- t(scale(t(data2plot.bc)))
+
+heatmap_selected_genes<- Heatmap(data2plot.bc.sc, cluster_columns=FALSE, cluster_rows=FALSE,
+        heatmap_legend_param = list(legend_direction = "horizontal", 
+                                    title = "cpm (centered \nand scaled)", 
+                                    color_bar = "continuous"),
+        column_split = c(rep(0, 6),rep(1, 6),rep(2,6),rep(3, 6),rep(4,6),rep(5, 6),rep(6,6)),
+        column_title = "",
+        bottom_annotation = HeatmapAnnotation(foo = anno_block(gp = gpar(fill = timepoint_colors, 
+                                                                         col = timepoint_colors),
+        labels = unique(metadata.sel_IVMC$description.alt_2lb), 
+        labels_rot = 90,
+        labels_gp = gpar(col = heatmap_labels_colors, fontsize = 8))),
+        show_column_names = FALSE)
+
+draw(heatmap_selected_genes, heatmap_legend_side="bottom")
+
+file_name <- paste(plot_dir,"/Figure_5_C.pdf", sep = "")
+pdf(file_name,height = 10,width = 8)
+    draw(heatmap_selected_genes, heatmap_legend_side="bottom")
+dev.off()
+```
+
+
+# Supplementary Fig 1 C
+PCA of all organoid samples from all conditions colored by the breakdown variable. 
+```{r}
+#| label: S Fig 1 C
+colnames(metadata)[c(4,5,11)] <- c("Breakdown","Hormones","Timeline")
+all_counts.CBSeq_byD.log.cpm.pca <- pca(cpm(all_counts.CBSeq_byD, log=TRUE), 
+                                        metadata = metadata, removeVar = 0.1)
+
+xlab = paste("PC1, ",round(all_counts.CBSeq_byD.log.cpm.pca$variance["PC1"],digits = 2),"% variance",sep = "")
+ylab = paste("PC2, ",round(all_counts.CBSeq_byD.log.cpm.pca$variance["PC2"],digits = 2),"% variance",sep = "")
+
+plot_object<- biplot(all_counts.CBSeq_byD.log.cpm.pca, 
+       colby = 'Breakdown',
+       colkey = breakdown_colors,
+       shape = 'Timeline',
+       pointSize = 7,
+       lab = NULL,
+       legendPosition = 'bottom',
+       gridlines.major = FALSE,
+       gridlines.minor = FALSE,
+       xlab = xlab,
+       ylab = ylab,
+       title = "")
+
+plot_object
+
+file_name <- paste(plot_dir,"/S_Figure_1_C.pdf", sep = "")
+    pdf(file_name, width = 8, height = 7.5)
+plot_object
+dev.off()
+```
+
+
+# Supplementary Fig 1 D
+PCA of all organoid samples from all conditions colored by the hormonal treatment variable.
+```{r}
+#| label: S Fig 1 D
+plot_object<- biplot(all_counts.CBSeq_byD.log.cpm.pca, 
+       colby = 'Hormones',
+       colkey = hormones_colors,
+       shape = 'Timeline',
+       pointSize = 7,
+       lab = NULL,
+       legendPosition = 'bottom',
+       gridlines.major = FALSE,
+       gridlines.minor = FALSE,
+       xlab = xlab,
+       ylab = ylab,
+       title = "")
+
+plot_object
+
+file_name <- paste(plot_dir,"/S_Figure_1_D.pdf", sep = "")
+    pdf(file_name, width = 8, height = 7.5)
+plot_object
+dev.off()
+
+colnames(metadata)[c(4,5,11)] <- c("breakdown","hormones","timeline")
+```
+
+
+# Supplementary Fig 1 E
+Hierarchically clustered heatmap displaying the top 50 differentially upregulated genes from pairwise comparisons of each timepoint against all timepoints.
+
+## using B0xx_tp0_NB_NH, B0xx_tp1_NB_H, B0xx_tp2_NB_H, B0xx_tp3_NB_H, B0xx_tp4_B_H, B0xx_tp5_B_H, B0xx_tp6_B_H this has been "sel_IVMC"
+
+### DGE (specific for each time point) using the raw data
+```{r}
+#| label: S Fig 1 E define groups
+groups <- metadata.sel_IVMC$timepoint_B_H
+donor <- metadata.sel_IVMC$donor
+```
+setting up DGEList
+```{r}
+#| label: S Fig 1 E prep DGE 
+counts.sel_IVMC.asDGEList <- DGEList(counts=counts.sel_IVMC,
+                                     genes=rownames(counts.sel_IVMC), 
+                                     group = groups )
+
+counts.sel_IVMC.asDGEList
+
+# filter lowly expressed genes 
+counts.cpm.sel_IVMC <- all_counts.cpm[,metadata.sel_IVMC$sample]
+counts.sel_IVMC.asDGEList <- counts.sel_IVMC.asDGEList[ rowSums(counts.cpm.sel_IVMC > mincpm) >= minsamples, , keep.lib.size=FALSE] 
+dim(counts.sel_IVMC.asDGEList)
+
+# normalization
+counts.sel_IVMC.asDGEList <- calcNormFactors(counts.sel_IVMC.asDGEList)   # same as normLibSizes(y)
+head(counts.sel_IVMC.asDGEList$samples)
+
+plotMDS(counts.sel_IVMC.asDGEList)
+```
+
+### setting up the design matrix
+```{r}
+#| label: S Fig 1 E design matrix
+# use model.matrix
+design <- model.matrix(~donor +group, data = counts.sel_IVMC.asDGEList$samples)
+colnames(design)[2:12] <- substring(colnames(design)[2:12],6,14)
+design
+```
+
+### dispersion estimation and fitting
+```{r}
+#| label: S Fig 1 E dispersion estimation and fitting
+# dispersion estimation
+counts.sel_IVMC.asDGEList <- estimateDisp(counts.sel_IVMC.asDGEList, design)
+counts.sel_IVMC.asDGEList$common.dispersion
+
+plotBCV(counts.sel_IVMC.asDGEList)
+
+# fitting
+fit <- glmQLFit(counts.sel_IVMC.asDGEList, design)
+
+plotQLDisp(fit)
+```
+
+### 0) "Pre-diff" (tp0_NB_NH) specific
+```{r}
+#| label: S Fig 1 E DGE tp0
+contrast_0 <- 1/6 * c(- (colnames(design) == "tp1_NB_H") -  (colnames(design) == "tp2_NB_H") - (colnames(design) == "tp3_NB_H") 
+                      - (colnames(design) == "tp4_B_H") - (colnames(design) == "tp5_B_H") - (colnames(design) == "tp6_B_H") )
+contrast_0
+qlf_0 <- glmQLFTest(fit, contrast = contrast_0)
+tt_0 <- as.data.frame(topTags(qlf_0,n=nrow(counts.sel_IVMC.asDGEList)))
+head(tt_0)
+
+file_name.table <- paste(table_dir,"/S_Figure_1_E.tp0_TopTable.tab",sep = "")
+write.table(tt_0, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+### 1) "P4-diff" (tp1_NB_H) specific
+```{r}
+#| label: S Fig 1 E DGE tp1
+contrast_1 <- c((colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
+                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
+contrast_1
+qlf_1 <- glmQLFTest(fit, contrast = contrast_1)
+tt_1 <- as.data.frame(topTags(qlf_1,n=nrow(counts.sel_IVMC.asDGEList)))
+head(tt_1)
+
+file_name.table <- paste(table_dir,"/S_Figure_1_E.tp1_TopTable.tab",sep = "")
+write.table(tt_1, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+### 2) "Horm Withdr 24h" (tp2_NB_H) specific
+```{r}
+#| label: S Fig 1 E DGE tp2
+contrast_2 <-  c((colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
+                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
+contrast_2
+qlf_2 <- glmQLFTest(fit, contrast = contrast_2)
+tt_2 <- as.data.frame(topTags(qlf_2,n=nrow(counts.sel_IVMC.asDGEList)))
+head(tt_2)
+
+file_name.table <- paste(table_dir,"/S_Figure_1_E.tp2_TopTable.tab",sep = "")
+write.table(tt_2, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+### 3) "Horm Withdr 48h" (tp3_NB_H) specific
+```{r}
+#| label: S Fig 1 E DGE tp3
+contrast_3 <-  c((colnames(design) == "tp3_NB_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") 
+                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
+contrast_3
+qlf_3 <- glmQLFTest(fit, contrast = contrast_3)
+tt_3 <- as.data.frame(topTags(qlf_3,n=nrow(counts.sel_IVMC.asDGEList)))
+head(tt_3)
+
+file_name.table <- paste(table_dir,"/S_Figure_1_E.tp3_TopTable.tab",sep = "")
+write.table(tt_3, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+### 4) "Post-breakdown 24h" (tp4_B_H) specific
+```{r}
+#| label: S Fig 1 E DGE tp4
+contrast_4 <-  c((colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
+                                - 1/6* (colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
+contrast_4
+qlf_4 <- glmQLFTest(fit, contrast = contrast_4)
+tt_4 <- as.data.frame(topTags(qlf_4,n=nrow(counts.sel_IVMC.asDGEList)))
+head(tt_4)
+
+file_name.table <- paste(table_dir,"/S_Figure_1_E.tp4_TopTable.tab",sep = "")
+write.table(tt_4, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+### 5) "E2-diff 24h" (tp5_B_H) specific
+```{r}
+#| label: S Fig 1 E DGE tp5
+contrast_5 <- c((colnames(design) == "tp5_B_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
+                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp6_B_H") )
+qlf_5 <- glmQLFTest(fit, contrast = contrast_5)
+contrast_5
+tt_5 <- as.data.frame(topTags(qlf_5,n=nrow(counts.sel_IVMC.asDGEList)))
+head(tt_5)
+
+file_name.table <- paste(table_dir,"/S_Figure_1_E.tp5_TopTable.tab",sep = "")
+write.table(tt_5, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+### 6) "E2 diff 48h" (tp6_B_H) specific
+```{r}
+#| label: S Fig 1 E DGE tp6
+contrast_6 <-  c((colnames(design) == "tp6_B_H") - 1/6* (colnames(design) == "tp1_NB_H") - 1/6* (colnames(design) == "tp2_NB_H") - 1/6* (colnames(design) == "tp3_NB_H") 
+                                - 1/6* (colnames(design) == "tp4_B_H") - 1/6* (colnames(design) == "tp5_B_H") )
+qlf_6 <- glmQLFTest(fit, contrast = contrast_6)
+contrast_6
+tt_6 <- as.data.frame(topTags(qlf_6,n=nrow(counts.sel_IVMC.asDGEList)))
+head(tt_6)
+
+file_name.table <- paste(table_dir,"/S_Figure_1_E.tp6_TopTable.tab",sep = "")
+write.table(tt_6, file_name.table, quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+## gene list Heatmaps
+```{r}
+#| label: S Fig 1 E heatmap
+# top 50 genes with logFC > 2
+genes_top50up_all <- c(tt_0[tt_0$logFC > 2,]$genes[1:50],
+                       tt_1[tt_1$logFC > 2,]$genes[1:50],
+                       tt_2[tt_2$logFC > 2,]$genes[1:50],
+                       tt_3[tt_3$logFC > 2,]$genes[1:50],
+                       tt_4[tt_4$logFC > 2,]$genes[1:50],
+                       tt_5[tt_5$logFC > 2,]$genes[1:50],
+                       tt_6[tt_6$logFC > 2,]$genes[1:50])
+
+# define data to plot
+data2plot <- data.frame()
+
+for (gene in genes_top50up_all) {
+    data2plot <- rbind(data2plot, counts.bc.cpm.sel_IVMC[rownames(counts.bc.cpm.sel_IVMC) == gene,])
+}
+# rownames(data2plot) <- genes
+colnames(data2plot) <- colnames(counts.bc.cpm.sel_IVMC)
+
+# center and scale
+data2plot.sc <- t(scale(t(data2plot)))
+
+h <- Heatmap(data2plot.sc, cluster_columns=FALSE, cluster_rows=FALSE, 
+        heatmap_legend_param = list(title = "cpm\n(centered\nscaled)", color_bar = "continuous"),
+        column_split = c(rep(0, 6),rep(1, 6),rep(2,6),rep(3, 6),rep(4,6),rep(5, 6),rep(6,6)),
+        row_split = c(rep(0,50),rep(1,50),rep(2,50),rep(3,50),rep(4,50),rep(5,50),rep(6,50)),
+        column_title = " ",
+        bottom_annotation = HeatmapAnnotation(foo = anno_block(gp = gpar(fill = timepoint_colors, 
+                                                                         col = timepoint_colors),
+                                                               labels = unique(metadata.sel_IVMC$description.alt_2lb), 
+                                                               labels_rot = 90,
+                                                               labels_gp = gpar(col = heatmap_labels_colors, 
+                                                                                fontsize = 6))),
+        show_column_names = FALSE,
+        row_title = NULL)
+
+print(h)
+
+file_name <- paste(plot_dir,"/S_Figure_1_E.pdf",sep = "")
+pdf(file_name, width = 6, height = 7)    
+    print(h)
+dev.off()
+```
+
+
+# Supplementary Fig 1 F
+Heatmap depicting batch corrected centered and scaled counts per million (cpm) of selected genes across the IVMC protocol (comparing hormone treatmenT)
+```{r}
+genes <- c("PDK1","SLC2A1","HK2","ALDOA","GAPDH","ENO2","SERPINE1", 
+           "VEGFA","FLT1","ANGPT4","ANGPTL4","ANGPTL6","ANGPTL8","ANG","IGF1","PTGS2","TIMP1","EGF","PDHA1",  
+           "CXCL8","FGF2","PDGFB","EFNB2","TFRC","HMOX1","EDN1","NOS1","NOS2","NOS3","CDKN1A") 
+# selection
+selm <- c(metadata$sample[metadata$timepoint == "tp0"],
+          metadata$sample[metadata$timepoint == "tp1" & metadata$hormones == "NH"],
+          metadata$sample[metadata$timepoint == "tp1" & metadata$hormones == "H"],
+          metadata$sample[metadata$timepoint == "tp2" & metadata$hormones == "NH"],
+          metadata$sample[metadata$timepoint == "tp2" & metadata$hormones == "H"],          
+          metadata$sample[metadata$timepoint == "tp3" & metadata$hormones == "NH"],
+          metadata$sample[metadata$timepoint == "tp3" & metadata$hormones == "H"],     
+          metadata$sample[metadata$timepoint == "tp4" & metadata$hormones == "NH" & metadata$breakdown == "B"],
+          metadata$sample[metadata$timepoint == "tp4" & metadata$hormones == "H" & metadata$breakdown == "B"],          
+          metadata$sample[metadata$timepoint == "tp5" & metadata$hormones == "NH" & metadata$breakdown == "B"],
+          metadata$sample[metadata$timepoint == "tp5" & metadata$hormones == "H" & metadata$breakdown == "B"],  
+          metadata$sample[metadata$timepoint == "tp6" & metadata$hormones == "NH" & metadata$breakdown == "B"],
+          metadata$sample[metadata$timepoint == "tp6" & metadata$hormones == "H" & metadata$breakdown == "B"])
+
+selm
+
+# select the samples 
+counts.bc.cpm.selm <- all_counts.bc.cpm[,selm]
+
+metadata.selm <- metadata[metadata$sample %in% selm,]
+
+# define data to plot
+data2plot.bc <- data.frame()
+
+for (gene in genes) {
+    data2plot.bc <- rbind(data2plot.bc, counts.bc.cpm.selm[rownames(counts.bc.cpm.selm) == gene,])
+}
+
+rownames(data2plot.bc) <- genes
+colnames(data2plot.bc) <- colnames(counts.bc.cpm.selm)
+
+# center and scale
+data2plot.bc.sc <- t(scale(t(data2plot.bc)))
+
+# heatmap with annotation (trying with two columns)
+heatmap_selected_genes <- Heatmap(data2plot.bc.sc, cluster_columns=FALSE, cluster_rows=FALSE, 
+        heatmap_legend_param = list(legend_direction = "horizontal", 
+                                    title = "cpm (centered \nand scaled)", 
+                                    color_bar = "continuous"),
+        column_split = c(rep(0, 6),rep(1,6),rep(2,6),rep(3,6),rep(4,6),rep(5,6),rep(6,6),rep(7,6),rep(8,6),rep(9,6),rep(10,6),rep(11,6),rep(12,6)),
+        column_title = "",
+        bottom_annotation = HeatmapAnnotation(row1 = anno_block(gp = gpar(fill = c("#CCCCC4",rep(c("#CCCCC4","#00C5CD"),6)), 
+                                                                          col = c("#CCCCC4",rep(c("#CCCCC4","#00C5CD"),6))),
+                                                                labels = c("NH",rep(c("NH","H"),6)), 
+                                                                labels_gp = gpar(col = "black", fontsize = 8)),
+                                              row2 = anno_block(gp = gpar(fill = c("#e6e6e6",rep("#5e17d1",2),rep("#989692",4),rep("#cb3b63",2),rep("#debaf5",2),rep("#BE9FD2",2)), 
+                                                                         col = c("#e6e6e6",rep("#5e17d1",2),rep("#989692",4),rep("#cb3b63",2),rep("#debaf5",2),rep("#BE9FD2",2))),
+                                                                labels_rot = 90,
+                                                               #labels = unique(metadata.sel_IVMC$description.alt_2lb), 
+                                                               labels = c("Pre-diff",rep("P4-diff",2),rep("Horm\nWithdr\n24h",2),rep("Horm\nWithdr\n48h",2),
+                                                                          rep("Post-\nbreakdown\n24h",2),rep("E2-diff\n24h",2),rep("E2-diff\n48h",2)), 
+                                                               labels_gp = gpar(col = c("black",rep("white",2),rep("black",4),rep("white",2),rep("black",4)), fontsize = 8))
+                                              ),
+        show_column_names = FALSE)
+
+draw(heatmap_selected_genes, heatmap_legend_side="bottom")
+
+file_name <- paste(plot_dir,"/S_Figure_1_F.pdf", sep = "")
+pdf(file_name,height = 10,width = 8)
+    draw(heatmap_selected_genes, heatmap_legend_side="bottom")
+dev.off()
+```
+
+# Supplementary Fig 2 A
+
+## using B0xx_tp0_NB_NH, B0xx_tp1_NB_H, B0xx_tp2_NB_H, B0xx_tp3_NB_H, B0xx_tp4_B_H, B0xx_tp5_B_H, B0xx_tp6_B_H this has been "sel_IVMC"
+Line plots showing the (batch coreccted) mean expression levels (in cpm) of genes reported in literature to mark stem cells of the endometrial epithelium (MKI67, ALDH1A1, CDH2, SOX9, FUT4) across different timepoints in the IVMC protocol. The red line represents the mean cpm values across donors, while the shaded blue region indicates the standard deviation around the mean. 
+```{r}
+#| label: S Fig 2 A
+genes_for_line_plots <- c("MKI67","ALDH1A1","SOX9", "FUT4")
+
+for (gene in genes_for_line_plots ) {
+    expr.values.sel_IVMC <- counts.bc.cpm.sel_IVMC[gene,]
+    
+    # data to plot
+    df2plot <- data.frame(samples=colnames(counts.bc.cpm.sel_IVMC), cpm=expr.values.sel_IVMC)
+    
+    # combine with metadata
+    df2plot_withMetadata <- merge(df2plot, metadata.sel_IVMC, by.x = "samples", by.y = "sample", sort = FALSE)
+    
+    # aggregate
+    df2plot_aggregate <- data.frame(general_timepoint = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,1],
+                                    cpm_mean = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2],
+                                    cpm_mean_plus_sd = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2] +
+                                        aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=sd)[,2],
+                                    cpm_mean_minus_sd = aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=mean)[,2] -
+                                        aggregate(df2plot_withMetadata$cpm, list(df2plot_withMetadata$general_timepoint), FUN=sd)[,2] )
+    
+    
+    p <- ggplot(df2plot_aggregate, aes(y=cpm_mean, x=general_timepoint, group = 1)) + 
+        geom_line(color = "red") +
+        geom_point(color = "red", size = 2) +
+        geom_ribbon(aes(x = general_timepoint, ymax = cpm_mean_plus_sd, ymin = cpm_mean_minus_sd), 
+                    alpha = 0.3, fill = "lightblue") +
+        ggtitle(bquote(italic(.(gene)))) +
+        ylab("cpm (Mean ± SD across donors)") +
+        xlab("") +
+        theme_bw() +
+        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+        theme(axis.line = element_line(colour = "black")) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 24)) +
+        theme(axis.text.y = element_text(size = 22)) +
+        theme(axis.title.y = element_text(size = 24)) +
+        theme(panel.border = element_blank())
+    print(p)
+    
+    file_name <- paste(plot_dir,"/S_Figure_2_A__",gene,".pdf", sep = "")
+    pdf(file_name, height = 8,width = 10)
+    print(p)
+    dev.off()
+}
+```
+
+
+# Supplementary Fig 3 A
+Volcano plot highlighting selected from comparison between organoids at P4-diff phase of the IVMC protocol to organoids not treated with hormones but undergone breakdown (B_NH) at the same timepoint. 
+
+## define contrast
+```{r}
+#| label: S Fig 3 A DGE contrast
+(colnames(design_all) == "tp1_NB_H") - (colnames(design_all) == "tp1_NB_NH")
+qlf_3A<- glmQLFTest(fit_all, contrast = as.vector((colnames(design_all) == "tp1_NB_H") - (colnames(design_all) == "tp1_NB_NH")))
+tt_3A <- as.data.frame(topTags(qlf_3A,n=nrow(counts.all.asDGEList)))
+head(tt_3A)
+```
+
+## define cut offs
+FDR < 0.05 & logFC > 2.0 ~ up; 
+FDR < 0.05 & logFC < -2.0 ~ down
+```{r}
+#| label: S Fig 3 A DGE define cut offs
+# create significant (sig) column
+results_3A <- mutate(tt_3A, sig = case_when(
+    FDR < 0.05 & logFC > 2.0 ~ up,
+    FDR < 0.05 & logFC < -2.0 ~ down,
+    TRUE ~ notsig))
+sum(results_3A$sig == "Up")
+sum(results_3A$sig == "Down")
+
+file_name.table  <- paste(table_dir,"/S_Figure_3_A.DEG.tab",sep = "")
+write.table(results_3A, file_name.table,
+            quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+## define genes to label 
+```{r}
+#| label: S Fig 3 A DGE define display genes
+genes_3A_up_label <- c("SULT1E1", "GATA2", "SCGB1D4", "ALPG", "PAEP", "SCGB1D2", 
+                       "SERPINA5", "S100P", "SCGB2A2", "SCGB2A1", "PTGS2", "ENPP3", 
+                       "KRT17", "TPPP3", "IL1A")
+genes_3A_down_label <- c("NCAM1", "SHISA3", "KRT4", "FZD10", "SSTR1", "SCTR", 
+                         "FAM20A", "PTPRG", "RXRG", "MMP10", "FN1", "S100A9", 
+                         "MMP3", "MMP1", "ASCL2")
+genes_3A_label <- c(genes_3A_up_label,genes_3A_down_label)
+
+# add gene labels
+results_3A <- mutate(results_3A, labels = ifelse(genes %in% genes_3A_label, genes, ""))
+```
+
+## volcano plot
+```{r}
+#| label: S Fig 3 A volcano plot
+# set up base plot
+p <- ggplot(data = results_3A, aes(x = logFC, y = -log10(PValue))) +
+    geom_point(aes(colour = sig)) +
+    xlim(-12, +12) +
+    scale_color_manual(name = "|log2FC| > 2, FDR < 0.05", values = volcano_colors) +
+    theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        legend.key = element_blank(),
+        legend.position = "bottom",
+        
+        # increase text sizes
+        axis.text = element_text(size = 18), 
+        axis.title = element_text(size = 22),  
+        plot.title = element_text(size = 26, hjust = 0.5), 
+        legend.title = element_text(size = 20), 
+        legend.text = element_text(size = 20) 
+    ) +
+    xlab('log2 FC') +
+    ylab('-log10 p-value') +
+    guides(color = guide_legend(override.aes = list(size=5))) +
+    
+    # add gene labels
+    geom_text_repel(data = filter(results_3A, labels != ""), 
+                    aes(label = labels),
+                    min.segment.length = 0,
+                    max.overlaps = Inf,
+                    size = 7,  
+                    show.legend = FALSE) +
+    ggtitle('P4-diff (IVMC vs NH)')
+
+print(p)
+
+file_name <- paste(plot_dir,"/S_Figure_3_A.pdf", sep = "")
+pdf(file_name,height = 8,width = 10)
+p
+dev.off()
+```
+
+
+# Supplementary Fig 3 C
+Volcano plot highlighting selected DEGs from comparison between organoids of the IVMC protocol at P4-diff phase to organoids at hormonal withdrawal 48 h. 
+
+## define contrast
+```{r}
+#| label: S Fig 3 C DGE contrast
+(colnames(design_all) == "tp3_NB_H") - (colnames(design_all) == "tp1_NB_H")  - ((colnames(design_all) == "tp3_NB_NH") - (colnames(design_all) == "tp1_NB_NH") )
+qlf_3C<- glmQLFTest(fit_all, contrast = as.vector( (colnames(design_all) == "tp3_NB_H") - (colnames(design_all) == "tp1_NB_H")  - ((colnames(design_all) == "tp3_NB_NH") - (colnames(design_all) == "tp1_NB_NH") ) ) )
+tt_3C <- as.data.frame(topTags(qlf_3C,n=nrow(counts.all.asDGEList)))
+head(tt_3C)
+```
+
+## define cut offs
+FDR < 0.05 & logFC > 2.0 ~ up; 
+FDR < 0.05 & logFC < -2.0 ~ down
+```{r}
+#| label: S Fig 3 C DGE define cut offs
+# create significant (sig) column
+results_3C <- mutate(tt_3C, sig = case_when(
+    FDR < 0.05 & logFC > 2.0 ~ up,
+    FDR < 0.05 & logFC < -2.0 ~ down,
+    TRUE ~ notsig))
+sum(results_3C$sig == "Up")
+sum(results_3C$sig == "Down")
+
+file_name.table  <- paste(table_dir,"/S_Figure_3_C.DEG.tab",sep = "")
+write.table(results_3C, file_name.table,
+            quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+## define genes to label 
+```{r}
+#| label: S Fig 3 C DGE define display genes
+genes_3C_up_label <- c("HMGA2-AS1", "SIGLEC15", "MEOX1", "VTCN1", "RXRG", "MT1E", 
+                       "MMP10", "CASP1", "MT1G", "SSTR1")
+genes_3C_down_label <- c("PHACTR3", "KRT16", "SERPINA3", "KRT17", "SFRP1", "NOTUM", 
+                         "S100P", "CXCL8", "PAEP", "PLAUR", "AREG")
+genes_3C_label <- c(genes_3C_up_label,genes_3C_down_label)
+
+# add gene labels
+results_3C <- mutate(results_3C, labels = ifelse(genes %in% genes_3C_label, genes, ""))
+```
+
+## volcano plot
+```{r}
+#| label: S Fig 3 C volcano plot
+# set up base plot
+p <- ggplot(data = results_3C, aes(x = logFC, y = -log10(PValue))) +
+    geom_point(aes(colour = sig)) +
+    xlim(-12, +12) +
+    scale_color_manual(name = "|log2FC| > 2, FDR < 0.05", values = volcano_colors) +
+    theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        legend.key = element_blank(),
+        legend.position = "bottom",
+        
+        # increase text sizes
+        axis.text = element_text(size = 18), 
+        axis.title = element_text(size = 22),  
+        plot.title = element_text(size = 26, hjust = 0.5), 
+        legend.title = element_text(size = 20), 
+        legend.text = element_text(size = 20) 
+    ) +
+    xlab('log2 FC') +
+    ylab('-log10 p-value') +
+    guides(color = guide_legend(override.aes = list(size=5))) +
+    
+    # add gene labels 4
+    geom_text_repel(data = filter(results_3C, labels != ""), 
+                    aes(label = labels),
+                    min.segment.length = 0,
+                    max.overlaps = Inf,
+                    size = 7,  
+                    show.legend = FALSE) +
+    ggtitle('Horm.Withdr. 48h vs P4-diff (controlled for hormone)')
+
+print(p)
+
+file_name <- paste(plot_dir,"/S_Figure_3_C.pdf", sep = "")
+pdf(file_name,height = 8,width = 10)
+p
+dev.off()
+```
+
+
+# Supplementary Fig 3 F
+Volcano plot highlighting selected DEGs comparing EOs at Post-breakdown 24h phase of the IVMC protocol to control EOs (B_NH) at the same timepoint. 
+
+```{r}
+#| label: S Fig 3 F DGE contrast
+(colnames(design_all) == "tp4_B_H") - (colnames(design_all) == "tp4_B_NH")
+qlf_3F<- glmQLFTest(fit_all, contrast = as.vector((colnames(design_all) == "tp4_B_H") - (colnames(design_all) == "tp4_B_NH")))
+tt_3F <- as.data.frame(topTags(qlf_3F,n=nrow(counts.all.asDGEList)))
+head(tt_3F)
+```
+
+## define cut offs
+FDR < 0.05 & logFC > 2.0 ~ up; 
+FDR < 0.05 & logFC < -2.0 ~ down
+```{r}
+#| label: S Fig 3 F DGE define cut offs
+# create significant (sig) column
+results_3F <- mutate(tt_3F, sig = case_when(
+    FDR < 0.05 & logFC > 2.0 ~ up,
+    FDR < 0.05 & logFC < -2.0 ~ down,
+    TRUE ~ notsig))
+sum(results_3F$sig == "Up")
+sum(results_3F$sig == "Down")
+
+file_name.table  <- paste(table_dir,"/S_Figure_3_F.DEG.tab",sep = "")
+write.table(results_3F, file_name.table,
+            quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+## define genes to label 
+```{r}
+#| label: S Fig 3 F DGE define display genes
+genes_3F_up_label <- c("DUOXA2", "DUOX2", " IL19", "SAA2", "SAA1", "SAA4", "TREM1", 
+                       "CCR7", "MUC13", "IL10", "CCL20", "IRAK3", "PF4V1")
+genes_3F_down_label <- c("FBN2", "CALCA", "SHISA3", "KRT4", "CYP1A2", "NGFR", "KRT5",
+                         "ESRRB", "SSTR1", "PLXNA4", "FRZB")
+genes_3F_label <- c(genes_3F_up_label,genes_3F_down_label)
+
+# add gene labels
+results_3F <- mutate(results_3F, labels = ifelse(genes %in% genes_3F_label, genes, ""))
+```
+
+## volcano plot
+```{r}
+#| label: S Fig 3 F volcano plot
+# set up base plot
+p <- ggplot(data = results_3F, aes(x = logFC, y = -log10(PValue))) +
+    geom_point(aes(colour = sig)) +
+    xlim(-12, +12) +
+    scale_color_manual(name = "|log2FC| > 2, FDR < 0.05", values = volcano_colors) +
+    theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        legend.key = element_blank(),
+        legend.position = "bottom",
+        
+        # increase text sizes
+        axis.text = element_text(size = 18), 
+        axis.title = element_text(size = 22),  
+        plot.title = element_text(size = 26, hjust = 0.5), 
+        legend.title = element_text(size = 20), 
+        legend.text = element_text(size = 20) 
+    ) +
+    xlab('log2 FC') +
+    ylab('-log10 p-value') +
+    guides(color = guide_legend(override.aes = list(size=5))) +
+    
+    # add gene labels 
+    geom_text_repel(data = filter(results_3F, labels != ""), 
+                    aes(label = labels),
+                    min.segment.length = 0,
+                    max.overlaps = Inf,
+                    size = 7,  
+                    show.legend = FALSE) +
+    ggtitle('Post-breakdown 24h (IVMC vs B_NH)')
+
+print(p)
+
+file_name <- paste(plot_dir,"/S_Figure_3_F.pdf", sep = "")
+pdf(file_name,height = 8,width = 10)
+p
+dev.off()
+```
+
+
+# Supplementary Fig 3 G
+Biological processes enriched in Post-breakdown 24h phase of the IVMC protocol using genes upregulated in A. 
+
+```{r}
+#| label: S Fig 3G
+# all upregulated genes
+genes_3F_up <- results_3F$genes[results_3F$sig == "Up"]
+
+gostres <- gost(query = genes_3F_up, custom_bg = results_3F$genes, organism = "hsapiens", correction_method = "fdr")
+head(gostres$result)
+unique(gostres$result$source)
+
+gostres_results.BP <- gostres$result[gostres$result$source == "GO:BP",]
+unique(gostres_results.BP$source)
+
+gostres_results.BP$neg_log10Pvalue <- ( -log10(gostres_results.BP$p_value) )
+gostres_results.BP <- gostres_results.BP[order(gostres_results.BP$neg_log10Pvalue, decreasing = TRUE),]
+head(gostres_results.BP[,c("term_name","neg_log10Pvalue")])
+
+file_name.table  <- paste(table_dir,"/S_Figure_3_G.tab",sep = "")
+write.table(gostres_results.BP[,c("term_name","neg_log10Pvalue")], file_name.table,
+            quote = FALSE, row.names = FALSE, sep = "\t")
+
+representative_GO_terms <- c("cilium movement", 
+                             "cell motility", 
+                             "acute inflammatory response", 
+                             "acute-phase response", 
+                             "defense response",
+                             "sperm motility",
+                             "response to bacterium",
+                             "leukocyte migration",
+                             "neutrophil chemotaxis",
+                             "extracellular transport")
+
+head(gostres_results.BP[,c("term_name","neg_log10Pvalue")])
+gostres_results.BP$term_name[gostres_results.BP$term_name %in% representative_GO_terms]
+
+data2plot <- gostres_results.BP[gostres_results.BP$term_name %in% representative_GO_terms,]
+
+data2plot$term_name <- factor(data2plot$term_name, levels = rev(data2plot$term_name))
+
+p <- ggplot(data2plot, aes(x=neg_log10Pvalue,y=term_name)) +
+    geom_point(size = 10, color = "#00C5CD") +
+    xlab('-log10 p-value') +
+    xlim(0, 10) +
+    ylab('') +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    theme(axis.text.y = element_text(size=22)) +
+    theme(axis.text.x = element_text(size=18)) +
+    theme(axis.title.x =element_text(size=18)) +
+    theme(panel.border = element_blank(), axis.line = element_line())
+
+print(p)    
+
+file_name <- paste(plot_dir,"/S_Figure_3_G.pdf", sep = "")
+pdf(file_name,height = 8,width = 7)
+print(p)
+dev.off() 
+```
+
+
+# Supplementary Fig 3 I
+Volcano plot highlighting selected DEGs from comparison of organoids between E2-diff 48h phase of the IVMC protocol to organoids not treated with hormones but undergone breakdown (B_NH) at the same timepoint. 
+
+## define contrast
+```{r}
+#| label: S Fig 3 I DGE contrast
+(colnames(design_all) == "tp6_B_H") - (colnames(design_all) == "tp6_B_NH")
+qlf_3I<- glmQLFTest(fit_all, contrast = as.vector((colnames(design_all) == "tp6_B_H") - (colnames(design_all) == "tp6_B_NH")))
+tt_3I <- as.data.frame(topTags(qlf_3I,n=nrow(counts.all.asDGEList)))
+head(tt_3I)
+```
+
+## define cut offs
+FDR < 0.05 & logFC > 2.0 ~ up; 
+FDR < 0.05 & logFC < -2.0 ~ down
+```{r}
+#| label: S Fig 3 I DGE define cut offs
+# create significant (sig) column
+results_3I <- mutate(tt_3I, sig = case_when(
+    FDR < 0.05 & logFC > 2.0 ~ up,
+    FDR < 0.05 & logFC < -2.0 ~ down,
+    TRUE ~ notsig))
+sum(results_3I$sig == "Up")
+sum(results_3I$sig == "Down")
+
+file_name.table  <- paste(table_dir,"/S_Figure_3_I.DEG.tab",sep = "")
+write.table(results_3I, file_name.table,
+            quote = FALSE, row.names = FALSE, sep = "\t")
+```
+
+## define genes to label 
+```{r}
+#| label: S Fig 3 I DGE define display genes
+genes_3I_up_label <- c("OLFM4", "COL1A2", "PGR", "CDC20B", "GMNC", "GREB1", "GATA5", "CCN5")
+genes_3I_down_label <- c("KRT5", "MMP1", "PAX2", "FRZB", "MMP10", "SHISA3", "PLXNA4", "SSTR1")
+genes_3I_label <- c(genes_3I_up_label,genes_3I_down_label)
+
+# add gene labels
+results_3I <- mutate(results_3I, labels = ifelse(genes %in% genes_3I_label, genes, ""))
+```
+
+## volcano plot
+```{r}
+#| label: S Fig 3 I volcano plot
+# set up base plot
+p <- ggplot(data = results_3I, aes(x = logFC, y = -log10(PValue))) +
+    geom_point(aes(colour = sig)) +
+    xlim(-12, +12) +
+    scale_color_manual(name = "|log2FC| > 2, FDR < 0.05", values = volcano_colors) +
+    theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        legend.key = element_blank(),
+        legend.position = "bottom",
+        
+        # increase text sizes
+        axis.text = element_text(size = 18), 
+        axis.title = element_text(size = 22),  
+        plot.title = element_text(size = 26, hjust = 0.5), 
+        legend.title = element_text(size = 20), 
+        legend.text = element_text(size = 20) 
+    ) +
+    xlab('log2 FC') +
+    ylab('-log10 p-value') +
+    guides(color = guide_legend(override.aes = list(size=5))) +
+    
+    # add gene labels 4
+    geom_text_repel(data = filter(results_3I, labels != ""), 
+                    aes(label = labels),
+                    min.segment.length = 0,
+                    max.overlaps = Inf,
+                    size = 7,  
+                    show.legend = FALSE) +
+    ggtitle('E2-diff 48h (IVMC vs B_NH)')
+
+print(p)
+
+file_name <- paste(plot_dir,"/S_Figure_3_I.pdf", sep = "")
+pdf(file_name,height = 8,width = 10)
+p
+dev.off()
+```
+
+
+
+# Supplementary Fig 5 F
 Bar plot showing the average transcripts per million (TPM) of FZD receptors during at Post-breakdown 24h in EOs undergoing the IVMC protocol, analysed with bulk RNAseq. 
 
 ## using TPM for B0xx_tp4_H_B
 ```{r}
-#| label: ED Fig 10 b
+#| label: S Fig 5 F
 # use tpm.selected from 10 a
 paralogues.FZD <- rownames(tpm.selected)[grep("FZD",rownames(tpm.selected))]
 # exclude ncRNA and order    
 paralogues.FZD <- paralogues.FZD[c(4,9,1,7,5,6,3,8,10,2)]  
 paralogues.FZD
-    
+
 tpm.selected.FZD <- data.frame(FZD = as.vector(as.matrix(tpm.selected[paralogues.FZD,])), 
-                                paralogue = rep(paralogues.FZD,6), 
-                                donor = (c(rep("B032",10), rep("B044",10), rep("B050",10), rep("B066",10), rep("B078",10), rep("B080",10))))
+                               paralogue = rep(paralogues.FZD,6), 
+                               donor = (c(rep("B032",10), rep("B044",10), rep("B050",10), rep("B066",10), rep("B078",10), rep("B080",10))))
 tpm.selected.FZD$paralogue <- factor(tpm.selected.FZD$paralogue, levels = tpm.selected.FZD$paralogue[1:10])
 
 # and plot  
 ggplot(tpm.selected.FZD, aes(y=FZD)) + 
-          geom_bar(aes(x=paralogue, fill = donor), data = tpm.selected.FZD, stat="identity", position = "dodge") + 
-          ylab('TPM') +
-          ggtitle("Post-breakdown 24h") +
-          scale_fill_manual(values = donor_colors) +
-          theme_bw() +
-          theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-          theme(axis.line = element_line(colour = "black")) + 
-          theme(axis.text.x = element_text(angle = 90)) +
-          theme(panel.border = element_blank()) 
+    geom_bar(aes(x=paralogue, fill = donor), data = tpm.selected.FZD, stat="identity", position = "dodge") + 
+    ylab('TPM') +
+    ggtitle("Post-breakdown 24h") +
+    scale_fill_manual(values = donor_colors) +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    theme(axis.line = element_line(colour = "black")) + 
+    theme(axis.text.x = element_text(angle = 90)) +
+    theme(panel.border = element_blank()) 
 
 
-    
+
 p <- ggplot(tpm.selected.FZD, aes(x=paralogue,y=FZD)) + 
-          stat_summary(fun=mean, geom="bar", fill="magenta4", ) +
-          geom_point(size = 4) + 
-          labs(y='TPM',x=NULL) +
-          ggtitle("Post-breakdown 24h") +
-          theme_bw() +
-          theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-          theme(axis.line = element_line(colour = "black")) + 
-          theme(axis.text.x = element_text(angle = 90, size=24, hjust=0.90,vjust=0.5)) +
-          theme(axis.text.y = element_text(size=18)) +
-          theme(axis.title.y =element_text(size=18)) +
-          theme(axis.ticks = element_blank()) +
-          theme(panel.border = element_blank()) 
-    
+    stat_summary(fun=mean, geom="bar", fill="magenta4", ) +
+    geom_point(size = 4) + 
+    labs(y='TPM',x=NULL) +
+    ggtitle("Post-breakdown 24h") +
+    theme_bw() +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    theme(axis.line = element_line(colour = "black")) + 
+    theme(axis.text.x = element_text(angle = 90, size=24, hjust=0.90,vjust=0.5)) +
+    theme(axis.text.y = element_text(size=18)) +
+    theme(axis.title.y =element_text(size=18)) +
+    theme(axis.ticks = element_blank()) +
+    theme(panel.border = element_blank()) 
+
 print(p)    
-    
-file_name <- paste(plot_dir,"/EDFigure_10_b.pdf", sep = "")
+
+file_name <- paste(plot_dir,"/S_Figure_5_F.pdf", sep = "")
 pdf(file_name,height = 6,width = 8)
-    print(p)
+print(p)
 dev.off()    
 ```
-
 
 
 # sessionInfo

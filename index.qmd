@@ -23,6 +23,10 @@ author:
     email: 
     affiliations: 
       - ref: fmi
+  - name: Tereza Cindrova-Davies
+    email: 
+    affiliations: 
+      - ref: cambridge
   - name: Hans-Rudolf Hotz
     orcid: 0000-0002-2799-424X
     email: hansrudolf.hotz@fmi.ch
@@ -59,6 +63,10 @@ affiliations:
     postal-code: 4056
     city: Basel
     country: Switzerland
+  - id: cambridge
+    name: Loke Centre for Trophoblast Research, University of Cambridge
+    city: Cambridge
+    country: United Kingdom
 license: MIT License
 format: 
     html:
@@ -80,10 +88,11 @@ format:
 
 The accompanying manuscript is:
 
-Nikolakopoulou et al.: An organoid model of the menstrual cycle reveals the role of the luminal epithelium in regeneration of the human endometrium (2025)
+Nikolakopoulou et al.: An in vitro menstrual cycle using organoids captures epithelial cell transitions during menstruation and regeneration of the human endometrium. Cell Stem Cell 33(5):747-762.e8 (2026)
 
 which is available from:
 
+- [Cell Stem Cell](https://doi.org/10.1016/j.stem.2026.04.005)
 - [bioRxiv](https://doi.org/10.1101/2025.07.03.663000)
 
 ## Links to analysis code

@@ -95,6 +95,13 @@ which is available from:
 - [Cell Stem Cell](https://doi.org/10.1016/j.stem.2026.04.005)
 - [bioRxiv](https://doi.org/10.1101/2025.07.03.663000)
 
+## Links to data
+
+* Bulk RNA-seq raw data: [E-MTAB-15118](https://www.ebi.ac.uk/biostudies/arrayexpress/studies/E-MTAB-15118)
+* Single-cell RNA-seq raw data: [E-MTAB-15330](https://www.ebi.ac.uk/biostudies/arrayexpress/studies/E-MTAB-15330)
+* Luminex raw data: [Mendeley Data](https://doi.org/10.17632/vpmzzd54r5.1)
+* Processed single-cell data: [Zenodo](https://doi.org/10.5281/zenodo.22015161)
+
 ## Links to analysis code
 
 All source code is available from GitHub at [https://github.com/fmicompbio/IVMC-protocol](https://github.com/fmicompbio/IVMC-protocol) and archived on [Zenodo](https://doi.org/10.5281/zenodo.19334152).
